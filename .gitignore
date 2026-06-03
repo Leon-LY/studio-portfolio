@@ -25,6 +25,3 @@ logs
 
 # Docker secret env
 supabase/docker/.env
-
-# Deploy target config
-deploy/deploy.sh

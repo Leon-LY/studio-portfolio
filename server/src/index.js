@@ -22,43 +22,29 @@ app.use(express.json())
 app.use('/uploads', express.static(UPLOAD_DIR))
 
 // ============================================================
-// Public routes
+// Routes — use app.use() to mount routers properly
 // ============================================================
-app.get('/api/categories', categoriesRouter)
-app.get('/api/styles', stylesRouter)
-app.get('/api/projects/featured', projectsRouter)
-app.get('/api/projects/:slug', projectsRouter)
-app.get('/api/projects', projectsRouter)
+
+// Public
+app.use('/api/categories', categoriesRouter)
+app.use('/api/styles', stylesRouter)
+app.use('/api/projects', projectsRouter)
 
 // Auth
 app.post('/api/auth/login', login)
-app.post('/api/auth/register', createAdmin) // For initial admin creation
+app.post('/api/auth/register', createAdmin)
 
-// ============================================================
-// Admin routes (auth required)
-// ============================================================
-app.get('/api/projects/admin/all', projectsRouter)
-app.get('/api/projects/admin/:id', projectsRouter)
-app.post('/api/projects', projectsRouter)
-app.put('/api/projects/:id', projectsRouter)
-app.patch('/api/projects/:id/status', projectsRouter)
-app.delete('/api/projects/:id', projectsRouter)
+// Images
+app.use('/api/images', imagesRouter)
 
-app.post('/api/categories', categoriesRouter)
-app.put('/api/categories/:id', categoriesRouter)
-app.delete('/api/categories/:id', categoriesRouter)
-
-app.post('/api/styles', stylesRouter)
-app.delete('/api/styles/:id', stylesRouter)
-
-app.post('/api/images/upload', imagesRouter)
-app.delete('/api/images/:id', imagesRouter)
-app.put('/api/images/:id/cover', imagesRouter)
-app.put('/api/images/reorder', imagesRouter)
+// 404
+app.use((_req, res) => {
+  res.status(404).json({ error: 'Not found' })
+})
 
 // ============================================================
 // Start
 // ============================================================
 app.listen(PORT, () => {
-  console.log(`Studio API server running on http://localhost:${PORT}`)
+  console.log(`Studio API running on http://localhost:${PORT}`)
 })

@@ -39,7 +39,7 @@ vim .env
 # 启动所有服务
 docker compose up -d
 
-# 访问 Supabase Studio：http://your-server:8000
+# 访问 Supabase Studio：http://49.232.49.175:8100
 ```
 
 ### 2. 初始化数据库

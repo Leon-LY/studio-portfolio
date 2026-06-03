@@ -1,0 +1,30 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files (keeps secrets out of git)
+.env
+.env.*
+!.env.example
+
+# Docker secret env
+supabase/docker/.env
+
+# Deploy target config
+deploy/deploy.sh

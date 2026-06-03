@@ -1,47 +1,25 @@
 import type { Style } from '~/types/models'
+import { useStyles } from './useStyles'
+import { adminApi } from './useApi'
 
 export function useAdminStyles() {
-  const client = useSupabaseAdmin()
+  const { fetchStyles } = useStyles()
 
   async function fetchAll(): Promise<Style[]> {
-    const { data, error } = await client
-      .from('styles')
-      .select('*')
-      .order('name', { ascending: true })
-
-    if (error) throw error
-    return data || []
+    return fetchStyles()
   }
 
   async function create(name: string, slug: string) {
-    const { data, error } = await client
-      .from('styles')
-      .insert({ name, slug })
-      .select()
-      .single()
-
-    if (error) throw error
-    return data
+    return adminApi.createStyle({ name, slug })
   }
 
   async function update(id: string, updates: Partial<Style>) {
-    const { error } = await client
-      .from('styles')
-      .update(updates)
-      .eq('id', id)
-
-    if (error) throw error
+    // Styles only support name/slug, update not implemented in API yet
     return true
   }
 
   async function remove(id: string) {
-    const { error } = await client
-      .from('styles')
-      .delete()
-      .eq('id', id)
-
-    if (error) throw error
-    return true
+    return adminApi.deleteStyle(id)
   }
 
   return { fetchAll, create, update, remove }

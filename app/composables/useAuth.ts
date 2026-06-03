@@ -1,34 +1,27 @@
-import type { Session, User } from '@supabase/supabase-js'
+import { api, getToken, clearToken } from './useApi'
 
 export function useAuth() {
-  const client = useSupabase()
-  const session = useState<Session | null>('auth:session', () => null)
+  const session = useState<any>('auth:session', () => null)
   const user = computed(() => session.value?.user ?? null)
   const isAuthenticated = computed(() => !!session.value)
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  // Check for existing session on mount
+  // Check if we have a stored token on mount
   async function checkSession() {
-    try {
-      const { data } = await client.auth.getSession()
-      session.value = data.session
-    } catch {
-      session.value = null
+    const token = getToken()
+    if (token) {
+      // We have a token, assume valid (the API will reject if expired)
+      session.value = { access_token: token, user: null }
     }
   }
 
-  // Sign in with email + password
   async function signIn(email: string, password: string) {
     isLoading.value = true
     error.value = null
     try {
-      const { data, error: err } = await client.auth.signInWithPassword({
-        email,
-        password,
-      })
-      if (err) throw err
-      session.value = data.session
+      const result = await api.login(email, password)
+      session.value = { access_token: result.token, user: result.user }
       return true
     } catch (err: any) {
       error.value = err.message || 'Login failed'
@@ -38,21 +31,12 @@ export function useAuth() {
     }
   }
 
-  // Sign out
   async function signOut() {
-    await client.auth.signOut()
+    api.logout()
+    clearToken()
     session.value = null
     await navigateTo('/admin/login')
   }
 
-  return {
-    session,
-    user,
-    isAuthenticated,
-    isLoading,
-    error,
-    checkSession,
-    signIn,
-    signOut,
-  }
+  return { session, user, isAuthenticated, isLoading, error, checkSession, signIn, signOut }
 }

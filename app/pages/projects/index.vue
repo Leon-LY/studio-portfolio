@@ -114,13 +114,10 @@ const selectedStyle = ref((route.query.style as string) || '')
 const currentPage = ref(parseInt(route.query.page as string) || 1)
 const perPage = 12
 
-// Fetch filter data (with fallback for when Supabase is not configured)
 const { data: categories } = useAsyncData('project-categories', async () => {
-  if (!isSupabaseConfigured()) return []
   try { return await fetchCategories() } catch { return [] }
 })
 const { data: styles } = useAsyncData('project-styles', async () => {
-  if (!isSupabaseConfigured()) return []
   try { return await fetchStyles() } catch { return [] }
 })
 
@@ -158,7 +155,6 @@ function updateURL() {
 const { data: result, pending } = useAsyncData(
   () => `projects-${search.value}-${selectedCategory.value}-${selectedStyle.value}-${currentPage.value}`,
   async () => {
-    if (!isSupabaseConfigured()) return { data: [], count: 0, page: 1, perPage: 12, totalPages: 0 }
     try {
       return await fetchProjects({
         search: search.value,

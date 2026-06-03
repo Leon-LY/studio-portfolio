@@ -1,47 +1,24 @@
 import type { Category } from '~/types/models'
+import { useCategories } from './useCategories'
+import { adminApi } from './useApi'
 
 export function useAdminCategories() {
-  const client = useSupabaseAdmin()
+  const { fetchCategories } = useCategories()
 
   async function fetchAll(): Promise<Category[]> {
-    const { data, error } = await client
-      .from('categories')
-      .select('*')
-      .order('sort_order', { ascending: true })
-
-    if (error) throw error
-    return data || []
+    return fetchCategories()
   }
 
   async function create(name: string, slug: string) {
-    const { data, error } = await client
-      .from('categories')
-      .insert({ name, slug })
-      .select()
-      .single()
-
-    if (error) throw error
-    return data
+    return adminApi.createCategory({ name, slug })
   }
 
   async function update(id: string, updates: Partial<Category>) {
-    const { error } = await client
-      .from('categories')
-      .update(updates)
-      .eq('id', id)
-
-    if (error) throw error
-    return true
+    return adminApi.updateCategory(id, updates)
   }
 
   async function remove(id: string) {
-    const { error } = await client
-      .from('categories')
-      .delete()
-      .eq('id', id)
-
-    if (error) throw error
-    return true
+    return adminApi.deleteCategory(id)
   }
 
   return { fetchAll, create, update, remove }

@@ -128,9 +128,9 @@ async function uploadFiles(files: File[]) {
 }
 
 function getImageUrl(path: string) {
-  const { $supabase } = useNuxtApp()
-  const { data } = $supabase.storage.from('project-images').getPublicUrl(path)
-  return data.publicUrl
+  // Our API serves uploads at /uploads/:filename
+  if (path.startsWith('/uploads/') || path.startsWith('http')) return path
+  return `/uploads/${path}`
 }
 
 onMounted(() => fetchImages())

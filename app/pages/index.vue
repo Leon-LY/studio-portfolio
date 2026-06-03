@@ -107,13 +107,10 @@
 const { fetchFeaturedProjects } = useProjects()
 const { fetchCategories } = useCategories()
 
-// Wrap with fallback — if Supabase isn't configured, return empty arrays
 const { data: projects, pending } = useAsyncData('featured-projects', async () => {
-  if (!isSupabaseConfigured()) return []
   try { return await fetchFeaturedProjects() } catch { return [] }
 })
 const { data: categories } = useAsyncData('categories', async () => {
-  if (!isSupabaseConfigured()) return []
   try { return await fetchCategories() } catch { return [] }
 })
 </script>

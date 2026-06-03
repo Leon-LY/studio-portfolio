@@ -13,7 +13,6 @@
     "@headlessui/vue": "^1.7.23",
     "@nuxt/icon": "^2.2.2",
     "@nuxtjs/tailwindcss": "^6.14.0",
-    "@supabase/supabase-js": "^2.106.2",
     "@tailwindcss/typography": "^0.5.19",
     "@tiptap/extension-image": "^3.24.0",
     "@tiptap/starter-kit": "^3.24.0",

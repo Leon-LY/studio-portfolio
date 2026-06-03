@@ -1,29 +1,13 @@
 import type { Style } from '~/types/models'
+import { api } from './useApi'
 
 export function useStyles() {
-  const client = useSupabase()
-
-  // Fetch all styles (public)
   async function fetchStyles(): Promise<Style[]> {
-    const { data, error } = await client
-      .from('styles')
-      .select('*')
-      .order('name', { ascending: true })
-
-    if (error) throw error
-    return data || []
+    return api.getStyles()
   }
-
-  // Fetch a style by slug
   async function fetchStyleBySlug(slug: string): Promise<Style | null> {
-    const { data } = await client
-      .from('styles')
-      .select('*')
-      .eq('slug', slug)
-      .single()
-
-    return data
+    const styles = await api.getStyles()
+    return styles.find((s: any) => s.slug === slug) || null
   }
-
   return { fetchStyles, fetchStyleBySlug }
 }

@@ -155,20 +155,16 @@
 
 <script setup lang="ts">
 import type { ProjectImage } from '~/types/models'
+import { getImageUrl } from '~/composables/useApi'
 
-definePageMeta({
-  validate: true,
-})
+definePageMeta({ validate: true })
 
 const route = useRoute()
 const { fetchProjectBySlug, fetchRelatedProjects } = useProjects()
-const { $supabase } = useNuxtApp()
 
 const slug = route.params.slug as string
 
-// Fetch project (with fallback for when Supabase is not configured)
 const { data: project, pending } = useAsyncData(`project-${slug}`, async () => {
-  if (!isSupabaseConfigured()) return null
   try { return await fetchProjectBySlug(slug) } catch { return null }
 })
 
@@ -187,11 +183,6 @@ const lightboxImage = ref<ProjectImage | null>(null)
 
 function openLightbox(img: ProjectImage) {
   lightboxImage.value = img
-}
-
-function getImageUrl(path: string) {
-  const { data } = $supabase.storage.from('project-images').getPublicUrl(path)
-  return data.publicUrl
 }
 
 function formatDate(date: string) {

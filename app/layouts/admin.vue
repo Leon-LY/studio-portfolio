@@ -6,3 +6,7 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import AdminSidebar from '~/components/admin/layout/AdminSidebar.vue'
+</script>

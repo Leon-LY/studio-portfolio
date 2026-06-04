@@ -75,7 +75,7 @@ const props = defineProps({
 })
 
 const cardClasses = computed(() => {
-  const base = 'group block bg-canvas rounded-sm overflow-hidden border border-stone-100 hover:-translate-y-1 hover:shadow-elevation-4 transition-all duration-500 cursor-pointer'
+  const base = 'group block bg-white rounded-sm overflow-hidden border border-stone-200 hover:-translate-y-1 hover:shadow-elevation-4 transition-all duration-500 cursor-pointer'
   return base
 })
 
@@ -90,9 +90,9 @@ const imageClasses = computed(() => {
 
 const infoClasses = computed(() => {
   const variants: Record<string, string> = {
-    compact: 'p-4',
-    featured: 'p-6',
-    grid: 'p-5',
+    compact: 'p-4 border-t border-stone-100',
+    featured: 'p-6 border-t border-stone-100',
+    grid: 'p-5 border-t border-stone-100',
   }
   return variants[props.variant] || variants.grid
 })

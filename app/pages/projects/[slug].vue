@@ -81,7 +81,7 @@
           </div>
 
           <!-- 项目正文（富文本） -->
-          <div v-if="project.content" class="prose prose-lg prose max-w-none mb-14" v-html="project.content" />
+          <div v-if="project.content" class="prose prose-lg prose max-w-none mb-14" v-html="sanitizeHtml(project.content)" />
 
           <!-- 图片图集 -->
           <div v-if="project.images && project.images.length > 1" class="mb-14">
@@ -133,6 +133,7 @@
 <script setup lang="ts">
 import type { ProjectImage } from '~/types/models'
 import { getImageUrl } from '~/composables/useApi'
+import { sanitizeHtml } from '~/composables/useSanitize'
 
 definePageMeta({ validate: true })
 

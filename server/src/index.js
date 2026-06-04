@@ -10,6 +10,7 @@ import stylesRouter from './routes/styles.js'
 import imagesRouter from './routes/images.js'
 import filesRouter from './routes/files.js'
 import paymentsRouter from './routes/payments.js'
+import contactRouter from './routes/contact.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
@@ -49,6 +50,9 @@ app.use('/api/files', filesRouter)
 
 // Payments (milestones)
 app.use('/api/payments', paymentsRouter)
+
+// Contact form
+app.use('/api/contact', contactRouter)
 
 // 404
 app.use((_req, res) => {

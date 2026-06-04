@@ -107,14 +107,22 @@ async function handleSubmit() {
   sending.value = true
   error.value = ''
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: '提交失败' }))
+      throw new Error(err.error)
+    }
     sent.value = true
     form.name = ''
     form.email = ''
     form.projectType = ''
     form.message = ''
-  } catch {
-    error.value = '发送失败，请稍后重试或直接发送邮件至 554295000@qq.com'
+  } catch (e: any) {
+    error.value = e.message || '发送失败，请稍后重试或直接发送邮件至 554295000@qq.com'
   } finally {
     sending.value = false
   }

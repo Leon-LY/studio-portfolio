@@ -42,12 +42,12 @@ export default {
       },
 
       // ============================================================
-      // 字体 — Inter 优先拉丁 / 宋体标题 / Playfair Display 英文展示
+      // 字体 — 系统字体栈（无需外部加载，中国大陆可用）
       // ============================================================
       fontFamily: {
-        serif: ['"Noto Serif SC"', '"Source Han Serif SC"', 'Georgia', 'serif'],
-        sans: ['"Inter"', '"Noto Sans SC"', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Playfair Display"', '"Noto Serif SC"', 'Georgia', 'serif'],
+        serif: ['"PingFang SC"', '"Noto Serif SC"', '"STSong"', '"SimSun"', 'Georgia', 'serif'],
+        sans: ['"PingFang SC"', '"Microsoft YaHei"', '"Hiragino Sans GB"', '"Noto Sans SC"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"PingFang SC"', '"Noto Serif SC"', '"STSong"', 'Georgia', 'serif'],
       },
 
       // ============================================================

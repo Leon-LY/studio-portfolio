@@ -1,7 +1,8 @@
 <template>
-  <NuxtLink
-    :to="`/projects/${project.slug}`"
+  <a
+    :href="`/projects/${project.slug}`"
     :class="cardClasses"
+    @click.prevent="navigateTo(`/projects/${project.slug}`)"
   >
     <!-- 封面图 -->
     <div :class="imageClasses">
@@ -56,7 +57,7 @@
         </span>
       </div>
     </div>
-  </NuxtLink>
+  </a>
 </template>
 
 <script setup lang="ts">
@@ -75,7 +76,7 @@ const props = defineProps({
 })
 
 const cardClasses = computed(() => {
-  const base = 'group block bg-canvas rounded-sm overflow-hidden border border-stone-100 hover:-translate-y-1 hover:shadow-elevation-4 transition-all duration-500'
+  const base = 'group block bg-canvas rounded-sm overflow-hidden border border-stone-100 hover:-translate-y-1 hover:shadow-elevation-4 transition-all duration-500 cursor-pointer'
   return base
 })
 

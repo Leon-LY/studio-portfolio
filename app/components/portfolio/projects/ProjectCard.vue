@@ -1,8 +1,7 @@
 <template>
-  <a
-    :href="`/projects/${project.slug}`"
+  <NuxtLink
+    :to="`/projects/${project.slug}`"
     :class="cardClasses"
-    @click.prevent="navigateTo(`/projects/${project.slug}`)"
   >
     <!-- 封面图 -->
     <div :class="imageClasses">
@@ -57,7 +56,7 @@
         </span>
       </div>
     </div>
-  </a>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">

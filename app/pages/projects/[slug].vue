@@ -141,8 +141,6 @@ import EmptyState from '~/components/ui/EmptyState.vue'
 import BaseButton from '~/components/ui/BaseButton.vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 
-definePageMeta({ validate: true })
-
 const route = useRoute()
 const { fetchProjectBySlug, fetchRelatedProjects } = useProjects()
 

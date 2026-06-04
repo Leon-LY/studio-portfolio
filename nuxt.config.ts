@@ -16,10 +16,8 @@ export default defineNuxtConfig({
 
   // ============================================================
   // Rendering: Portfolio = Static (SSG), Admin = Client-only (CSR)
-  // Login page SSR-enabled so form pre-renders reliably
   // ============================================================
   routeRules: {
-    '/admin/login': { ssr: true },
     '/admin/**': { ssr: false },
   },
 

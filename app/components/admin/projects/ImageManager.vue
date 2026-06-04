@@ -90,6 +90,8 @@
 
 <script setup lang="ts">
 import type { ProjectImage } from '~/types/models'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 
 const props = defineProps({
   projectId: { type: String, required: true },

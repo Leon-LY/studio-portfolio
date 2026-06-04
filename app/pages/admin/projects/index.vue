@@ -131,9 +131,10 @@
 
     <!-- 删除确认 -->
     <ConfirmDialog
-      :model-value="!!confirmDelete"
+      v-if="confirmDelete"
+      :model-value="true"
       title="删除项目"
-      :message="`确定要删除「${confirmDelete?.title}」吗？此操作无法撤销。`"
+      :message="`确定要删除「${confirmDelete.title}」吗？`"
       confirm-text="删除"
       confirm-variant="danger"
       @update:model-value="confirmDelete = null"

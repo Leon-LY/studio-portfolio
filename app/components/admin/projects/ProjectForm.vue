@@ -106,10 +106,12 @@
     <details class="group">
       <summary class="text-sm font-medium text-stone-500 cursor-pointer hover:text-stone-700">
         SEO 设置
+        <span class="text-xs text-stone-400 ml-2">— 控制搜索引擎中如何展示此项目</span>
       </summary>
-      <div class="mt-3 space-y-3 pl-2">
-        <BaseInput v-model="form.seo_title" label="SEO 标题" placeholder="自定义页面标题" />
-        <BaseTextarea v-model="form.seo_description" label="SEO 描述" placeholder="自定义页面描述" rows="2" />
+      <div class="mt-3 space-y-3 pl-2 border-l-2 border-stone-200">
+        <p class="text-xs text-stone-400">以下内容仅影响搜索引擎结果页面（如 Google、百度），不影响页面实际显示。留空则使用默认值。</p>
+        <BaseInput v-model="form.seo_title" label="SEO 标题" placeholder="自定义页面标题（出现在搜索结果中）" hint="如不填写，默认使用项目标题" />
+        <BaseTextarea v-model="form.seo_description" label="SEO 描述" placeholder="自定义页面描述（出现在搜索结果摘要中）" :rows="2" hint="如不填写，默认使用项目简介" />
       </div>
     </details>
 
@@ -128,6 +130,9 @@
 
 <script setup lang="ts">
 import type { ProjectFormData } from '~/types/models'
+import BaseInput from '~/components/ui/BaseInput.vue'
+import BaseTextarea from '~/components/ui/BaseTextarea.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
 
 const props = defineProps({
   initialData: { type: Object as PropType<Partial<ProjectFormData>>, default: () => ({}) },

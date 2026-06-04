@@ -58,6 +58,8 @@
 
 <script setup lang="ts">
 import type { PaymentMilestone } from '~/types/models'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 
 const { calendarData, fetchCalendar } = usePayments()
 

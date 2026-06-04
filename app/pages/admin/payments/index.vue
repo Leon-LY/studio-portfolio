@@ -84,11 +84,13 @@
 
       <!-- Delete Confirmation -->
       <ConfirmDialog
-        v-model="showDeleteConfirm"
+        v-if="deletingMilestone"
+        :model-value="showDeleteConfirm"
         title="删除回款节点"
-        :message="`确定删除「${deletingMilestone?.title}」吗？`"
+        :message="`确定要删除「${deletingMilestone.title}」吗？`"
         confirm-text="删除"
         confirm-variant="danger"
+        @update:model-value="showDeleteConfirm = false"
         @confirm="handleDeleteConfirm"
       />
     </div>

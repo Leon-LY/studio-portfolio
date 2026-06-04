@@ -18,6 +18,10 @@
 
 <script setup lang="ts">
 import type { PaymentMilestone } from '~/types/models'
+import BaseModal from '~/components/ui/BaseModal.vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
+import BaseTextarea from '~/components/ui/BaseTextarea.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },

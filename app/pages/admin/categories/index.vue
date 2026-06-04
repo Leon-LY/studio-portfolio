@@ -12,13 +12,20 @@
 
         <!-- 添加表单 -->
         <div v-if="showAdd" class="p-5 border-b border-stone-100 bg-stone-50">
-          <div class="flex gap-3">
-            <BaseInput v-model="newName" label="名称" placeholder="分类名称" wrapper-class="flex-1" />
-            <BaseInput v-model="newSlug" label="标识符" placeholder="category-slug" wrapper-class="flex-1" />
-          </div>
+          <BaseInput
+            v-model="newName"
+            label="分类名称"
+            placeholder="例如：住宅、商业、公共建筑"
+            hint="标识符（slug）将根据名称自动生成"
+            wrapper-class="max-w-sm"
+            @input="onNameChange"
+          />
+          <p v-if="newSlug" class="text-xs text-stone-400 mt-2">
+            标识符：<code class="bg-stone-200 px-1 py-0.5 rounded text-stone-600">{{ newSlug }}</code>
+          </p>
           <div class="flex gap-2 mt-3">
             <BaseButton size="sm" :loading="saving" @click="handleAdd">保存</BaseButton>
-            <BaseButton size="sm" variant="outline" @click="showAdd = false">取消</BaseButton>
+            <BaseButton size="sm" variant="outline" @click="showAdd = false; resetForm()">取消</BaseButton>
           </div>
         </div>
 
@@ -54,9 +61,10 @@
 
     <!-- 删除确认 -->
     <ConfirmDialog
-      :model-value="!!confirmDelete"
+      v-if="confirmDelete"
+      :model-value="true"
       title="删除分类"
-      :message="`确定要删除分类「${confirmDelete?.name}」吗？此操作不可撤销。`"
+      :message="`确定要删除分类「${confirmDelete.name}」吗？`"
       confirm-text="删除"
       confirm-variant="danger"
       @update:model-value="confirmDelete = null"
@@ -83,6 +91,23 @@ const newSlug = ref('')
 const saving = ref(false)
 const confirmDelete = ref<Category | null>(null)
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w一-鿿]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    || 'category'
+}
+
+function onNameChange() {
+  newSlug.value = slugify(newName.value)
+}
+
+function resetForm() {
+  newName.value = ''
+  newSlug.value = ''
+}
+
 onMounted(async () => {
   try {
     categories.value = await fetchAll()
@@ -92,15 +117,14 @@ onMounted(async () => {
 })
 
 async function handleAdd() {
-  if (!newName.value || !newSlug.value) return
+  if (!newName.value) return
+  const slug = newSlug.value || slugify(newName.value)
   saving.value = true
   try {
-    await create(newName.value, newSlug.value)
+    await create(newName.value, slug)
     categories.value = await fetchAll()
-    newName.value = ''
-    newSlug.value = ''
+    resetForm()
     showAdd.value = false
-    // Invalidate ProjectForm cache so new category appears in dropdowns
     refreshNuxtData('admin-categories')
   } catch (e: any) {
     alert(e.message)

@@ -86,11 +86,13 @@
 
     <!-- Delete Confirmation -->
     <ConfirmDialog
-      v-model="showDeleteConfirm"
+      v-if="fileToDelete"
+      :model-value="showDeleteConfirm"
       title="删除文件"
-      :message="`确定删除「${fileToDelete?.original_name}」吗？此操作不可撤销。`"
+      :message="`确定删除「${fileToDelete.original_name}」吗？`"
       confirm-text="删除"
       confirm-variant="danger"
+      @update:model-value="showDeleteConfirm = false"
       @confirm="handleDeleteConfirm"
     />
   </div>
@@ -98,6 +100,9 @@
 
 <script setup lang="ts">
 import type { ProjectFile } from '~/types/models'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
+import FileIcon from '~/components/ui/FileIcon.vue'
 
 defineProps({
   files: { type: Array as () => ProjectFile[], required: true },

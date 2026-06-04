@@ -94,11 +94,13 @@
 
     <!-- Payment Delete Confirm -->
     <ConfirmDialog
-      v-model="showPmtDeleteConfirm"
+      v-if="deletingMilestone"
+      :model-value="showPmtDeleteConfirm"
       title="删除回款节点"
-      :message="`确定删除「${deletingMilestone?.title}」吗？`"
+      :message="`确定要删除「${deletingMilestone.title}」吗？`"
       confirm-text="删除"
       confirm-variant="danger"
+      @update:model-value="showPmtDeleteConfirm = false"
       @confirm="handlePaymentDeleteConfirm"
     />
   </div>

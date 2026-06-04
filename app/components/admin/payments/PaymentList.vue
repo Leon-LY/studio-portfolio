@@ -81,6 +81,7 @@
 
 <script setup lang="ts">
 import type { PaymentMilestone } from '~/types/models'
+import EmptyState from '~/components/ui/EmptyState.vue'
 
 defineProps({
   milestones: { type: Array as () => PaymentMilestone[], required: true },

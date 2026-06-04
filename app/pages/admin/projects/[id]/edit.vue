@@ -105,8 +105,19 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "admin" }) 
+definePageMeta({ layout: "admin" })
 import type { Project, ProjectFormData, ProjectFile, PaymentMilestone } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
+import ProjectForm from '~/components/admin/projects/ProjectForm.vue'
+import ImageManager from '~/components/admin/projects/ImageManager.vue'
+import FileUploader from '~/components/admin/files/FileUploader.vue'
+import FileList from '~/components/admin/files/FileList.vue'
+import PaymentList from '~/components/admin/payments/PaymentList.vue'
+import PaymentForm from '~/components/admin/payments/PaymentForm.vue'
 
 const route = useRoute()
 const { fetchProjectById, updateProject } = useAdminProjects()

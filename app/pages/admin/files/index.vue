@@ -66,8 +66,13 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "admin" }) 
+definePageMeta({ layout: "admin" })
 import type { Project, ProjectFile } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
+import FileUploader from '~/components/admin/files/FileUploader.vue'
+import FileList from '~/components/admin/files/FileList.vue'
 
 const { fetchProjects: fetchAdminProjects } = useAdminProjects()
 

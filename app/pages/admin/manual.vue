@@ -320,7 +320,9 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "admin" }) 
+definePageMeta({ layout: "admin" })
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+
 const sections = [
   { id: 'overview', num: '1', title: '系统概述' },
   { id: 'dashboard', num: '2', title: '仪表盘' },

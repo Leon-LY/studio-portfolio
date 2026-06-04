@@ -55,8 +55,12 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "admin" }) 
+definePageMeta({ layout: "admin" })
 import type { Style } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
 
 const { fetchAll, create, remove } = useAdminStyles()
 

@@ -143,8 +143,13 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "admin" }) 
+definePageMeta({ layout: "admin" })
 import type { Project, ProjectStatus } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import StatusBadge from '~/components/admin/projects/StatusBadge.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
 
 const { fetchProjects, updateStatus, deleteProject } = useAdminProjects()
 const { archiveProject, restoreProject } = useArchiveWorkflow()

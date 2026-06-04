@@ -96,8 +96,16 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "admin" }) 
+definePageMeta({ layout: "admin" })
 import type { Project, PaymentMilestone } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
+import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
+import PaymentList from '~/components/admin/payments/PaymentList.vue'
+import PaymentCalendar from '~/components/admin/payments/PaymentCalendar.vue'
+import PaymentForm from '~/components/admin/payments/PaymentForm.vue'
 
 const { fetchProjects: fetchAdminProjects } = useAdminProjects()
 const {

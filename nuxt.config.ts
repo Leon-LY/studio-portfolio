@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  // Dev server — non-default port
+  devServer: {
+    port: 3100,
+  },
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/icon',
@@ -26,11 +31,11 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: '形筑 — 建筑设计工作室',
+      title: '方外设计 — 建筑设计工作室',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '形筑建筑设计工作室 — 创造能够启发灵感的空间。专注建筑设计，用思考塑造场所。' },
+        { name: 'description', content: '方外设计 — 方寸之外，别有天地。专注建筑设计，以思考重塑空间的边界。' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

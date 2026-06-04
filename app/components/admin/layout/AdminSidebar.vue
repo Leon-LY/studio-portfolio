@@ -2,7 +2,7 @@
   <aside class="w-64 bg-stone-900 text-canvas flex flex-col h-screen fixed left-0 top-0 z-30">
     <!-- Logo -->
     <div class="flex items-center h-16 px-6 border-b border-stone-700">
-      <NuxtLink to="/admin" class="font-serif text-lg font-bold tracking-tight">形筑 后台</NuxtLink>
+      <NuxtLink to="/admin" class="font-serif text-lg font-bold tracking-tight">方外设计 后台</NuxtLink>
     </div>
 
     <!-- 导航 -->

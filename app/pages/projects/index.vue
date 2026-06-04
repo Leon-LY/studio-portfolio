@@ -108,12 +108,10 @@
         </EmptyState>
 
         <!-- 网格 -->
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <ProjectCard
-            v-for="project in projects"
-            :key="project.id"
-            :project="project"
-          />
+        <div v-else :ref="revealRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div v-for="(project, idx) in projects" :key="project.id" class="reveal-hidden" :data-delay="`${idx % 3 * 80}ms`">
+            <ProjectCard :project="project" />
+          </div>
         </div>
 
         <!-- 分页 -->
@@ -154,6 +152,7 @@
 <script setup lang="ts">
 
 const { fetchProjects } = useProjects()
+const { revealRef } = useScrollReveal()
 const { fetchCategories } = useCategories()
 const { fetchStyles } = useStyles()
 const route = useRoute()

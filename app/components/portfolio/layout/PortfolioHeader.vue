@@ -11,7 +11,7 @@
       <div class="flex items-center justify-between h-16 lg:h-20">
         <!-- Logo -->
         <NuxtLink to="/" class="font-serif text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">
-          <span :class="isScrolled || !transparent ? 'text-stone-800' : 'text-canvas'">形筑</span>
+          <span :class="isScrolled || !transparent ? 'text-stone-800' : 'text-canvas'">方外设计</span>
         </NuxtLink>
 
         <!-- 导航 — 桌面端 -->

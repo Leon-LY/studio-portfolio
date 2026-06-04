@@ -6,7 +6,7 @@
     <section class="pt-28 pb-16 bg-stone-50 border-b border-stone-200">
       <div class="container-narrow">
         <p class="text-accent-500 text-sm font-medium tracking-widest uppercase mb-3">About</p>
-        <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-stone-900">关于形筑</h1>
+        <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-stone-900">关于方外设计</h1>
       </div>
     </section>
 
@@ -32,7 +32,7 @@
             </div>
             <div class="md:col-span-3">
               <p class="text-lg text-stone-600 leading-relaxed">
-                形筑是一家专注于建筑设计的小型工作室，致力于创造既美观又实用的空间。我们相信，每一个项目都是一场对话——空间、光线、材料与人的体验之间无声的交流。
+                方外设计 — 方寸之外，别有天地。我们是一家专注于建筑设计的小型工作室，致力于打破常规、创造既美观又实用的空间。我们相信，每一个项目都是一场对话——空间、光线、材料与人的体验之间无声的交流。
               </p>
               <p class="text-stone-500 leading-relaxed mt-4">
                 我们的方法将深思熟虑的设计与务实的解决方案相结合，始终以客户需求为核心，寻求美学与功能的完美平衡。

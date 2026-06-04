@@ -4,9 +4,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         <!-- 品牌 -->
         <div>
-          <h3 class="font-serif text-xl font-bold text-canvas">形筑</h3>
+          <h3 class="font-serif text-xl font-bold text-canvas">方外设计</h3>
           <p class="mt-3 text-sm text-stone-400 leading-relaxed">
-            建筑设计工作室 — 创造能够启发灵感的空间。
+            方寸之外，别有天地 — 以思考重塑空间的边界。
           </p>
         </div>
 
@@ -38,7 +38,7 @@
 
       <div class="mt-14 pt-8 border-t border-stone-700">
         <p class="text-sm text-stone-400 text-center">
-          &copy; {{ new Date().getFullYear() }} 形筑建筑设计工作室。保留所有权利。
+          &copy; {{ new Date().getFullYear() }} 方外设计建筑设计工作室。保留所有权利。
         </p>
       </div>
     </div>

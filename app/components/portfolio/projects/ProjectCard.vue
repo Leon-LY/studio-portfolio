@@ -12,7 +12,7 @@
         <img
           :src="project.cover_image_url"
           :alt="project.title"
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
         />
       </div>
@@ -23,8 +23,8 @@
         <Icon name="lucide:image" size="32" class="text-stone-300" />
       </div>
 
-      <!-- Hover overlay -->
-      <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/5 transition-colors duration-500" />
+      <!-- Hover overlay — more visible -->
+      <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/10 transition-colors duration-500" />
     </div>
 
     <!-- 信息 -->

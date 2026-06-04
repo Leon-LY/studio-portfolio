@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-stone-50 flex items-center justify-center p-4">
     <div class="w-full max-w-sm">
       <div class="text-center mb-8">
-        <h1 class="font-serif text-2xl font-bold text-stone-800">形筑 · 后台管理</h1>
+        <h1 class="font-serif text-2xl font-bold text-stone-800">方外设计 · 后台管理</h1>
         <p class="mt-2 text-sm text-stone-500">登录以管理作品集</p>
       </div>
 

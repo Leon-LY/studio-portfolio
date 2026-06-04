@@ -4,12 +4,12 @@
          Hero — 全屏建筑感
          ============================================================ -->
     <section class="relative h-screen min-h-[700px] flex items-center overflow-hidden">
-      <!-- 深色基底 + 建筑网格纹理 -->
+      <!-- 深色基底 + 建筑网格纹理（视差） -->
       <div class="absolute inset-0 bg-ink">
-        <!-- 对角线光束 -->
-        <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 50%, rgba(200, 164, 78, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);" />
-        <!-- 建筑网格叠加 -->
-        <div class="absolute inset-0 opacity-[0.04]" style="background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 80px 80px;" />
+        <!-- 对角线光束 — 随滚动视差 -->
+        <div class="absolute inset-0" :style="{ transform: `translateY(${scrollY * 0.15}px)` }" style="will-change: transform; background: radial-gradient(ellipse at 30% 50%, rgba(200, 164, 78, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);" />
+        <!-- 建筑网格叠加 — 微视差 -->
+        <div class="absolute inset-0 opacity-[0.04]" :style="{ transform: `translateY(${scrollY * 0.08}px)` }" style="will-change: transform; background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 80px 80px;" />
         <!-- 底部渐变 fade -->
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/80" />
       </div>
@@ -19,16 +19,16 @@
         <div class="max-w-4xl">
           <!-- 标签 -->
           <p class="text-accent-300 text-sm font-medium tracking-[0.2em] uppercase mb-8 animate-fade-in">
-            Architecture Design Studio
+            Fangwai Design Studio
           </p>
           <!-- 主标题 -->
           <h1 class="font-serif text-display-xl font-bold text-canvas tracking-tight animate-fade-in-up">
-            塑造空间<br />
-            <span class="text-accent-300">启发生活</span>
+            方寸之外<br />
+            <span class="text-accent-300">别有天地</span>
           </h1>
           <!-- 副标题 -->
           <p class="mt-8 text-lg sm:text-xl text-stone-400 max-w-xl leading-relaxed font-light animate-fade-in" style="animation-delay: 0.2s">
-            以思考塑造场所，创造既美观又实用的空间。<br />每一个项目，都是光线、材料与人的对话。
+            以思考重塑空间的边界，创造既美观又实用的建筑。<br />每一个项目，都是光线、材料与人的对话。
           </p>
           <!-- CTA -->
           <div class="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.4s">
@@ -62,8 +62,8 @@
          精选作品
          ============================================================ -->
     <section class="py-section bg-canvas">
-      <div class="container-wide">
-        <div class="flex items-end justify-between mb-14">
+      <div class="container-wide" :ref="revealRef">
+        <div class="flex items-end justify-between mb-14 reveal-hidden">
           <div>
             <p class="text-accent-500 text-sm font-medium tracking-widest uppercase mb-3">Selected Works</p>
             <h2 class="text-display-sm font-serif font-bold text-stone-900">精选作品</h2>
@@ -90,12 +90,9 @@
 
         <!-- 项目网格 -->
         <div v-else-if="projects && projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
-          <ProjectCard
-            v-for="project in projects"
-            :key="project.id"
-            :project="project"
-            variant="featured"
-          />
+          <div v-for="project in projects" :key="project.id" class="reveal-hidden" :data-delay="`${Math.random() * 200}ms`">
+            <ProjectCard :project="project" variant="featured" />
+          </div>
         </div>
 
         <!-- 空状态 -->
@@ -112,17 +109,19 @@
          按类型浏览
          ============================================================ -->
     <section class="py-section bg-stone-50">
-      <div class="container-wide">
-        <p class="text-accent-500 text-sm font-medium tracking-widest uppercase text-center mb-3">Categories</p>
-        <h2 class="text-display-sm font-serif font-bold text-stone-900 text-center">按类型浏览</h2>
+      <div class="container-wide" :ref="revealRef">
+        <div class="reveal-hidden">
+          <p class="text-accent-500 text-sm font-medium tracking-widest uppercase text-center mb-3">Categories</p>
+          <h2 class="text-display-sm font-serif font-bold text-stone-900 text-center">按类型浏览</h2>
+        </div>
 
         <div v-if="categories.length > 0" class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
           <NuxtLink
             v-for="(cat, idx) in categories"
             :key="cat.id"
             :to="`/projects?category=${cat.slug}`"
-            class="group p-10 bg-canvas rounded-sm border border-stone-200 hover:border-accent-300 hover:shadow-elevation-3 transition-all duration-400 text-center hover:-translate-y-1"
-            :style="{ transitionDelay: `${idx * 50}ms` }"
+            class="reveal-hidden group p-10 bg-canvas rounded-sm border border-stone-200 hover:border-accent-300 hover:shadow-elevation-3 transition-all duration-400 text-center hover:-translate-y-1"
+            :data-delay="`${idx * 60}ms`"
           >
             <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-stone-100 group-hover:bg-accent-50 flex items-center justify-center transition-colors duration-400">
               <Icon :name="catIcons[cat.slug] || 'lucide:building-2'" size="24" class="text-stone-400 group-hover:text-accent-400 transition-colors" />
@@ -141,6 +140,13 @@
 <script setup lang="ts">
 const { fetchFeaturedProjects } = useProjects()
 const { fetchCategories } = useCategories()
+const { revealRef } = useScrollReveal()
+
+// Hero parallax
+const scrollY = ref(0)
+function onHeroScroll() { scrollY.value = window.scrollY }
+onMounted(() => window.addEventListener('scroll', onHeroScroll, { passive: true }))
+onUnmounted(() => window.removeEventListener('scroll', onHeroScroll))
 
 // Category icon mapping — different icon per category
 const catIcons: Record<string, string> = {

@@ -5,18 +5,31 @@ import { query } from './db.js'
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES = '7d'
 
-// Fail fast in production if JWT_SECRET is not set
+// Require JWT_SECRET to be set — refuse to start without it
 if (!JWT_SECRET) {
-  if (process.env.NODE_ENV === 'production') {
-    console.error('FATAL: JWT_SECRET environment variable is required in production')
-    process.exit(1)
-  }
-  console.warn('WARNING: JWT_SECRET not set — using insecure default (dev only)')
+  console.error('FATAL: JWT_SECRET environment variable is required')
+  process.exit(1)
 }
 
-// Get the JWT secret (with dev fallback)
+// Simple in-memory rate limiter for login
+const loginAttempts = new Map() // IP → { count, resetAt }
+const MAX_LOGIN_ATTEMPTS = 10
+const LOGIN_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
+
+function checkRateLimit(ip) {
+  const now = Date.now()
+  const entry = loginAttempts.get(ip)
+  if (!entry || now > entry.resetAt) {
+    loginAttempts.set(ip, { count: 1, resetAt: now + LOGIN_WINDOW_MS })
+    return true
+  }
+  if (entry.count >= MAX_LOGIN_ATTEMPTS) return false
+  entry.count++
+  return true
+}
+
 function getSecret() {
-  return JWT_SECRET || 'studio-jwt-secret-dev-only'
+  return JWT_SECRET
 }
 
 // Generate JWT token
@@ -46,6 +59,11 @@ export function authMiddleware(req, res, next) {
 
 // Login handler
 export async function login(req, res) {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: '登录尝试过于频繁，请 15 分钟后再试' })
+  }
+
   const { email, password } = req.body
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password required' })
@@ -70,7 +88,7 @@ export async function login(req, res) {
   }
 }
 
-// Create admin (for initial setup)
+// Create admin (open for initial setup, then requires auth)
 export async function createAdmin(req, res) {
   const { email, password, full_name } = req.body
   if (!email || !password) {
@@ -78,6 +96,21 @@ export async function createAdmin(req, res) {
   }
 
   try {
+    // If admins already exist, this endpoint requires authentication
+    const { rows: existing } = await query('SELECT COUNT(*) FROM admins')
+    if (parseInt(existing[0].count) > 0) {
+      // Check for valid auth token
+      const header = req.headers.authorization
+      if (!header || !header.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Unauthorized — admin setup already completed' })
+      }
+      try {
+        jwt.verify(header.split(' ')[1], getSecret())
+      } catch {
+        return res.status(401).json({ error: 'Invalid token' })
+      }
+    }
+
     const hashed = await bcrypt.hash(password, 10)
     const { rows } = await query(
       'INSERT INTO admins (email, password, full_name, role) VALUES ($1, $2, $3, $4) RETURNING id, email, full_name, role',

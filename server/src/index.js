@@ -17,7 +17,12 @@ const PORT = process.env.API_PORT || 3001
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads')
 
 // Middleware
-app.use(cors())
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production'
+    ? ['https://你的域名.com', 'http://localhost:3000']
+    : '*',
+  credentials: true,
+}))
 app.use(express.json())
 
 // Serve uploaded files
@@ -32,7 +37,7 @@ app.use('/api/categories', categoriesRouter)
 app.use('/api/styles', stylesRouter)
 app.use('/api/projects', projectsRouter)
 
-// Auth
+// Auth (register: open for first admin, auth-required after)
 app.post('/api/auth/login', login)
 app.post('/api/auth/register', createAdmin)
 

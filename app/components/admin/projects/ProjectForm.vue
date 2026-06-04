@@ -20,10 +20,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- 分类 -->
       <div class="space-y-1.5">
-        <label class="block text-sm font-medium text-warm-700">分类</label>
+        <label class="block text-sm font-medium text-stone-700">分类</label>
         <select
           v-model="form.category_id"
-          class="block w-full rounded-sm border border-warm-300 px-3 py-2 text-sm bg-white focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600"
+          class="block w-full rounded-sm border border-stone-300 px-3 py-2 text-sm bg-white focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600"
         >
           <option :value="null">无</option>
           <option v-for="cat in categories" :key="cat.id" :value="cat.id">
@@ -34,10 +34,10 @@
 
       <!-- 状态 -->
       <div class="space-y-1.5">
-        <label class="block text-sm font-medium text-warm-700">状态</label>
+        <label class="block text-sm font-medium text-stone-700">状态</label>
         <select
           v-model="form.status"
-          class="block w-full rounded-sm border border-warm-300 px-3 py-2 text-sm bg-white focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600"
+          class="block w-full rounded-sm border border-stone-300 px-3 py-2 text-sm bg-white focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600"
         >
           <option value="draft">草稿</option>
           <option value="published">已发布</option>
@@ -48,7 +48,7 @@
 
     <!-- 风格（多选） -->
     <div class="space-y-1.5">
-      <label class="block text-sm font-medium text-warm-700">建筑风格</label>
+      <label class="block text-sm font-medium text-stone-700">建筑风格</label>
       <div class="flex flex-wrap gap-2">
         <button
           v-for="style in styles"
@@ -57,8 +57,8 @@
           :class="[
             'px-3 py-1.5 text-sm rounded-full border transition-colors',
             form.style_ids.includes(style.id)
-              ? 'bg-warm-800 text-cream border-warm-800'
-              : 'bg-white text-warm-600 border-warm-300 hover:border-warm-400',
+              ? 'bg-stone-800 text-canvas border-stone-800'
+              : 'bg-white text-stone-600 border-stone-300 hover:border-stone-400',
           ]"
           @click="toggleStyle(style.id)"
         >
@@ -77,7 +77,7 @@
 
     <!-- 正文 -->
     <div class="space-y-1.5">
-      <label class="block text-sm font-medium text-warm-700">正文内容</label>
+      <label class="block text-sm font-medium text-stone-700">正文内容</label>
       <BaseTextarea
         v-model="form.content"
         placeholder="详细的项目描述（支持 HTML）"
@@ -98,13 +98,13 @@
 
     <!-- 精选 -->
     <label class="flex items-center gap-2 cursor-pointer">
-      <input v-model="form.is_featured" type="checkbox" class="w-4 h-4 rounded-sm border-warm-300 text-warm-800 focus:ring-warm-600" />
-      <span class="text-sm text-warm-700">精选项目（在首页展示）</span>
+      <input v-model="form.is_featured" type="checkbox" class="w-4 h-4 rounded-sm border-stone-300 text-stone-800 focus:ring-stone-600" />
+      <span class="text-sm text-stone-700">精选项目（在首页展示）</span>
     </label>
 
     <!-- SEO 设置 -->
     <details class="group">
-      <summary class="text-sm font-medium text-warm-500 cursor-pointer hover:text-warm-700">
+      <summary class="text-sm font-medium text-stone-500 cursor-pointer hover:text-stone-700">
         SEO 设置
       </summary>
       <div class="mt-3 space-y-3 pl-2">
@@ -114,7 +114,7 @@
     </details>
 
     <!-- 操作按钮 -->
-    <div class="flex items-center gap-3 pt-4 border-t border-warm-200">
+    <div class="flex items-center gap-3 pt-4 border-t border-stone-200">
       <BaseButton type="submit" :loading="saving">
         {{ projectId ? '保存更改' : '创建项目' }}
       </BaseButton>

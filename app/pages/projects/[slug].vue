@@ -20,7 +20,7 @@
 
     <template v-else-if="project">
       <!-- 封面大图 -->
-      <section class="relative h-[65vh] min-h-[450px] bg-warm-200">
+      <section class="relative h-[65vh] min-h-[450px] bg-stone-200">
         <div v-if="project.cover_image_url" class="absolute inset-0">
           <img
             :src="project.cover_image_url"
@@ -28,11 +28,11 @@
             class="w-full h-full object-cover"
           />
         </div>
-        <div class="absolute inset-0 bg-gradient-to-b from-warm-900/30 to-warm-900/10" />
+        <div class="absolute inset-0 bg-gradient-to-b from-stone-900/30 to-stone-900/10" />
       </section>
 
       <!-- 项目内容 -->
-      <section class="py-section bg-cream">
+      <section class="py-section bg-canvas">
         <div class="container-narrow">
           <!-- 标题 & 标签 -->
           <div class="mb-14">
@@ -46,38 +46,38 @@
               <span
                 v-for="style in project.styles"
                 :key="style.id"
-                class="px-3 py-1 text-xs font-medium bg-warm-100 text-warm-500 rounded-full border border-warm-200"
+                class="px-3 py-1 text-xs font-medium bg-stone-100 text-stone-500 rounded-full border border-stone-200"
               >
                 {{ style.name }}
               </span>
             </div>
 
-            <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-warm-800">{{ project.title }}</h1>
+            <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-stone-800">{{ project.title }}</h1>
 
             <!-- 项目信息 -->
-            <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 bg-warm-50 rounded-sm border border-warm-200">
+            <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 bg-stone-50 rounded-sm border border-stone-200">
               <div v-if="project.location">
-                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">位置</p>
-                <p class="text-sm font-medium text-warm-700">{{ project.location }}</p>
+                <p class="text-xs text-stone-400 uppercase tracking-widest mb-1">位置</p>
+                <p class="text-sm font-medium text-stone-700">{{ project.location }}</p>
               </div>
               <div v-if="project.completion_date">
-                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">年份</p>
-                <p class="text-sm font-medium text-warm-700">{{ formatDate(project.completion_date) }}</p>
+                <p class="text-xs text-stone-400 uppercase tracking-widest mb-1">年份</p>
+                <p class="text-sm font-medium text-stone-700">{{ formatDate(project.completion_date) }}</p>
               </div>
               <div v-if="project.client">
-                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">客户</p>
-                <p class="text-sm font-medium text-warm-700">{{ project.client }}</p>
+                <p class="text-xs text-stone-400 uppercase tracking-widest mb-1">客户</p>
+                <p class="text-sm font-medium text-stone-700">{{ project.client }}</p>
               </div>
               <div v-if="project.area_sqm">
-                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">面积</p>
-                <p class="text-sm font-medium text-warm-700">{{ project.area_sqm }} m&sup2;</p>
+                <p class="text-xs text-stone-400 uppercase tracking-widest mb-1">面积</p>
+                <p class="text-sm font-medium text-stone-700">{{ project.area_sqm }} m&sup2;</p>
               </div>
             </div>
           </div>
 
           <!-- 项目描述 -->
           <div v-if="project.description" class="prose prose-lg prose max-w-none mb-14">
-            <p class="text-lg text-warm-600 leading-relaxed">{{ project.description }}</p>
+            <p class="text-lg text-stone-600 leading-relaxed">{{ project.description }}</p>
           </div>
 
           <!-- 项目正文（富文本） -->
@@ -85,12 +85,12 @@
 
           <!-- 图片图集 -->
           <div v-if="project.images && project.images.length > 1" class="mb-14">
-            <h2 class="text-2xl font-serif font-bold text-warm-800 mb-8">项目图集</h2>
+            <h2 class="text-2xl font-serif font-bold text-stone-800 mb-8">项目图集</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div
                 v-for="img in project.images"
                 :key="img.id"
-                class="relative aspect-[4/3] rounded-sm overflow-hidden cursor-pointer group bg-warm-100"
+                class="relative aspect-[4/3] rounded-sm overflow-hidden cursor-pointer group bg-stone-100"
                 @click="openGallery(img)"
               >
                 <img
@@ -99,16 +99,16 @@
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
                   loading="lazy"
                 />
-                <div v-if="img.caption" class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-warm-900/70 to-transparent">
-                  <p class="text-sm text-cream">{{ img.caption }}</p>
+                <div v-if="img.caption" class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-stone-900/70 to-transparent">
+                  <p class="text-sm text-canvas">{{ img.caption }}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- 相关项目 -->
-          <div v-if="relatedProjects.length > 0" class="border-t border-warm-200 pt-14">
-            <h2 class="text-2xl font-serif font-bold text-warm-800 mb-8">相关项目</h2>
+          <div v-if="relatedProjects.length > 0" class="border-t border-stone-200 pt-14">
+            <h2 class="text-2xl font-serif font-bold text-stone-800 mb-8">相关项目</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               <ProjectCard
                 v-for="rp in relatedProjects"
@@ -162,7 +162,7 @@ function openGallery(img: ProjectImage) {
   const currentIndex = images.findIndex(i => i.id === img.id)
 
   const overlay = document.createElement('div')
-  overlay.className = 'fixed inset-0 z-50 bg-warm-900/95 flex items-center justify-center p-8 cursor-pointer'
+  overlay.className = 'fixed inset-0 z-50 bg-stone-900/95 flex items-center justify-center p-8 cursor-pointer'
   overlay.onclick = () => overlay.remove()
 
   const imgEl = document.createElement('img')

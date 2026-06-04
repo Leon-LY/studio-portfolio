@@ -12,7 +12,7 @@
       <div
         v-for="m in milestones"
         :key="m.id"
-        class="flex items-center justify-between p-4 bg-warm-50 rounded-sm border border-warm-200 hover:border-warm-300 transition-colors"
+        class="flex items-center justify-between p-4 bg-stone-50 rounded-sm border border-stone-200 hover:border-stone-300 transition-colors"
       >
         <div class="flex items-center gap-4 flex-1 min-w-0">
           <!-- Status dot -->
@@ -26,7 +26,7 @@
           />
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-3 flex-wrap">
-              <p class="text-sm font-medium text-warm-800">{{ m.title }}</p>
+              <p class="text-sm font-medium text-stone-800">{{ m.title }}</p>
               <span
                 class="inline-flex px-2 py-0.5 text-xs rounded-full"
                 :class="statusColor(m.status)"
@@ -34,7 +34,7 @@
                 {{ statusLabel(m.status) }}
               </span>
             </div>
-            <p class="text-xs text-warm-400 mt-1">
+            <p class="text-xs text-stone-400 mt-1">
               到期：{{ formatDate(m.due_date) }}
               <template v-if="m.paid_date">
                 · 实际收款：{{ formatDate(m.paid_date) }}
@@ -47,7 +47,7 @@
         </div>
 
         <div class="flex items-center gap-3 ml-4">
-          <p class="text-sm font-semibold text-warm-700 whitespace-nowrap">{{ formatAmount(m.amount) }}</p>
+          <p class="text-sm font-semibold text-stone-700 whitespace-nowrap">{{ formatAmount(m.amount) }}</p>
           <!-- Actions -->
           <div class="flex items-center gap-1">
             <button
@@ -59,14 +59,14 @@
               <Icon name="lucide:check-circle" size="16" />
             </button>
             <button
-              class="p-1.5 text-warm-400 hover:text-warm-600 hover:bg-warm-100 rounded transition-colors"
+              class="p-1.5 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded transition-colors"
               title="编辑"
               @click="$emit('edit', m)"
             >
               <Icon name="lucide:pencil" size="16" />
             </button>
             <button
-              class="p-1.5 text-warm-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+              class="p-1.5 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
               title="删除"
               @click="$emit('delete', m)"
             >
@@ -93,7 +93,7 @@ function statusColor(status: string): string {
     pending: 'bg-amber-100 text-amber-700',
     paid: 'bg-green-100 text-green-700',
     overdue: 'bg-red-100 text-red-700',
-  }[status] || 'bg-warm-100 text-warm-500'
+  }[status] || 'bg-stone-100 text-stone-500'
 }
 
 function statusLabel(status: string): string {

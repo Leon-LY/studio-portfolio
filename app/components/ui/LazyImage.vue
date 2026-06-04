@@ -3,7 +3,7 @@
     <!-- 占位 -->
     <div
       v-if="!loaded"
-      class="absolute inset-0 bg-warm-100 animate-pulse"
+      class="absolute inset-0 bg-stone-100 animate-pulse"
     />
     <!-- 图片 -->
     <img

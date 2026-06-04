@@ -5,7 +5,7 @@
       <BaseButton variant="outline" size="sm" @click="prevMonth">
         <Icon name="lucide:chevron-left" size="16" />
       </BaseButton>
-      <h3 class="text-lg font-serif font-semibold text-warm-800">{{ displayMonth }}</h3>
+      <h3 class="text-lg font-serif font-semibold text-stone-800">{{ displayMonth }}</h3>
       <BaseButton variant="outline" size="sm" @click="nextMonth">
         <Icon name="lucide:chevron-right" size="16" />
       </BaseButton>
@@ -16,9 +16,9 @@
       <LoadingSpinner size="md" text="加载中..." />
     </div>
 
-    <div v-else class="bg-white rounded-sm border border-warm-200 overflow-hidden">
+    <div v-else class="bg-white rounded-sm border border-stone-200 overflow-hidden">
       <!-- Day-of-week headers -->
-      <div class="grid grid-cols-7 text-center text-xs font-medium text-warm-400 border-b border-warm-200 bg-warm-50">
+      <div class="grid grid-cols-7 text-center text-xs font-medium text-stone-400 border-b border-stone-200 bg-stone-50">
         <div v-for="day in dayLabels" :key="day" class="py-2">{{ day }}</div>
       </div>
 
@@ -27,15 +27,15 @@
         <div
           v-for="(cell, idx) in calendarCells"
           :key="idx"
-          class="min-h-[80px] border-b border-r border-warm-100 p-1.5"
+          class="min-h-[80px] border-b border-r border-stone-100 p-1.5"
           :class="[
-            cell.isCurrentMonth ? 'bg-white' : 'bg-warm-50/50',
+            cell.isCurrentMonth ? 'bg-white' : 'bg-stone-50/50',
             cell.isToday ? 'ring-1 ring-inset ring-accent-400' : '',
           ]"
         >
           <p
             class="text-xs mb-1"
-            :class="cell.isCurrentMonth ? 'text-warm-600' : 'text-warm-300'"
+            :class="cell.isCurrentMonth ? 'text-stone-600' : 'text-stone-300'"
           >
             {{ cell.day }}
           </p>
@@ -124,7 +124,7 @@ function statusBg(status: string): string {
     pending: 'bg-amber-100 text-amber-700',
     paid: 'bg-green-100 text-green-700',
     overdue: 'bg-red-100 text-red-700',
-  }[status] || 'bg-warm-100 text-warm-500'
+  }[status] || 'bg-stone-100 text-stone-500'
 }
 
 function prevMonth() {

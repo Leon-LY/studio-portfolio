@@ -3,60 +3,82 @@
     <PortfolioHeader />
 
     <!-- 页头 -->
-    <section class="pt-28 pb-16 bg-warm-50 border-b border-warm-200">
+    <section class="pt-28 pb-16 bg-stone-50 border-b border-stone-200">
       <div class="container-narrow">
-        <p class="text-accent-400 text-sm font-medium tracking-widest uppercase mb-3">联系</p>
-        <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-warm-800">联系我们</h1>
-        <p class="mt-3 text-warm-500 text-lg">与我们取得联系，开启一段对话</p>
+        <p class="text-accent-500 text-sm font-medium tracking-widest uppercase mb-3">Contact</p>
+        <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-stone-900">联系我们</h1>
+        <p class="mt-2 text-stone-500">期待与您探讨未来的项目可能。</p>
       </div>
     </section>
 
-    <!-- 内容 -->
-    <section class="py-section bg-cream">
+    <!-- 表单区域 -->
+    <section class="py-section bg-canvas">
       <div class="container-narrow">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-16">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-12">
           <!-- 联系信息 -->
-          <div class="md:col-span-2">
-            <h2 class="text-2xl font-serif font-bold text-warm-800 mb-8">开始对话</h2>
-            <div class="space-y-8">
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center flex-shrink-0">
-                  <Icon name="lucide:mail" size="18" class="text-warm-500" />
-                </div>
-                <div>
-                  <p class="text-sm font-medium text-warm-800">邮箱</p>
-                  <a href="mailto:info@studio.com" class="text-sm text-warm-500 hover:text-accent-500 transition-colors">
-                    554295000@qq.com
-                  </a>
+          <div class="md:col-span-2 space-y-8">
+            <div>
+              <h3 class="text-xs text-stone-400 uppercase tracking-widest font-medium mb-4">联系方式</h3>
+              <div class="space-y-4">
+                <a href="mailto:554295000@qq.com" class="flex items-center gap-3 text-stone-600 hover:text-accent-500 transition-colors group">
+                  <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
+                    <Icon name="lucide:mail" size="18" class="text-stone-500 group-hover:text-accent-400" />
+                  </span>
+                  <span class="text-sm">554295000@qq.com</span>
+                </a>
+                <div class="flex items-center gap-3 text-stone-500">
+                  <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center">
+                    <Icon name="lucide:map-pin" size="18" class="text-stone-500" />
+                  </span>
+                  <span class="text-sm">中国 · 上海</span>
                 </div>
               </div>
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center flex-shrink-0">
-                  <Icon name="lucide:map-pin" size="18" class="text-warm-500" />
-                </div>
-                <div>
-                  <p class="text-sm font-medium text-warm-800">地址</p>
-                  <p class="text-sm text-warm-500">中国 · 上海</p>
-                </div>
+            </div>
+            <div>
+              <h3 class="text-xs text-stone-400 uppercase tracking-widest font-medium mb-4">关注我们</h3>
+              <div class="flex gap-3">
+                <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 cursor-not-allowed" title="微信">
+                  <Icon name="lucide:message-circle" size="18" />
+                </span>
+                <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 cursor-not-allowed" title="小红书">
+                  <Icon name="lucide:book-open" size="18" />
+                </span>
               </div>
             </div>
           </div>
 
-          <!-- 联系表单 -->
+          <!-- 表单 -->
           <div class="md:col-span-3">
-            <form class="space-y-6" @submit.prevent="handleSubmit">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form @submit.prevent="handleSubmit" class="space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <BaseInput v-model="form.name" label="姓名" placeholder="您的姓名" required />
-                <BaseInput v-model="form.email" label="邮箱" type="email" placeholder="您的邮箱地址" required />
+                <BaseInput v-model="form.email" label="邮箱" type="email" placeholder="your@email.com" required />
               </div>
-              <BaseTextarea v-model="form.message" label="留言" placeholder="请告诉我们您的项目情况..." rows="5" required />
-              <BaseButton type="submit" full-width size="lg">
-                发送留言
+              <div>
+                <label class="block text-sm font-medium text-stone-700 mb-1.5">项目类型</label>
+                <select
+                  v-model="form.projectType"
+                  class="w-full px-4 py-2.5 text-sm border border-stone-300 rounded-sm bg-white text-stone-700 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 transition-colors"
+                >
+                  <option value="">请选择</option>
+                  <option value="residential">住宅</option>
+                  <option value="commercial">商业</option>
+                  <option value="public">公共建筑</option>
+                  <option value="landscape">景观</option>
+                  <option value="renovation">改造</option>
+                  <option value="other">其他</option>
+                </select>
+              </div>
+              <BaseTextarea v-model="form.message" label="留言" placeholder="请描述您的项目需求、规模、时间计划等信息..." rows="5" required />
+              <BaseButton type="submit" full-width size="lg" :loading="sending">
+                {{ sending ? '发送中...' : '发送留言' }}
               </BaseButton>
+              <p v-if="sent" class="text-sm text-green-600 text-center font-medium">
+                <Icon name="lucide:check-circle" size="16" class="inline mr-1" />
+                留言已发送，我们会尽快与您联系。
+              </p>
+              <p v-if="error" class="text-sm text-red-500 text-center">{{ error }}</p>
             </form>
-            <p v-if="sent" class="mt-4 text-sm text-accent-600 text-center font-medium">
-              感谢您的留言！我们会尽快回复您。
-            </p>
           </div>
         </div>
       </div>
@@ -67,20 +89,34 @@
 </template>
 
 <script setup lang="ts">
-
+const sending = ref(false)
+const sent = ref(false)
+const error = ref('')
 const form = reactive({
   name: '',
   email: '',
+  projectType: '',
   message: '',
 })
-const sent = ref(false)
 
-function handleSubmit() {
-  // 生产环境中应发送到邮件服务或存储到数据库
-  console.log('Contact form:', form)
-  sent.value = true
-  form.name = ''
-  form.email = ''
-  form.message = ''
+async function handleSubmit() {
+  if (!form.name || !form.email || !form.message) {
+    error.value = '请填写所有必填字段。'
+    return
+  }
+  sending.value = true
+  error.value = ''
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    sent.value = true
+    form.name = ''
+    form.email = ''
+    form.projectType = ''
+    form.message = ''
+  } catch {
+    error.value = '发送失败，请稍后重试或直接发送邮件至 554295000@qq.com'
+  } finally {
+    sending.value = false
+  }
 }
 </script>

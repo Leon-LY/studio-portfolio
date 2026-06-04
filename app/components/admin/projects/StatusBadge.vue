@@ -21,7 +21,7 @@ const labels: Record<ProjectStatus, string> = {
 }
 
 const colors: Record<ProjectStatus, string> = {
-  draft: 'bg-warm-100 text-warm-600',
+  draft: 'bg-stone-100 text-stone-600',
   published: 'bg-green-100 text-green-700',
   archived: 'bg-amber-100 text-amber-700',
 }

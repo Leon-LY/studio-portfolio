@@ -1,6 +1,6 @@
 <template>
   <div :class="wrapperClass">
-    <label v-if="label" :for="inputId" class="block text-sm font-medium text-warm-700 mb-1">
+    <label v-if="label" :for="inputId" class="block text-sm font-medium text-stone-700 mb-1">
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
     </label>
@@ -18,7 +18,7 @@
       />
       <slot name="suffix" />
     </div>
-    <p v-if="hint && !error" class="mt-1 text-sm text-warm-500">{{ hint }}</p>
+    <p v-if="hint && !error" class="mt-1 text-sm text-stone-500">{{ hint }}</p>
     <p v-if="error" class="mt-1 text-sm text-red-600">{{ error }}</p>
   </div>
 </template>
@@ -40,5 +40,5 @@ defineEmits(['update:modelValue', 'blur'])
 
 const inputId = `input-${Math.random().toString(36).slice(2, 9)}`
 
-const inputClasses = 'block w-full rounded-sm border border-warm-300 px-3 py-2 text-sm shadow-sm placeholder-warm-400 focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600 disabled:bg-warm-50 disabled:text-warm-500 transition-colors bg-white'
+const inputClasses = 'block w-full rounded-sm border border-stone-300 px-3 py-2 text-sm shadow-sm placeholder-stone-400 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 disabled:bg-stone-50 disabled:text-stone-500 transition-colors bg-white'
 </script>

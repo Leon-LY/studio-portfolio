@@ -1,7 +1,7 @@
 <template>
-  <aside class="w-64 bg-warm-900 text-cream flex flex-col h-screen fixed left-0 top-0 z-30">
+  <aside class="w-64 bg-stone-900 text-canvas flex flex-col h-screen fixed left-0 top-0 z-30">
     <!-- Logo -->
-    <div class="flex items-center h-16 px-6 border-b border-warm-700">
+    <div class="flex items-center h-16 px-6 border-b border-stone-700">
       <NuxtLink to="/admin" class="font-serif text-lg font-bold tracking-tight">形筑 后台</NuxtLink>
     </div>
 
@@ -12,7 +12,7 @@
         :key="item.to"
         :to="item.to"
         class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors"
-        :class="isActive(item.to) ? 'bg-warm-700 text-cream border-l-2 border-accent-400' : 'text-warm-400 hover:text-cream hover:bg-warm-800'"
+        :class="isActive(item.to) ? 'bg-stone-700 text-canvas border-l-2 border-accent-400' : 'text-stone-400 hover:text-canvas hover:bg-stone-800'"
       >
         <Icon :name="item.icon" size="18" />
         {{ item.label }}
@@ -20,11 +20,11 @@
     </nav>
 
     <!-- 返回网站 -->
-    <div class="p-4 border-t border-warm-700">
+    <div class="p-4 border-t border-stone-700">
       <NuxtLink
         to="/"
         target="_blank"
-        class="flex items-center gap-2 px-3 py-2 text-sm text-warm-400 hover:text-cream transition-colors rounded-sm hover:bg-warm-800"
+        class="flex items-center gap-2 px-3 py-2 text-sm text-stone-400 hover:text-canvas transition-colors rounded-sm hover:bg-stone-800"
       >
         <Icon name="lucide:external-link" size="16" />
         查看网站
@@ -43,6 +43,7 @@ const navItems = [
   { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },
   { to: '/admin/categories', label: '分类', icon: 'lucide:folder-tree' },
   { to: '/admin/styles', label: '风格', icon: 'lucide:palette' },
+  { to: '/admin/manual', label: '操作手册', icon: 'lucide:book-open' },
 ]
 
 function isActive(path: string) {

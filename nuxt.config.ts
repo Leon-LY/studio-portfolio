@@ -30,7 +30,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '形筑建筑设计工作室 — 创造能够启发灵感的空间。专注建筑与室内设计，用思考塑造场所。' },
+        { name: 'description', content: '形筑建筑设计工作室 — 创造能够启发灵感的空间。专注建筑设计，用思考塑造场所。' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

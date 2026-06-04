@@ -5,10 +5,10 @@
     <div class="p-6">
       <!-- Project Selector -->
       <div class="mb-6">
-        <label class="block text-sm font-medium text-warm-700 mb-2">选择项目</label>
+        <label class="block text-sm font-medium text-stone-700 mb-2">选择项目</label>
         <select
           v-model="selectedProjectId"
-          class="w-full max-w-md px-4 py-2.5 bg-white border border-warm-300 rounded-sm text-sm text-warm-800 focus:border-warm-600 focus:ring-1 focus:ring-warm-600 outline-none transition-colors"
+          class="w-full max-w-md px-4 py-2.5 bg-white border border-stone-300 rounded-sm text-sm text-stone-800 focus:border-stone-600 focus:ring-1 focus:ring-stone-600 outline-none transition-colors"
           @change="onProjectChange"
         >
           <option value="">-- 选择项目 --</option>
@@ -21,7 +21,7 @@
         <div class="flex items-center gap-2 mb-4 flex-wrap">
           <button
             class="px-3 py-1 text-xs rounded-full border transition-colors"
-            :class="selectedCategory === '' ? 'bg-warm-800 text-cream border-warm-800' : 'bg-white text-warm-600 border-warm-300 hover:border-warm-500'"
+            :class="selectedCategory === '' ? 'bg-stone-800 text-canvas border-stone-800' : 'bg-white text-stone-600 border-stone-300 hover:border-stone-500'"
             @click="selectedCategory = ''"
           >
             全部
@@ -30,7 +30,7 @@
             v-for="cat in filesCategories"
             :key="cat.id"
             class="px-3 py-1 text-xs rounded-full border transition-colors"
-            :class="selectedCategory === cat.id ? 'bg-warm-800 text-cream border-warm-800' : 'bg-white text-warm-600 border-warm-300 hover:border-warm-500'"
+            :class="selectedCategory === cat.id ? 'bg-stone-800 text-canvas border-stone-800' : 'bg-white text-stone-600 border-stone-300 hover:border-stone-500'"
             @click="selectedCategory = cat.id"
           >
             <Icon v-if="cat.icon" :name="cat.icon" size="12" class="mr-1 inline" />
@@ -49,7 +49,7 @@
         </div>
 
         <!-- File List -->
-        <div v-else class="bg-white rounded-sm border border-warm-200 shadow-elevation-1 p-4">
+        <div v-else class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-4">
           <FileList :files="filteredFiles" @deleted="handleDelete" />
         </div>
       </template>

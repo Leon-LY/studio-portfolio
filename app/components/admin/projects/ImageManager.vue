@@ -2,18 +2,18 @@
   <div class="space-y-4">
     <!-- 上传区域 -->
     <div
-      class="border-2 border-dashed border-warm-300 rounded-sm p-8 text-center hover:border-warm-400 transition-colors cursor-pointer bg-warm-50"
+      class="border-2 border-dashed border-stone-300 rounded-sm p-8 text-center hover:border-stone-400 transition-colors cursor-pointer bg-stone-50"
       :class="{ 'border-accent-400 bg-accent-50': isDragging }"
       @dragover.prevent="isDragging = true"
       @dragleave.prevent="isDragging = false"
       @drop.prevent="handleDrop"
       @click="triggerFileInput"
     >
-      <Icon name="lucide:upload" size="32" class="text-warm-400 mx-auto mb-3" />
-      <p class="text-sm text-warm-600 font-medium">
+      <Icon name="lucide:upload" size="32" class="text-stone-400 mx-auto mb-3" />
+      <p class="text-sm text-stone-600 font-medium">
         拖放图片到此处或点击上传
       </p>
-      <p class="text-xs text-warm-400 mt-1">支持 PNG、JPG、WebP，单文件不超过 10MB</p>
+      <p class="text-xs text-stone-400 mt-1">支持 PNG、JPG、WebP，单文件不超过 10MB</p>
       <input
         ref="fileInput"
         type="file"
@@ -25,7 +25,7 @@
     </div>
 
     <!-- 上传进度 -->
-    <div v-if="isUploading" class="flex items-center gap-3 text-sm text-warm-600">
+    <div v-if="isUploading" class="flex items-center gap-3 text-sm text-stone-600">
       <LoadingSpinner size="sm" />
       上传中...
     </div>
@@ -37,11 +37,11 @@
         :key="img.id"
         :class="[
           'relative group rounded-sm overflow-hidden border-2 transition-colors',
-          img.is_cover ? 'border-accent-400' : 'border-warm-200',
+          img.is_cover ? 'border-accent-400' : 'border-stone-200',
         ]"
       >
         <!-- 图片 -->
-        <div class="aspect-square bg-warm-100">
+        <div class="aspect-square bg-stone-100">
           <img
             :src="getImageUrl(img.storage_path)"
             :alt="img.alt_text || ''"
@@ -50,11 +50,11 @@
         </div>
 
         <!-- 悬停操作层 -->
-        <div class="absolute inset-0 bg-warm-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+        <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
           <!-- 设为封面 -->
           <button
             v-if="!img.is_cover"
-            class="p-1.5 bg-white rounded-sm text-warm-700 hover:bg-warm-50 transition-colors"
+            class="p-1.5 bg-white rounded-sm text-stone-700 hover:bg-stone-50 transition-colors"
             title="设为封面"
             @click="setCoverImage(img.id)"
           >

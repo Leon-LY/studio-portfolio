@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-1.5">
-    <label v-if="label" :for="textareaId" class="block text-sm font-medium text-warm-700">
+    <label v-if="label" :for="textareaId" class="block text-sm font-medium text-stone-700">
       {{ label }}
     </label>
     <textarea
@@ -9,10 +9,10 @@
       :placeholder="placeholder"
       :rows="rows"
       :disabled="disabled"
-      class="block w-full rounded-sm border border-warm-300 px-3 py-2 text-sm shadow-sm placeholder-warm-400 focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600 disabled:bg-warm-50 transition-colors resize-y bg-white"
+      class="block w-full rounded-sm border border-stone-300 px-3 py-2 text-sm shadow-sm placeholder-stone-400 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 disabled:bg-stone-50 transition-colors resize-y bg-white"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
     />
-    <p v-if="hint" class="text-sm text-warm-500">{{ hint }}</p>
+    <p v-if="hint" class="text-sm text-stone-500">{{ hint }}</p>
   </div>
 </template>
 

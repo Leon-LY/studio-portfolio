@@ -38,6 +38,6 @@ const sizes: Record<string, string> = {
 }
 
 const spinnerClasses = computed(() =>
-  `animate-spin text-warm-400 ${sizes[props.size] || sizes.md}`,
+  `animate-spin text-stone-400 ${sizes[props.size] || sizes.md}`,
 )
 </script>

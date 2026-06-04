@@ -37,7 +37,7 @@ const colorClass = computed(() => {
     '.ppt': 'text-orange-500', '.pptx': 'text-orange-500',
     '.dwg': 'text-purple-500', '.dxf': 'text-purple-500',
   }
-  return map[ext.value] || 'text-warm-400'
+  return map[ext.value] || 'text-stone-400'
 })
 
 const bgClass = computed(() => {
@@ -48,7 +48,7 @@ const bgClass = computed(() => {
     '.ppt': 'bg-orange-50', '.pptx': 'bg-orange-50',
     '.dwg': 'bg-purple-50', '.dxf': 'bg-purple-50',
   }
-  return map[ext.value] || 'bg-warm-100'
+  return map[ext.value] || 'bg-stone-100'
 })
 
 const sizeClass = computed(() => {

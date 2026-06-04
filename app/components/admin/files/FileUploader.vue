@@ -3,7 +3,7 @@
     <!-- Drop Zone -->
     <div
       class="border-2 border-dashed rounded-sm p-8 text-center transition-colors cursor-pointer"
-      :class="isDragging ? 'border-accent-400 bg-accent-50' : 'border-warm-300 hover:border-warm-500 bg-warm-50'"
+      :class="isDragging ? 'border-accent-400 bg-accent-50' : 'border-stone-300 hover:border-stone-500 bg-stone-50'"
       @dragover.prevent="isDragging = true"
       @dragleave.prevent="isDragging = false"
       @drop.prevent="handleDrop"
@@ -21,9 +21,9 @@
         <LoadingSpinner size="md" :text="`上传中... ${uploadProgress}%`" />
       </div>
       <div v-else>
-        <Icon name="lucide:upload-cloud" size="32" class="text-warm-400 mx-auto mb-3" />
-        <p class="text-sm text-warm-600 font-medium">点击或拖拽上传文件</p>
-        <p class="text-xs text-warm-400 mt-1">
+        <Icon name="lucide:upload-cloud" size="32" class="text-stone-400 mx-auto mb-3" />
+        <p class="text-sm text-stone-600 font-medium">点击或拖拽上传文件</p>
+        <p class="text-xs text-stone-400 mt-1">
           支持 PDF、Word、Excel、PPT、DWG、SKP、ZIP 等格式，单文件最大 100MB
         </p>
       </div>

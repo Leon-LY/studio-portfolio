@@ -1,14 +1,14 @@
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-    <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
-      <p class="text-sm text-warm-500">预计回款总额</p>
-      <p class="mt-2 font-serif text-2xl font-bold text-warm-800">{{ formatAmount(overview?.total_expected || 0) }}</p>
+    <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
+      <p class="text-sm text-stone-500">预计回款总额</p>
+      <p class="mt-2 font-serif text-2xl font-bold text-stone-800">{{ formatAmount(overview?.total_expected || 0) }}</p>
     </div>
-    <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
+    <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
       <p class="text-sm text-green-600">已收款项</p>
       <p class="mt-2 font-serif text-2xl font-bold text-green-700">{{ formatAmount(overview?.total_received || 0) }}</p>
     </div>
-    <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
+    <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
       <p class="text-sm text-red-500">逾期款项</p>
       <p class="mt-2 font-serif text-2xl font-bold text-red-600">
         {{ formatAmount(overview?.total_overdue || 0) }}

@@ -8,53 +8,60 @@
   }
 
   body {
-    @apply antialiased text-warm-600 bg-cream;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    @apply antialiased text-stone-600 bg-canvas;
+    font-size: 15px;
   }
 
-  /* 标题默认使用衬线字体 */
   h1, h2, h3 {
-    @apply font-serif text-warm-800;
+    @apply font-serif text-stone-900;
+  }
+
+  h4, h5, h6 {
+    @apply font-sans text-stone-800 font-medium;
+  }
+
+  ::selection {
+    @apply bg-stone-800 text-canvas;
   }
 }
 
 @layer components {
   .container-wide {
-    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-10;
+    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
   }
 
   .container-narrow {
-    @apply max-w-4xl mx-auto px-6 sm:px-8 lg:px-10;
+    @apply max-w-4xl mx-auto px-6 sm:px-8 lg:px-12;
   }
 
-  /* Typography prose 暖色调覆盖 */
+  /* Typography prose — stone 色板覆盖 */
   .prose {
-    --tw-prose-body: #635e55;
-    --tw-prose-headings: #2d2a26;
-    --tw-prose-lead: #635e55;
-    --tw-prose-links: #b8891a;
-    --tw-prose-bold: #2d2a26;
-    --tw-prose-counters: #a8a194;
-    --tw-prose-bullets: #d6d1c4;
-    --tw-prose-hr: #e8e5dc;
-    --tw-prose-quotes: #2d2a26;
-    --tw-prose-quote-borders: #d4a43c;
-    --tw-prose-captions: #a8a194;
-    --tw-prose-code: #2d2a26;
-    --tw-prose-pre-code: #e8e5dc;
-    --tw-prose-pre-bg: #1a1815;
-    --tw-prose-th-borders: #d6d1c4;
-    --tw-prose-td-borders: #e8e5dc;
+    --tw-prose-body: #57544d;
+    --tw-prose-headings: #1c1917;
+    --tw-prose-lead: #57544d;
+    --tw-prose-links: #9a7b2c;
+    --tw-prose-bold: #1c1917;
+    --tw-prose-counters: #a8a59b;
+    --tw-prose-bullets: #d6d3cc;
+    --tw-prose-hr: #e7e5e0;
+    --tw-prose-quotes: #1c1917;
+    --tw-prose-quote-borders: #c8a44e;
+    --tw-prose-captions: #a8a59b;
+    --tw-prose-code: #1c1917;
+    --tw-prose-pre-code: #e7e5e0;
+    --tw-prose-pre-bg: #111110;
+    --tw-prose-th-borders: #d6d3cc;
+    --tw-prose-td-borders: #e7e5e0;
   }
 }
 
 @layer utilities {
   /* ============================================================
-     滚动揭示动画
+     滚动揭示动画 — 更明显的入场感
      ============================================================ */
   .reveal-hidden {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(40px);
   }
   .reveal-visible {
     opacity: 1;
@@ -63,24 +70,25 @@
                 transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* 子元素逐帧延迟动画 */
-  .stagger-children > * {
-    --stagger-index: 0;
-  }
+  /* 子元素逐帧延迟 — 支持 12 个子元素 */
   .stagger-children > *:nth-child(1) { transition-delay: 0ms; }
-  .stagger-children > *:nth-child(2) { transition-delay: 80ms; }
-  .stagger-children > *:nth-child(3) { transition-delay: 160ms; }
-  .stagger-children > *:nth-child(4) { transition-delay: 240ms; }
-  .stagger-children > *:nth-child(5) { transition-delay: 320ms; }
-  .stagger-children > *:nth-child(6) { transition-delay: 400ms; }
-  .stagger-children > *:nth-child(7) { transition-delay: 480ms; }
-  .stagger-children > *:nth-child(8) { transition-delay: 560ms; }
+  .stagger-children > *:nth-child(2) { transition-delay: 60ms; }
+  .stagger-children > *:nth-child(3) { transition-delay: 120ms; }
+  .stagger-children > *:nth-child(4) { transition-delay: 180ms; }
+  .stagger-children > *:nth-child(5) { transition-delay: 240ms; }
+  .stagger-children > *:nth-child(6) { transition-delay: 300ms; }
+  .stagger-children > *:nth-child(7) { transition-delay: 360ms; }
+  .stagger-children > *:nth-child(8) { transition-delay: 420ms; }
+  .stagger-children > *:nth-child(9) { transition-delay: 480ms; }
+  .stagger-children > *:nth-child(10) { transition-delay: 540ms; }
+  .stagger-children > *:nth-child(11) { transition-delay: 600ms; }
+  .stagger-children > *:nth-child(12) { transition-delay: 660ms; }
 
   /* 图片加载模糊过渡 */
   .img-loading {
     opacity: 0;
-    filter: blur(10px);
-    transform: scale(1.05);
+    filter: blur(12px);
+    transform: scale(1.03);
   }
   .img-loaded {
     opacity: 1;
@@ -88,22 +96,23 @@
     transform: scale(1);
     transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s ease;
   }
+
+  /* 骨架屏 */
+  .skeleton {
+    @apply bg-stone-200 rounded-sm animate-pulse;
+  }
 }
 
 /* ============================================================
-   页面过渡
+   页面过渡 — 交叉淡入淡出
    ============================================================ */
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.5s ease;
 }
-.page-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
+.page-enter-from,
 .page-leave-to {
   opacity: 0;
-  transform: translateY(-12px);
 }
 
 /* ============================================================
@@ -116,4 +125,17 @@
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* ============================================================
+   水平滑动过渡（共用）
+   ============================================================ */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }

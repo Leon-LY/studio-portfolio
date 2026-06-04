@@ -7,72 +7,77 @@ export default {
   theme: {
     extend: {
       // ============================================================
-      // 暖灰色系 — 建筑工作室主色调
+      // 冷灰主色系 — 建筑工作室，高对比度 WCAG AA
       // ============================================================
       colors: {
-        warm: {
-          50: '#fafaf8',
+        stone: {
+          50: '#fafaf9',
           100: '#f5f4f0',
-          200: '#e8e5dc',
-          300: '#d6d1c4',
-          400: '#a8a194',
-          500: '#807a6e',
-          600: '#635e55',
-          700: '#4a4540',
-          800: '#2d2a26',
-          900: '#1a1815',
+          200: '#e7e5e0',
+          300: '#d6d3cc',
+          400: '#a8a59b',
+          500: '#78756c',
+          600: '#57544d',
+          700: '#44413c',
+          800: '#292725',
+          900: '#1c1917',
         },
         accent: {
-          50: '#fdf8f0',
+          50: '#fdf9f0',
           100: '#f9eddb',
-          200: '#f0d7a8',
-          300: '#e5be6c',
-          400: '#d4a43c',
-          500: '#b8891a',
-          600: '#8c6914',
+          200: '#f0d7a0',
+          300: '#d4af37',
+          400: '#c8a44e',
+          500: '#9a7b2c',
+          600: '#6b5418',
         },
-        cream: '#fdfcf8',
-        ink: '#1a1815',
+        canvas: '#F5F4F0',
+        ink: '#111110',
+        signal: {
+          red: '#dc2626',
+          green: '#16a34a',
+          blue: '#2563eb',
+          amber: '#d97706',
+        },
       },
 
       // ============================================================
-      // 字体 — 宋体（标题）/ 黑体（正文）
+      // 字体 — Inter 优先拉丁 / 宋体标题 / Playfair Display 英文展示
       // ============================================================
       fontFamily: {
-        serif: ['"Noto Serif SC"', '"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Noto Sans SC"', '"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Noto Serif SC"', '"Playfair Display"', 'Georgia', 'serif'],
+        serif: ['"Noto Serif SC"', '"Source Han Serif SC"', 'Georgia', 'serif'],
+        sans: ['"Inter"', '"Noto Sans SC"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Playfair Display"', '"Noto Serif SC"', 'Georgia', 'serif'],
       },
 
       // ============================================================
-      // 展示字号 — 大标题专用
+      // 流体字号 — clamp() 响应式，无需断点切换
       // ============================================================
       fontSize: {
-        'display-xl': ['5rem', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
-        'display-lg': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.01em' }],
-        'display-md': ['2.5rem', { lineHeight: '1.15' }],
-        'display-sm': ['1.75rem', { lineHeight: '1.2' }],
+        'display-xl': ['clamp(2.75rem, 6vw, 5.5rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
+        'display-lg': ['clamp(2.25rem, 4.5vw, 4rem)', { lineHeight: '1.08', letterSpacing: '-0.015em' }],
+        'display-md': ['clamp(1.75rem, 3vw, 2.75rem)', { lineHeight: '1.12' }],
+        'display-sm': ['clamp(1.35rem, 2vw, 1.75rem)', { lineHeight: '1.2' }],
       },
 
       // ============================================================
-      // 阴影 — 柔和暖调层次
+      // 阴影 — 提高不透明度，屏幕可见
       // ============================================================
       boxShadow: {
-        'elevation-1': '0 1px 2px rgba(26, 24, 21, 0.04)',
-        'elevation-2': '0 2px 8px rgba(26, 24, 21, 0.06)',
-        'elevation-3': '0 4px 16px rgba(26, 24, 21, 0.08)',
-        'elevation-4': '0 8px 32px rgba(26, 24, 21, 0.10)',
-        'elevation-image': '0 4px 24px rgba(26, 24, 21, 0.12)',
+        'elevation-1': '0 1px 3px rgba(0, 0, 0, 0.06)',
+        'elevation-2': '0 3px 10px rgba(0, 0, 0, 0.08)',
+        'elevation-3': '0 6px 20px rgba(0, 0, 0, 0.10)',
+        'elevation-4': '0 12px 36px rgba(0, 0, 0, 0.12)',
+        'elevation-xl': '0 20px 60px rgba(0, 0, 0, 0.14)',
+        'elevation-image': '0 6px 28px rgba(0, 0, 0, 0.15)',
       },
 
       // ============================================================
-      // 间距 — 统一垂直节奏
+      // 间距 — 统一垂直节奏 + 保持 Tailwind 默认值
       // ============================================================
       spacing: {
-        '18': '4.5rem',
-        '22': '5.5rem',
-        '30': '7.5rem',
         'section': '7.5rem',
+        'section-sm': '4.5rem',
       },
 
       // ============================================================
@@ -86,18 +91,21 @@ export default {
       },
 
       // ============================================================
-      // 自定义动画 — 优雅缓动
+      // 自定义动画
       // ============================================================
       animation: {
         'fade-in-up': 'fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'fade-in': 'fade-in 0.6s ease forwards',
         'scale-in': 'scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'slide-in-left': 'slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slide-in-right': 'slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'pulse-subtle': 'pulse-subtle 2.5s ease-in-out infinite',
+        'reveal-image': 'reveal-image 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
 
       keyframes: {
         'fade-in-up': {
-          from: { opacity: '0', transform: 'translateY(2rem)' },
+          from: { opacity: '0', transform: 'translateY(2.5rem)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
         'fade-in': {
@@ -109,8 +117,20 @@ export default {
           to: { opacity: '1', transform: 'scale(1)' },
         },
         'slide-in-left': {
-          from: { opacity: '0', transform: 'translateX(-2rem)' },
+          from: { opacity: '0', transform: 'translateX(-2.5rem)' },
           to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        'slide-in-right': {
+          from: { opacity: '0', transform: 'translateX(2.5rem)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        'pulse-subtle': {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' },
+        },
+        'reveal-image': {
+          from: { opacity: '0', filter: 'blur(12px)', transform: 'scale(1.03)' },
+          to: { opacity: '1', filter: 'blur(0)', transform: 'scale(1)' },
         },
       },
     },

@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-warm-50 flex items-center justify-center p-4">
+  <div class="min-h-screen bg-stone-50 flex items-center justify-center p-4">
     <div class="w-full max-w-sm">
       <div class="text-center mb-8">
-        <h1 class="font-serif text-2xl font-bold text-warm-800">形筑 · 后台管理</h1>
-        <p class="mt-2 text-sm text-warm-500">登录以管理作品集</p>
+        <h1 class="font-serif text-2xl font-bold text-stone-800">形筑 · 后台管理</h1>
+        <p class="mt-2 text-sm text-stone-500">登录以管理作品集</p>
       </div>
 
-      <form class="bg-white p-6 rounded-sm shadow-elevation-2 border border-warm-200 space-y-4" @submit.prevent="handleLogin">
+      <form class="bg-white p-6 rounded-sm shadow-elevation-2 border border-stone-200 space-y-4" @submit.prevent="handleLogin">
         <BaseInput
           v-model="email"
           label="邮箱"

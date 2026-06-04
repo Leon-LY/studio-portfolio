@@ -4,12 +4,12 @@
 
     <div class="p-6 space-y-6">
       <!-- Tab Bar -->
-      <div class="flex items-center gap-1 bg-warm-100 rounded-sm p-1 w-fit">
+      <div class="flex items-center gap-1 bg-stone-100 rounded-sm p-1 w-fit">
         <button
           v-for="tab in tabs"
           :key="tab.key"
           class="px-4 py-2 text-sm font-medium rounded-sm transition-colors"
-          :class="activeTab === tab.key ? 'bg-white text-warm-800 shadow-elevation-1' : 'text-warm-500 hover:text-warm-700'"
+          :class="activeTab === tab.key ? 'bg-white text-stone-800 shadow-elevation-1' : 'text-stone-500 hover:text-stone-700'"
           @click="activeTab = tab.key"
         >
           <Icon :name="tab.icon" size="16" class="mr-1.5 inline" />
@@ -21,10 +21,10 @@
       <template v-if="activeTab === 'list'">
         <!-- Project Selector -->
         <div>
-          <label class="block text-sm font-medium text-warm-700 mb-2">选择项目</label>
+          <label class="block text-sm font-medium text-stone-700 mb-2">选择项目</label>
           <select
             v-model="selectedProjectId"
-            class="w-full max-w-md px-4 py-2.5 bg-white border border-warm-300 rounded-sm text-sm text-warm-800 focus:border-warm-600 focus:ring-1 focus:ring-warm-600 outline-none transition-colors"
+            class="w-full max-w-md px-4 py-2.5 bg-white border border-stone-300 rounded-sm text-sm text-stone-800 focus:border-stone-600 focus:ring-1 focus:ring-stone-600 outline-none transition-colors"
             @change="loadMilestones"
           >
             <option value="">-- 选择项目 --</option>
@@ -34,9 +34,9 @@
 
         <template v-if="selectedProjectId">
           <!-- Summary -->
-          <div v-if="milestones.length > 0" class="flex items-center gap-6 p-4 bg-warm-50 rounded-sm border border-warm-200 text-sm">
-            <span class="text-warm-500">共 <strong class="text-warm-800">{{ milestones.length }}</strong> 个节点</span>
-            <span class="text-warm-500">合计：<strong class="text-warm-800">{{ formatAmount(totalAmount) }}</strong></span>
+          <div v-if="milestones.length > 0" class="flex items-center gap-6 p-4 bg-stone-50 rounded-sm border border-stone-200 text-sm">
+            <span class="text-stone-500">共 <strong class="text-stone-800">{{ milestones.length }}</strong> 个节点</span>
+            <span class="text-stone-500">合计：<strong class="text-stone-800">{{ formatAmount(totalAmount) }}</strong></span>
             <span class="text-green-600">已收：<strong>{{ formatAmount(paidAmount) }}</strong></span>
             <span v-if="overdueCount > 0" class="text-red-500">逾期：<strong>{{ overdueCount }} 笔</strong></span>
           </div>
@@ -45,7 +45,7 @@
           <div v-if="isLoading" class="py-8 flex justify-center">
             <LoadingSpinner size="md" />
           </div>
-          <div v-else class="bg-white rounded-sm border border-warm-200 shadow-elevation-1 p-4">
+          <div v-else class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-4">
             <div class="flex justify-end mb-3">
               <BaseButton size="sm" @click="openCreateForm">
                 <Icon name="lucide:plus" size="16" class="mr-1" /> 新增回款节点

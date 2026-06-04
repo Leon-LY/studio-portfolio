@@ -109,7 +109,7 @@ export function usePayments(projectId?: string) {
       pending: 'bg-amber-100 text-amber-700',
       paid: 'bg-green-100 text-green-700',
       overdue: 'bg-red-100 text-red-700',
-    }[status] || 'bg-warm-100 text-warm-500'
+    }[status] || 'bg-stone-100 text-stone-500'
   }
 
   function statusLabel(status: string): string {

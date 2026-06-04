@@ -3,15 +3,15 @@
     <AdminHeader title="分类管理" />
 
     <div class="p-6 max-w-2xl">
-      <div class="bg-white rounded-sm border border-warm-200 shadow-elevation-1">
+      <div class="bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <!-- 头部 -->
-        <div class="flex items-center justify-between p-5 border-b border-warm-100">
-          <h3 class="text-sm font-semibold text-warm-800">管理分类</h3>
+        <div class="flex items-center justify-between p-5 border-b border-stone-100">
+          <h3 class="text-sm font-semibold text-stone-800">管理分类</h3>
           <BaseButton size="sm" @click="showAdd = true">添加分类</BaseButton>
         </div>
 
         <!-- 添加表单 -->
-        <div v-if="showAdd" class="p-5 border-b border-warm-100 bg-warm-50">
+        <div v-if="showAdd" class="p-5 border-b border-stone-100 bg-stone-50">
           <div class="flex gap-3">
             <BaseInput v-model="newName" label="名称" placeholder="分类名称" wrapper-class="flex-1" />
             <BaseInput v-model="newSlug" label="标识符" placeholder="category-slug" wrapper-class="flex-1" />
@@ -23,18 +23,18 @@
         </div>
 
         <!-- 列表 -->
-        <div v-if="categories.length > 0" class="divide-y divide-warm-100">
+        <div v-if="categories.length > 0" class="divide-y divide-stone-100">
           <div
             v-for="cat in categories"
             :key="cat.id"
-            class="flex items-center justify-between p-4 hover:bg-warm-50 transition-colors"
+            class="flex items-center justify-between p-4 hover:bg-stone-50 transition-colors"
           >
             <div>
-              <p class="text-sm font-medium text-warm-800">{{ cat.name }}</p>
-              <p class="text-xs text-warm-500">{{ cat.slug }}</p>
+              <p class="text-sm font-medium text-stone-800">{{ cat.name }}</p>
+              <p class="text-xs text-stone-500">{{ cat.slug }}</p>
             </div>
             <button
-              class="p-1.5 text-warm-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
+              class="p-1.5 text-stone-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
               @click="handleDelete(cat.id, cat.name)"
             >
               <Icon name="lucide:trash-2" size="16" />

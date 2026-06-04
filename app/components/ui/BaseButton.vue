@@ -35,10 +35,10 @@ const buttonClasses = computed(() => {
   const base = 'inline-flex items-center justify-center font-medium rounded-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]'
 
   const variants: Record<string, string> = {
-    primary: 'bg-warm-800 text-cream hover:bg-warm-700 hover:scale-[1.02] focus:ring-warm-500 shadow-elevation-1',
-    secondary: 'bg-warm-100 text-warm-700 hover:bg-warm-200 focus:ring-warm-500',
-    outline: 'border border-warm-300 text-warm-700 hover:bg-warm-50 hover:border-warm-400 focus:ring-warm-500',
-    ghost: 'text-warm-600 hover:bg-warm-100 hover:text-warm-800 focus:ring-warm-500',
+    primary: 'bg-stone-800 text-canvas hover:bg-stone-700 hover:scale-[1.02] focus:ring-stone-500 shadow-elevation-1',
+    secondary: 'bg-stone-100 text-stone-700 hover:bg-stone-200 focus:ring-stone-500',
+    outline: 'border border-stone-300 text-stone-700 hover:bg-stone-50 hover:border-stone-400 focus:ring-stone-500',
+    ghost: 'text-stone-600 hover:bg-stone-100 hover:text-stone-800 focus:ring-stone-500',
     danger: 'bg-red-600 text-white hover:bg-red-700 hover:scale-[1.02] focus:ring-red-500',
   }
 

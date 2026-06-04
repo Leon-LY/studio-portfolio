@@ -25,12 +25,12 @@
       <!-- 编辑界面 -->
       <template v-else>
         <!-- Tab Bar -->
-        <div class="flex items-center gap-1 bg-warm-100 rounded-sm p-1 w-fit mb-6 overflow-x-auto">
+        <div class="flex items-center gap-1 bg-stone-100 rounded-sm p-1 w-fit mb-6 overflow-x-auto">
           <button
             v-for="tab in tabs"
             :key="tab.key"
             class="px-4 py-2 text-sm font-medium rounded-sm transition-colors whitespace-nowrap"
-            :class="activeTab === tab.key ? 'bg-white text-warm-800 shadow-elevation-1' : 'text-warm-500 hover:text-warm-700'"
+            :class="activeTab === tab.key ? 'bg-white text-stone-800 shadow-elevation-1' : 'text-stone-500 hover:text-stone-700'"
             @click="activeTab = tab.key"
           >
             <Icon :name="tab.icon" size="16" class="mr-1.5 inline" />
@@ -49,7 +49,7 @@
         </div>
 
         <!-- Tab: 项目文件 -->
-        <div v-if="activeTab === 'files'" class="bg-white rounded-sm border border-warm-200 shadow-elevation-1 p-4">
+        <div v-if="activeTab === 'files'" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-4">
           <FileUploader :project-id="project.id" @uploaded="refreshFiles" />
           <div v-if="fileLoading" class="py-4 text-center">
             <LoadingSpinner size="sm" text="加载文件中..." />
@@ -60,10 +60,10 @@
         </div>
 
         <!-- Tab: 回款节点 -->
-        <div v-if="activeTab === 'payments'" class="bg-white rounded-sm border border-warm-200 shadow-elevation-1 p-4">
+        <div v-if="activeTab === 'payments'" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-4">
           <div class="flex justify-between items-center mb-4">
             <div v-if="paymentMilestones.length > 0" class="flex items-center gap-6 text-sm">
-              <span class="text-warm-500">合计：<strong class="text-warm-800">{{ formatAmount(pmtTotal) }}</strong></span>
+              <span class="text-stone-500">合计：<strong class="text-stone-800">{{ formatAmount(pmtTotal) }}</strong></span>
               <span class="text-green-600">已收：<strong>{{ formatAmount(pmtPaid) }}</strong></span>
             </div>
             <BaseButton size="sm" @click="openPaymentForm">

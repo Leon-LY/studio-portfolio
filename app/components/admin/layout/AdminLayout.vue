@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-warm-50">
+  <div class="min-h-screen bg-stone-50">
     <AdminSidebar />
     <div class="ml-64">
       <slot />

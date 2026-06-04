@@ -5,7 +5,7 @@
     content-class="w-full max-w-sm"
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <p class="text-sm text-warm-600">{{ message }}</p>
+    <p class="text-sm text-stone-600">{{ message }}</p>
 
     <template #footer>
       <div class="flex justify-end gap-3">

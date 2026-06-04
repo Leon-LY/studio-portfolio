@@ -35,10 +35,10 @@ const fileStorage = multer.diskStorage({
   filename: (_req, file, cb) => {
     // Use timestamp + random suffix to prevent collisions, keep original extension
     const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-    const ext = path.extname(file.originalname)
-    // Encode original name for filesystem safety while preserving readability
-    const safeName = Buffer.from(file.originalname, 'utf8').toString('hex').slice(0, 24)
-    cb(null, `${unique}-${safeName}${ext}`)
+    // Fix encoding: multer/busboy may interpret UTF-8 filenames as Latin-1
+    const origName = Buffer.from(file.originalname, 'latin1').toString('utf8')
+    const ext = path.extname(origName)
+    cb(null, `${unique}${ext}`)
   },
 })
 
@@ -140,7 +140,9 @@ router.post('/upload', authMiddleware, fileUpload.single('file'), async (req, re
     const { project_id, category_id, description } = req.body
     if (!project_id) return res.status(400).json({ error: 'project_id 为必填项' })
 
-    const ext = path.extname(req.file.originalname).toLowerCase()
+    // Fix encoding: multer/busboy may interpret UTF-8 filenames as Latin-1
+    const originalName = Buffer.from(req.file.originalname, 'latin1').toString('utf8')
+    const ext = path.extname(originalName).toLowerCase()
 
     // Get current sort_order
     const { rows: countRows } = await query(
@@ -157,7 +159,7 @@ router.post('/upload', authMiddleware, fileUpload.single('file'), async (req, re
         project_id,
         category_id || null,
         `files/${req.file.filename}`,
-        req.file.originalname,
+        originalName,
         req.file.mimetype,
         ext,
         req.file.size,

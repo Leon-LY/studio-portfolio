@@ -39,6 +39,8 @@ const route = useRoute()
 const navItems = [
   { to: '/admin', label: '仪表盘', icon: 'lucide:layout-dashboard' },
   { to: '/admin/projects', label: '项目', icon: 'lucide:folder-kanban' },
+  { to: '/admin/payments', label: '回款管理', icon: 'lucide:receipt' },
+  { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },
   { to: '/admin/categories', label: '分类', icon: 'lucide:folder-tree' },
   { to: '/admin/styles', label: '风格', icon: 'lucide:palette' },
 ]

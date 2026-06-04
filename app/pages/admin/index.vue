@@ -11,6 +11,25 @@
         </div>
       </div>
 
+      <!-- 回款概览 -->
+      <div v-if="paymentOverview" class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
+          <p class="text-sm text-warm-500">预计回款总额</p>
+          <p class="mt-2 font-serif text-2xl font-bold text-warm-800">{{ formatAmount(paymentOverview.total_expected) }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
+          <p class="text-sm text-green-600">已收款项</p>
+          <p class="mt-2 font-serif text-2xl font-bold text-green-700">{{ formatAmount(paymentOverview.total_received) }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
+          <p class="text-sm text-red-500">逾期款项</p>
+          <p class="mt-2 font-serif text-2xl font-bold text-red-600">
+            {{ formatAmount(paymentOverview.total_overdue) }}
+            <span class="text-sm font-normal text-red-400 ml-1">{{ paymentOverview.overdue_count }}笔</span>
+          </p>
+        </div>
+      </div>
+
       <!-- 快捷操作 -->
       <div class="bg-white p-6 rounded-sm border border-warm-200 shadow-elevation-1">
         <h3 class="text-sm font-semibold text-warm-800 mb-4">快捷操作</h3>
@@ -69,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~/types/models'
+import type { Project, PaymentOverview } from '~/types/models'
 
 const { fetchProjects } = useAdminProjects()
 
@@ -79,6 +98,7 @@ const stats = ref([
   { label: '草稿', value: 0 },
 ])
 const recentProjects = ref<Project[]>([])
+const paymentOverview = ref<PaymentOverview | null>(null)
 
 onMounted(async () => {
   try {
@@ -88,12 +108,14 @@ onMounted(async () => {
     const all = await Promise.all([
       fetchProjects({ status: 'draft', perPage: 1 }),
       fetchProjects({ status: 'published', perPage: 1 }),
+      adminApi.getPaymentOverview().catch(() => null),
     ])
     stats.value = [
       { label: '项目总数', value: result.count },
       { label: '已发布', value: all[1].count },
       { label: '草稿', value: all[0].count },
     ]
+    paymentOverview.value = all[2]
   } catch (e) {
     console.error('Failed to load dashboard:', e)
   }
@@ -105,5 +127,9 @@ function formatDate(date: string) {
     month: 'short',
     day: 'numeric',
   })
+}
+
+function formatAmount(amount: number): string {
+  return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY' }).format(amount)
 }
 </script>

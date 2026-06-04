@@ -161,6 +161,74 @@ export const adminApi = {
       body: JSON.stringify({ project_id: projectId, image_ids: imageIds }),
     })
   },
+
+  // ============================================================
+  // Project Files
+  // ============================================================
+  getProjectFiles(projectId: string) {
+    return apiFetch<any[]>(`/api/files/${projectId}`)
+  },
+  async uploadFile(projectId: string, file: File, metadata: { category_id?: string; description?: string } = {}) {
+    const token = getToken()
+    const form = new FormData()
+    form.append('file', file)
+    form.append('project_id', projectId)
+    if (metadata.category_id) form.append('category_id', metadata.category_id)
+    if (metadata.description) form.append('description', metadata.description)
+    const res = await fetch(`${getApiBase()}/api/files/upload`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Upload failed' }))
+      throw new Error(err.error)
+    }
+    return res.json()
+  },
+  updateFile(id: string, data: { description?: string; category_id?: string }) {
+    return apiFetch<any>(`/api/files/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  deleteFile(id: string) {
+    return apiFetch<any>(`/api/files/${id}`, { method: 'DELETE' })
+  },
+  getFileCategories() {
+    return apiFetch<any[]>('/api/files/categories')
+  },
+  createFileCategory(data: any) {
+    return apiFetch<any>('/api/files/categories', { method: 'POST', body: JSON.stringify(data) })
+  },
+  updateFileCategory(id: string, data: any) {
+    return apiFetch<any>(`/api/files/categories/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  deleteFileCategory(id: string) {
+    return apiFetch<any>(`/api/files/categories/${id}`, { method: 'DELETE' })
+  },
+
+  // ============================================================
+  // Payment Milestones
+  // ============================================================
+  getPaymentOverview() {
+    return apiFetch<any>('/api/payments/overview')
+  },
+  getPaymentCalendar(month: string) {
+    return apiFetch<any[]>(`/api/payments/calendar?month=${month}`)
+  },
+  getMilestones(projectId: string) {
+    return apiFetch<any[]>(`/api/payments/milestones?project_id=${projectId}`)
+  },
+  createMilestone(data: any) {
+    return apiFetch<any>('/api/payments/milestones', { method: 'POST', body: JSON.stringify(data) })
+  },
+  updateMilestone(id: string, data: any) {
+    return apiFetch<any>(`/api/payments/milestones/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  updateMilestoneStatus(id: string, status: string) {
+    return apiFetch<any>(`/api/payments/milestones/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) })
+  },
+  deleteMilestone(id: string) {
+    return apiFetch<any>(`/api/payments/milestones/${id}`, { method: 'DELETE' })
+  },
 }
 
 export function getImageUrl(filename: string): string {

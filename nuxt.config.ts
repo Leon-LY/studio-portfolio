@@ -32,6 +32,7 @@ export default defineNuxtConfig({
         '/admin/files',
         '/admin/categories',
         '/admin/styles',
+        '/admin/users',
         '/admin/manual',
       ],
     },

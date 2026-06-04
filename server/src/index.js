@@ -10,6 +10,7 @@ import stylesRouter from './routes/styles.js'
 import imagesRouter from './routes/images.js'
 import filesRouter from './routes/files.js'
 import paymentsRouter from './routes/payments.js'
+import usersRouter from './routes/users.js'
 import contactRouter from './routes/contact.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -51,6 +52,9 @@ app.use('/api/files', filesRouter)
 
 // Payments (milestones)
 app.use('/api/payments', paymentsRouter)
+
+// Users (auth required for all routes)
+app.use('/api/users', usersRouter)
 
 // Contact form
 app.use('/api/contact', contactRouter)

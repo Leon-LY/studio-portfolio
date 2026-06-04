@@ -234,6 +234,25 @@ export const adminApi = {
   deleteMilestone(id: string) {
     return apiFetch<any>(`/api/payments/milestones/${id}`, { method: 'DELETE' })
   },
+
+  // ============================================================
+  // User Management
+  // ============================================================
+  getUsers() {
+    return apiFetch<any[]>('/api/users')
+  },
+  createUser(data: { email: string; password: string; full_name?: string; role?: string }) {
+    return apiFetch<any>('/api/users', { method: 'POST', body: JSON.stringify(data) })
+  },
+  updateUser(id: string, data: { full_name?: string; role?: string }) {
+    return apiFetch<any>(`/api/users/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  changePassword(id: string, data: { current_password?: string; new_password: string }) {
+    return apiFetch<any>(`/api/users/${id}/password`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  deleteUser(id: string) {
+    return apiFetch<any>(`/api/users/${id}`, { method: 'DELETE' })
+  },
 }
 
 export function getImageUrl(filename: string): string {

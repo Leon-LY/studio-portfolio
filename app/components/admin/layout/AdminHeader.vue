@@ -29,6 +29,13 @@
             </div>
             <button
               class="w-full text-left px-4 py-2 text-sm text-stone-700 hover:bg-stone-50 transition-colors flex items-center gap-2"
+              @click="showChangePwd = true; menuOpen = false"
+            >
+              <Icon name="lucide:key" size="16" />
+              修改密码
+            </button>
+            <button
+              class="w-full text-left px-4 py-2 text-sm text-stone-700 hover:bg-stone-50 transition-colors flex items-center gap-2"
               @click="handleSignOut"
             >
               <Icon name="lucide:log-out" size="16" />
@@ -42,9 +49,25 @@
       <div v-if="menuOpen" class="fixed inset-0 z-40" @click="menuOpen = false" />
     </div>
   </header>
+
+    <!-- 修改密码 Modal -->
+    <BaseModal v-model="showChangePwd" title="修改密码" content-class="w-full max-w-sm">
+      <form @submit.prevent="handleChangePwd" class="space-y-4">
+        <BaseInput v-model="pwdForm.current" label="当前密码" type="password" placeholder="输入当前密码" required />
+        <BaseInput v-model="pwdForm.newPass" label="新密码" type="password" placeholder="至少6位" required />
+        <div class="flex justify-end gap-3 pt-2">
+          <BaseButton variant="outline" type="button" @click="showChangePwd = false">取消</BaseButton>
+          <BaseButton type="submit" :loading="pwdSaving">确认修改</BaseButton>
+        </div>
+      </form>
+    </BaseModal>
 </template>
 
 <script setup lang="ts">
+import BaseModal from '~/components/ui/BaseModal.vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+
 defineProps({
   title: { type: String, default: '仪表盘' },
 })
@@ -52,6 +75,9 @@ defineProps({
 const { user, signOut } = useAuth()
 
 const menuOpen = ref(false)
+const showChangePwd = ref(false)
+const pwdSaving = ref(false)
+const pwdForm = reactive({ current: '', newPass: '' })
 
 const userName = computed(() =>
   user.value?.full_name || user.value?.email?.split('@')[0] || '管理员',
@@ -62,6 +88,25 @@ const userEmail = computed(() => user.value?.email || '')
 async function handleSignOut() {
   menuOpen.value = false
   await signOut()
+}
+
+async function handleChangePwd() {
+  if (!pwdForm.current || !pwdForm.newPass) return
+  pwdSaving.value = true
+  try {
+    await adminApi.changePassword(user.value.id, {
+      current_password: pwdForm.current,
+      new_password: pwdForm.newPass,
+    })
+    showChangePwd.value = false
+    pwdForm.current = ''
+    pwdForm.newPass = ''
+    alert('密码修改成功')
+  } catch (e: any) {
+    alert(e.message)
+  } finally {
+    pwdSaving.value = false
+  }
 }
 </script>
 

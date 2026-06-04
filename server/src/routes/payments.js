@@ -40,7 +40,7 @@ router.get('/overview', async (_req, res) => {
 // GET /api/payments/calendar — get milestones for a month
 // ============================================================
 router.get('/calendar', async (req, res) => {
-  const month = req.query.month as string // format: "2026-06"
+  const month = req.query.month // format: "2026-06"
   if (!month) return res.status(400).json({ error: 'month 参数为必填项，格式：YYYY-MM' })
 
   try {
@@ -68,7 +68,7 @@ router.get('/calendar', async (req, res) => {
 // GET /api/payments/milestones — list milestones for a project
 // ============================================================
 router.get('/milestones', async (req, res) => {
-  const projectId = req.query.project_id as string
+  const projectId = req.query.project_id
   if (!projectId) return res.status(400).json({ error: 'project_id 参数为必填项' })
 
   try {

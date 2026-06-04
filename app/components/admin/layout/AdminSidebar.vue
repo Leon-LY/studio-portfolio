@@ -1,8 +1,18 @@
 <template>
-  <aside class="w-64 bg-stone-900 text-canvas flex flex-col h-screen fixed left-0 top-0 z-30">
+  <aside
+    class="w-64 bg-stone-900 text-canvas flex flex-col h-screen fixed left-0 top-0 z-50 transition-transform duration-300 lg:translate-x-0 lg:z-30"
+    :class="open ? 'translate-x-0' : '-translate-x-full'"
+  >
     <!-- Logo -->
-    <div class="flex items-center h-16 px-6 border-b border-stone-700">
-      <NuxtLink to="/admin" class="font-serif text-lg font-bold tracking-tight">方外设计 后台</NuxtLink>
+    <div class="flex items-center justify-between h-14 px-4 lg:px-6 lg:h-16 border-b border-stone-700">
+      <NuxtLink to="/admin" class="font-serif text-lg font-bold tracking-tight" @click="$emit('close')">方外设计 后台</NuxtLink>
+      <button
+        class="p-1 -mr-1 rounded-sm hover:bg-stone-700 transition-colors lg:hidden"
+        aria-label="关闭菜单"
+        @click="$emit('close')"
+      >
+        <Icon name="lucide:x" size="20" />
+      </button>
     </div>
 
     <!-- 导航 -->
@@ -13,6 +23,7 @@
         :to="item.to"
         class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors"
         :class="isActive(item.to) ? 'bg-stone-700 text-canvas border-l-2 border-accent-400' : 'text-stone-400 hover:text-canvas hover:bg-stone-800'"
+        @click="$emit('close')"
       >
         <Icon :name="item.icon" size="18" />
         {{ item.label }}
@@ -24,6 +35,7 @@
       <NuxtLink
         to="/"
         target="_blank"
+        rel="noopener noreferrer"
         class="flex items-center gap-2 px-3 py-2 text-sm text-stone-400 hover:text-canvas transition-colors rounded-sm hover:bg-stone-800"
       >
         <Icon name="lucide:external-link" size="16" />
@@ -34,6 +46,12 @@
 </template>
 
 <script setup lang="ts">
+defineProps({
+  open: { type: Boolean, default: false },
+})
+
+defineEmits(['close'])
+
 const route = useRoute()
 
 const navItems = [

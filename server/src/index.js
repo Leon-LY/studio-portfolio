@@ -3,7 +3,7 @@ import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { login, createAdmin } from './auth.js'
+import { login, createAdmin, getMe, authMiddleware } from './auth.js'
 import projectsRouter from './routes/projects.js'
 import categoriesRouter from './routes/categories.js'
 import stylesRouter from './routes/styles.js'
@@ -20,7 +20,7 @@ const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://你的域名.com', 'http://localhost:3000']
+    ? ['http://49.232.49.175:3000', 'http://49.232.49.175', 'http://localhost:3000']
     : '*',
   credentials: true,
 }))
@@ -41,6 +41,7 @@ app.use('/api/projects', projectsRouter)
 // Auth (register: open for first admin, auth-required after)
 app.post('/api/auth/login', login)
 app.post('/api/auth/register', createAdmin)
+app.get('/api/auth/me', authMiddleware, getMe)
 
 // Images
 app.use('/api/images', imagesRouter)

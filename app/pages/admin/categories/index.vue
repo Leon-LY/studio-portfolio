@@ -35,7 +35,7 @@
             </div>
             <button
               class="p-1.5 text-stone-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
-              @click="handleDelete(cat.id, cat.name)"
+              @click="confirmDelete = cat"
             >
               <Icon name="lucide:trash-2" size="16" />
             </button>
@@ -51,6 +51,17 @@
         />
       </div>
     </div>
+
+    <!-- 删除确认 -->
+    <ConfirmDialog
+      :model-value="!!confirmDelete"
+      title="删除分类"
+      :message="`确定要删除分类「${confirmDelete?.name}」吗？此操作不可撤销。`"
+      confirm-text="删除"
+      confirm-variant="danger"
+      @update:model-value="confirmDelete = null"
+      @confirm="handleDeleteConfirm"
+    />
   </div>
 </template>
 
@@ -61,6 +72,7 @@ import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
 import BaseButton from '~/components/ui/BaseButton.vue'
 import BaseInput from '~/components/ui/BaseInput.vue'
 import EmptyState from '~/components/ui/EmptyState.vue'
+import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
 
 const { fetchAll, create, remove } = useAdminCategories()
 
@@ -69,9 +81,14 @@ const showAdd = ref(false)
 const newName = ref('')
 const newSlug = ref('')
 const saving = ref(false)
+const confirmDelete = ref<Category | null>(null)
 
 onMounted(async () => {
-  categories.value = await fetchAll()
+  try {
+    categories.value = await fetchAll()
+  } catch (e: any) {
+    console.error('Failed to load categories:', e)
+  }
 })
 
 async function handleAdd() {
@@ -83,6 +100,8 @@ async function handleAdd() {
     newName.value = ''
     newSlug.value = ''
     showAdd.value = false
+    // Invalidate ProjectForm cache so new category appears in dropdowns
+    refreshNuxtData('admin-categories')
   } catch (e: any) {
     alert(e.message)
   } finally {
@@ -90,13 +109,15 @@ async function handleAdd() {
   }
 }
 
-async function handleDelete(id: string, name: string) {
-  if (!confirm(`确定要删除分类「${name}」吗？`)) return
+async function handleDeleteConfirm() {
+  if (!confirmDelete.value) return
   try {
-    await remove(id)
+    await remove(confirmDelete.value.id)
     categories.value = await fetchAll()
+    refreshNuxtData('admin-categories')
   } catch (e: any) {
     alert(e.message)
   }
+  confirmDelete.value = null
 }
 </script>

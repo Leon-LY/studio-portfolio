@@ -1,5 +1,5 @@
 <template>
-  <header class="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-6">
+  <header class="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-6 sticky top-0 z-20">
     <!-- 标题 -->
     <div>
       <h1 class="text-lg font-semibold text-stone-800">{{ title }}</h1>

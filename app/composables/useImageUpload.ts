@@ -10,7 +10,7 @@ export function useImageUpload(projectId: string) {
     try {
       const project = await adminApi.getProject(projectId)
       images.value = (project.images || []).sort((a: any, b: any) => a.sort_order - b.sort_order)
-    } catch { images.value = [] }
+    } catch { /* keep existing images on error */ }
   }
 
   async function uploadImage(file: File, _altText = ''): Promise<ProjectImage | null> {

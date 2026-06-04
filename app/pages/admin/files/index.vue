@@ -86,7 +86,6 @@ const filesCategories = ref<any[]>([])
 const isLoading = ref(false)
 
 // Use composable when project changes
-const filesData = reactive<Record<string, any>>({})
 
 const filteredFiles = computed(() => {
   if (!selectedCategory.value) return allFiles.value

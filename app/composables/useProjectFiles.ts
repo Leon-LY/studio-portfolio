@@ -1,5 +1,6 @@
 // Project files — upload / download / delete / categorize
 import type { ProjectFile, FileCategory } from '~/types/models'
+import { adminApi } from './useApi'
 
 export function useProjectFiles(projectId: string) {
   const files = ref<ProjectFile[]>([])

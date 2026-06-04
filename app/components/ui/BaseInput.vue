@@ -38,7 +38,7 @@ defineProps({
 
 defineEmits(['update:modelValue', 'blur'])
 
-const inputId = `input-${Math.random().toString(36).slice(2, 9)}`
+const inputId = useId()
 
 const inputClasses = 'block w-full rounded-sm border border-stone-300 px-3 py-2 text-sm shadow-sm placeholder-stone-400 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 disabled:bg-stone-50 disabled:text-stone-500 transition-colors bg-white'
 </script>

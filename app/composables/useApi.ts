@@ -91,6 +91,11 @@ export const api = {
 
 // Admin API (auth required)
 export const adminApi = {
+  // Auth
+  getMe() {
+    return apiFetch<any>('/api/auth/me')
+  },
+
   // Projects
   getProjects(params: Record<string, string | number> = {}) {
     const q = new URLSearchParams()

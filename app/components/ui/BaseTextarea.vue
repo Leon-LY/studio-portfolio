@@ -28,5 +28,5 @@ defineProps({
 
 defineEmits(['update:modelValue'])
 
-const textareaId = `textarea-${Math.random().toString(36).slice(2, 9)}`
+const textareaId = useId()
 </script>

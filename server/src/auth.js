@@ -28,6 +28,14 @@ function checkRateLimit(ip) {
   return true
 }
 
+// Periodic cleanup of expired rate limiter entries (every 30 min)
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, entry] of loginAttempts) {
+    if (now > entry.resetAt) loginAttempts.delete(ip)
+  }
+}, 30 * 60 * 1000).unref()
+
 function getSecret() {
   return JWT_SECRET
 }
@@ -85,6 +93,19 @@ export async function login(req, res) {
   } catch (err) {
     console.error('Login error:', err)
     res.status(500).json({ error: 'Login failed' })
+  }
+}
+
+// Get current user from token
+export async function getMe(req, res) {
+  try {
+    const { rows } = await query('SELECT id, email, full_name, role FROM admins WHERE id = $1', [req.user.id])
+    const admin = rows[0]
+    if (!admin) return res.status(404).json({ error: 'User not found' })
+    res.json(admin)
+  } catch (err) {
+    console.error('GetMe error:', err)
+    res.status(500).json({ error: 'Failed to get user' })
   }
 }
 

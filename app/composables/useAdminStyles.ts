@@ -13,9 +13,8 @@ export function useAdminStyles() {
     return adminApi.createStyle({ name, slug })
   }
 
-  async function update(id: string, updates: Partial<Style>) {
-    // Styles only support name/slug, update not implemented in API yet
-    return true
+  async function update(_id: string, _updates: Partial<Style>) {
+    throw new Error('风格更新功能尚未实现')
   }
 
   async function remove(id: string) {

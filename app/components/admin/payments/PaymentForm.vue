@@ -47,20 +47,30 @@ const amountStr = computed({
   set: (v) => { form.amount = parseFloat(v) || 0 },
 })
 
-// Populate form when editing
+// Populate form when editing, reset when creating new
 watch(() => props.milestone, (m) => {
   if (m) {
     form.title = m.title
     form.amount = m.amount
     form.due_date = m.due_date || ''
     form.notes = m.notes || ''
-  } else if (props.modelValue) {
+  } else {
     form.title = ''
     form.amount = 0
     form.due_date = ''
     form.notes = ''
   }
 }, { immediate: true })
+
+// Also clear form when modal opens for a new milestone (milestone was already null)
+watch(() => props.modelValue, (open) => {
+  if (open && !props.milestone) {
+    form.title = ''
+    form.amount = 0
+    form.due_date = ''
+    form.notes = ''
+  }
+})
 
 async function handleSubmit() {
   saving.value = true
@@ -69,7 +79,7 @@ async function handleSubmit() {
       ...form,
       project_id: props.milestone?.project_id || props.projectId,
     })
-    visible.value = false
+    // Don't close modal here — let parent close it after async work completes
   } finally {
     saving.value = false
   }

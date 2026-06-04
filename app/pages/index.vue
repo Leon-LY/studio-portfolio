@@ -122,10 +122,10 @@
             v-for="(cat, idx) in categories"
             :key="cat.id"
             :to="`/projects?category=${cat.slug}`"
-            class="reveal-hidden group p-10 bg-canvas rounded-sm border border-stone-200 hover:border-accent-300 hover:shadow-elevation-3 transition-all duration-400 text-center hover:-translate-y-1"
+            class="reveal-hidden group p-10 bg-canvas rounded-sm border border-stone-200 hover:border-accent-300 hover:shadow-elevation-3 transition-all duration-500 text-center hover:-translate-y-1"
             :data-delay="`${idx * 60}ms`"
           >
-            <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-stone-100 group-hover:bg-accent-50 flex items-center justify-center transition-colors duration-400">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-stone-100 group-hover:bg-accent-50 flex items-center justify-center transition-colors duration-500">
               <Icon :name="catIcons[cat.slug] || 'lucide:building-2'" size="24" class="text-stone-400 group-hover:text-accent-400 transition-colors" />
             </div>
             <h3 class="text-sm font-semibold text-stone-700 group-hover:text-stone-900 transition-colors font-sans">{{ cat.name }}</h3>

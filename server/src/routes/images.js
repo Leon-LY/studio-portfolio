@@ -2,10 +2,12 @@ import { Router } from 'express'
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
+import { fileURLToPath } from 'url'
 import { query } from '../db.js'
 import { authMiddleware } from '../auth.js'
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || './server/uploads'
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '../../../uploads')
 
 // Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -72,12 +74,12 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     if (rows.length === 0) return res.status(404).json({ error: 'Not found' })
     const img = rows[0]
 
+    // Delete from DB first — if this fails, file is still recoverable
+    await query('DELETE FROM project_images WHERE id = $1', [req.params.id])
+
     // Delete file from disk
     const filePath = path.join(UPLOAD_DIR, img.storage_path)
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
-
-    // Delete from DB
-    await query('DELETE FROM project_images WHERE id = $1', [req.params.id])
 
     // If was cover, reassign cover to first remaining image
     if (img.is_cover) {
@@ -129,14 +131,21 @@ router.put('/:id/cover', authMiddleware, async (req, res) => {
 // PUT /api/images/reorder — reorder images
 router.put('/reorder', authMiddleware, async (req, res) => {
   const { project_id, image_ids } = req.body
+  if (!project_id || !Array.isArray(image_ids)) {
+    return res.status(400).json({ error: 'project_id 和 image_ids 为必填项' })
+  }
   try {
+    // Wrap in a transaction so partial failures don't leave inconsistent sort_order
+    await query('BEGIN')
     for (let i = 0; i < image_ids.length; i++) {
       await query('UPDATE project_images SET sort_order = $1 WHERE id = $2 AND project_id = $3',
         [i, image_ids[i], project_id],
       )
     }
+    await query('COMMIT')
     res.json({ success: true })
   } catch (err) {
+    await query('ROLLBACK').catch(() => {})
     res.status(500).json({ error: 'Failed to reorder' })
   }
 })

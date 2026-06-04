@@ -41,7 +41,7 @@
       </div>
 
       <!-- 项目表格 -->
-      <div v-if="projects.length > 0" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 overflow-hidden">
+      <div v-if="projects.length > 0" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 overflow-x-auto">
         <table class="w-full">
           <thead>
             <tr class="border-b border-stone-100">
@@ -191,20 +191,32 @@ async function loadProjects() {
 }
 
 async function handleArchive(project: Project) {
-  await archiveProject(project.id, project.title)
-  await loadProjects()
+  try {
+    await archiveProject(project.id, project.title)
+    await loadProjects()
+  } catch (e: any) {
+    alert(`归档失败：${e.message}`)
+  }
 }
 
 async function handleRestore(project: Project) {
-  await restoreProject(project.id)
-  await loadProjects()
+  try {
+    await restoreProject(project.id)
+    await loadProjects()
+  } catch (e: any) {
+    alert(`恢复失败：${e.message}`)
+  }
 }
 
 async function handleDelete() {
   if (confirmDelete.value) {
-    await deleteProject(confirmDelete.value.id)
-    confirmDelete.value = null
-    await loadProjects()
+    try {
+      await deleteProject(confirmDelete.value.id)
+      confirmDelete.value = null
+      await loadProjects()
+    } catch (e: any) {
+      alert(`删除失败：${e.message}`)
+    }
   }
 }
 
@@ -217,5 +229,6 @@ function formatDate(date: string) {
 }
 
 onMounted(() => loadProjects())
+onUnmounted(() => clearTimeout(searchTimer))
 watch(activeTab, () => { page.value = 1; loadProjects() })
 </script>

@@ -1,5 +1,6 @@
 // Payment milestones — CRUD + calendar + overview
 import type { PaymentMilestone, PaymentOverview } from '~/types/models'
+import { adminApi } from './useApi'
 
 export function usePayments(projectId?: string) {
   const milestones = ref<PaymentMilestone[]>([])
@@ -23,20 +24,26 @@ export function usePayments(projectId?: string) {
   }
 
   async function fetchOverview() {
+    isLoading.value = true
     error.value = null
     try {
       overview.value = await adminApi.getPaymentOverview()
     } catch (e: any) {
       error.value = e.message || '获取回款概览失败'
+    } finally {
+      isLoading.value = false
     }
   }
 
   async function fetchCalendar(month: string) {
+    isLoading.value = true
     error.value = null
     try {
       calendarData.value = await adminApi.getPaymentCalendar(month)
     } catch (e: any) {
       error.value = e.message || '获取回款日历失败'
+    } finally {
+      isLoading.value = false
     }
   }
 

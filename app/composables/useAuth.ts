@@ -11,8 +11,17 @@ export function useAuth() {
   async function checkSession() {
     const token = getToken()
     if (token) {
-      // We have a token, assume valid (the API will reject if expired)
+      // Restore session from stored token, then fetch user profile
       session.value = { access_token: token, user: null }
+      try {
+        const { adminApi } = await import('./useApi')
+        const userProfile = await adminApi.getMe()
+        session.value = { access_token: token, user: userProfile }
+      } catch {
+        // Token invalid/expired — clear it
+        clearToken()
+        session.value = null
+      }
     }
   }
 

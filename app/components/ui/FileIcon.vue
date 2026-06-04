@@ -1,13 +1,13 @@
 <template>
   <div :class="['flex items-center justify-center rounded-sm', sizeClass, bgClass]">
-    <Icon :name="iconName" :class="sizeClass === 'w-8 h-8' ? 'text-sm' : 'text-xs'" :class="colorClass" />
+    <Icon :name="iconName" :class="[sizeClass === 'w-8 h-8' ? 'text-sm' : 'text-xs', colorClass]" />
   </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps({
   extension: { type: String, required: true },
-  size: { type: String as () => 'sm' | 'md' | 'lg', default: 'md' },
+  size: { type: String as PropType<'sm' | 'md' | 'lg'>, default: 'md' },
 })
 
 const ext = computed(() => props.extension.toLowerCase())

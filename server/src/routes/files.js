@@ -58,7 +58,7 @@ const router = Router()
 // ============================================================
 // File Categories (protected)
 // ============================================================
-router.get('/categories', async (_req, res) => {
+router.get('/categories', authMiddleware, async (_req, res) => {
   try {
     const { rows } = await query('SELECT * FROM file_categories ORDER BY sort_order')
     res.json(rows)
@@ -226,11 +226,11 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     const file = rows[0]
     const filePath = path.join(UPLOAD_DIR, file.storage_path)
 
+    // Delete from DB first — if this fails, file is still recoverable
+    await query('DELETE FROM project_files WHERE id = $1', [req.params.id])
+
     // Delete from disk
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
-
-    // Delete from DB
-    await query('DELETE FROM project_files WHERE id = $1', [req.params.id])
 
     res.json({ success: true })
   } catch (err) {

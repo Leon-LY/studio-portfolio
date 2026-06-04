@@ -17,21 +17,23 @@
       <!-- Hero 内容 -->
       <div class="container-wide relative z-10">
         <div class="max-w-4xl">
-          <!-- 标签 -->
-          <p class="text-accent-300 text-sm font-medium tracking-[0.2em] uppercase mb-6 animate-fade-in">
-            方外设计
-          </p>
-          <!-- 主标题 -->
+          <!-- 工作室名称 — 最显眼 -->
           <h1 class="font-serif text-display-xl font-bold text-canvas tracking-tight animate-fade-in-up">
-            方寸之外<br />
-            <span class="text-accent-300">别有天地</span>
+            方外设计
           </h1>
+          <!-- Slogan — 金线分隔 -->
+          <div class="flex items-center gap-5 mt-6 mb-6 animate-fade-in" style="animation-delay: 0.15s">
+            <span class="h-px w-12 bg-accent-400/60" />
+            <p class="font-display text-display-sm text-accent-300 tracking-wide">
+              方寸之外 · 别有天地
+            </p>
+          </div>
           <!-- 副标题 -->
-          <p class="mt-8 text-lg sm:text-xl text-stone-400 max-w-xl leading-relaxed font-light animate-fade-in" style="animation-delay: 0.2s">
+          <p class="text-lg sm:text-xl text-stone-400 max-w-xl leading-relaxed font-light animate-fade-in" style="animation-delay: 0.3s">
             以思考重塑空间的边界，创造既美观又实用的建筑。<br />每一个项目，都是光线、材料与人的对话。
           </p>
           <!-- CTA -->
-          <div class="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.4s">
+          <div class="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.5s">
             <NuxtLink
               to="/projects"
               class="inline-flex items-center justify-center px-8 py-3.5 bg-canvas text-ink text-sm font-medium rounded-sm hover:bg-white active:scale-[0.98] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none"

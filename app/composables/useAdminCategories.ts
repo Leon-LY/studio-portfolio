@@ -6,11 +6,11 @@ export function useAdminCategories() {
   const { fetchCategories } = useCategories()
 
   async function fetchAll(): Promise<Category[]> {
-    return fetchCategories()
+    return fetchCategories(true) // include hidden categories
   }
 
   async function create(name: string, slug: string) {
-    return adminApi.createCategory({ name, slug })
+    return adminApi.createCategory({ name, slug, is_visible: true })
   }
 
   async function update(id: string, updates: Partial<Category>) {

@@ -63,8 +63,9 @@ export const api = {
   },
 
   // Categories
-  getCategories() {
-    return apiFetch<any[]>('/api/categories')
+  getCategories(all = false) {
+    const q = all ? '?all=1' : ''
+    return apiFetch<any[]>(`/api/categories${q}`)
   },
   getCategoryBySlug(slug: string) {
     return apiFetch<any>(`/api/categories?slug=${slug}`)

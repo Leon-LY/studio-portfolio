@@ -7,6 +7,7 @@ export interface Category {
   slug: string
   description: string | null
   sort_order: number
+  is_visible: boolean
   created_at: string
 }
 

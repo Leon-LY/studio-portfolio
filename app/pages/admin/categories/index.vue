@@ -36,16 +36,30 @@
             :key="cat.id"
             class="flex items-center justify-between p-4 hover:bg-stone-50 transition-colors"
           >
-            <div>
-              <p class="text-sm font-medium text-stone-800">{{ cat.name }}</p>
-              <p class="text-xs text-stone-500">{{ cat.slug }}</p>
+            <div class="flex items-center gap-4 min-w-0">
+              <div class="min-w-0">
+                <p class="text-sm font-medium text-stone-800">{{ cat.name }}</p>
+                <p class="text-xs text-stone-500">{{ cat.slug }}</p>
+              </div>
             </div>
-            <button
-              class="p-1.5 text-stone-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
-              @click="confirmDelete = cat"
-            >
-              <Icon name="lucide:trash-2" size="16" />
-            </button>
+            <div class="flex items-center gap-3">
+              <!-- 首页展示开关 -->
+              <button
+                class="flex items-center gap-1.5 text-xs transition-colors"
+                :class="cat.is_visible ? 'text-green-600' : 'text-stone-400'"
+                :title="cat.is_visible ? '首页可见 — 点击隐藏' : '首页隐藏 — 点击显示'"
+                @click="toggleVisibility(cat)"
+              >
+                <Icon :name="cat.is_visible ? 'lucide:eye' : 'lucide:eye-off'" size="14" />
+                <span class="hidden sm:inline">{{ cat.is_visible ? '可见' : '隐藏' }}</span>
+              </button>
+              <button
+                class="p-1.5 text-stone-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
+                @click="confirmDelete = cat"
+              >
+                <Icon name="lucide:trash-2" size="16" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -82,7 +96,7 @@ import BaseInput from '~/components/ui/BaseInput.vue'
 import EmptyState from '~/components/ui/EmptyState.vue'
 import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
 
-const { fetchAll, create, remove } = useAdminCategories()
+const { fetchAll, create, update, remove } = useAdminCategories()
 
 const categories = ref<Category[]>([])
 const showAdd = ref(false)
@@ -115,6 +129,16 @@ onMounted(async () => {
     console.error('Failed to load categories:', e)
   }
 })
+
+async function toggleVisibility(cat: Category) {
+  try {
+    await update(cat.id, { is_visible: !cat.is_visible })
+    cat.is_visible = !cat.is_visible
+    refreshNuxtData('admin-categories')
+  } catch (e: any) {
+    alert(e.message)
+  }
+}
 
 async function handleAdd() {
   if (!newName.value) return

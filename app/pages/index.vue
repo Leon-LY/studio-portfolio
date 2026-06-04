@@ -64,7 +64,7 @@
          精选作品
          ============================================================ -->
     <section class="py-section bg-canvas">
-      <div class="container-wide" :ref="revealRef">
+      <div class="container-wide" :ref="revealAndSave">
         <div class="flex items-end justify-between mb-14 reveal-hidden">
           <div>
             <p class="text-accent-500 text-sm font-medium tracking-widest uppercase mb-3">Selected Works</p>
@@ -91,7 +91,7 @@
         </div>
 
         <!-- 项目网格 -->
-        <div v-else-if="projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
+        <div v-else-if="projects.length > 0" :ref="revealAndSave" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
           <div v-for="project in projects" :key="project.id" class="reveal-hidden" :data-delay="`${Math.random() * 200}ms`">
             <ProjectCard :project="project" variant="featured" />
           </div>
@@ -111,7 +111,7 @@
          按类型浏览
          ============================================================ -->
     <section class="py-section bg-stone-50">
-      <div class="container-wide" :ref="revealRef">
+      <div class="container-wide" :ref="revealAndSave">
         <div class="reveal-hidden">
           <p class="text-accent-500 text-sm font-medium tracking-widest uppercase text-center mb-3">Categories</p>
           <h2 class="text-display-sm font-serif font-bold text-stone-900 text-center">按类型浏览</h2>
@@ -135,6 +135,11 @@
       </div>
     </section>
 
+    <!-- DEBUG: 数据加载状态 -->
+    <div style="position:fixed;bottom:0;left:0;right:0;background:#111;color:#0f0;padding:8px 16px;font-size:12px;z-index:99999;font-family:monospace;opacity:0.9">
+      pending={{ pending }} | projects={{ projects ? projects.length : 'null' }} | categories={{ categories ? categories.length : 'null' }} | {{ debugMsg }}
+    </div>
+
     <PortfolioFooter />
   </div>
 </template>
@@ -143,6 +148,13 @@
 const { fetchFeaturedProjects } = useProjects()
 const { fetchCategories } = useCategories()
 const { revealRef } = useScrollReveal()
+
+function revealAndSave(el: any) {
+  revealRef(el)
+  if (el) revealContainer = el instanceof Element ? el : el.$el
+}
+
+const debugMsg = ref('init')
 
 // Hero parallax
 const scrollY = ref(0)
@@ -170,9 +182,38 @@ const projects = ref<any[] | null>(null)
 const categories = ref<any[] | null>(null)
 const pending = ref(true)
 
+// Re-trigger scroll reveal after data loads
+let revealContainer: Element | null = null
+function observeReveal() {
+  if (!revealContainer) return
+  revealContainer.querySelectorAll('.reveal-hidden').forEach(child => {
+    // manually add visible class since IntersectionObserver already ran
+    const delay = (child as HTMLElement).dataset.delay || '0ms'
+    ;(child as HTMLElement).style.setProperty('--reveal-delay', delay)
+    child.classList.add('reveal-visible')
+  })
+}
+
 onMounted(async () => {
-  try { projects.value = await fetchFeaturedProjects() } catch { projects.value = [] }
-  try { categories.value = await fetchCategories() } catch { categories.value = [] }
+  debugMsg.value = 'fetching...'
+  try {
+    debugMsg.value = 'fetching projects...'
+    projects.value = await fetchFeaturedProjects()
+    debugMsg.value = `projects loaded: ${projects.value.length}`
+  } catch (e: any) {
+    debugMsg.value = `projects error: ${e.message}`
+    projects.value = []
+  }
+  try {
+    debugMsg.value = 'fetching categories...'
+    categories.value = await fetchCategories()
+    debugMsg.value = `done: p=${projects.value?.length} c=${categories.value?.length}`
+  } catch (e: any) {
+    debugMsg.value = `categories error: ${e.message}`
+    categories.value = []
+  }
   pending.value = false
+  await nextTick()
+  observeReveal()
 })
 </script>

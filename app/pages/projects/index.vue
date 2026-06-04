@@ -245,6 +245,18 @@ async function loadProjects() {
 onMounted(() => loadProjects())
 watch([search, selectedCategory, selectedStyle, currentPage], () => loadProjects())
 
+// Re-trigger reveal after data loads
+watch(result, async (val) => {
+  if (val?.data?.length > 0) {
+    await nextTick()
+    document.querySelectorAll('.reveal-hidden').forEach(el => {
+      const delay = (el as HTMLElement).dataset.delay || '0ms'
+      ;(el as HTMLElement).style.setProperty('--reveal-delay', delay)
+      el.classList.add('reveal-visible')
+    })
+  }
+})
+
 const projects = computed(() => result.value?.data || [])
 const totalPages = computed(() => result.value?.totalPages || 0)
 </script>

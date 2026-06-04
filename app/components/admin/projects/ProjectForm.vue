@@ -1,54 +1,54 @@
 <template>
   <form class="space-y-6" @submit.prevent="onSubmit">
-    <!-- Title -->
+    <!-- 标题 -->
     <BaseInput
       v-model="form.title"
-      label="Title"
-      placeholder="Project title"
+      label="项目标题"
+      placeholder="输入项目标题"
       required
       @blur="autoGenerateSlug"
     />
 
-    <!-- Slug -->
+    <!-- 标识符 -->
     <BaseInput
       v-model="form.slug"
-      label="Slug"
+      label="URL 标识符"
       placeholder="project-slug"
-      hint="URL-friendly name, auto-generated from title"
+      hint="由标题自动生成，用于网址"
     />
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Category -->
+      <!-- 分类 -->
       <div class="space-y-1.5">
-        <label class="block text-sm font-medium text-gray-700">Category</label>
+        <label class="block text-sm font-medium text-warm-700">分类</label>
         <select
           v-model="form.category_id"
-          class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          class="block w-full rounded-sm border border-warm-300 px-3 py-2 text-sm bg-white focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600"
         >
-          <option :value="null">None</option>
+          <option :value="null">无</option>
           <option v-for="cat in categories" :key="cat.id" :value="cat.id">
             {{ cat.name }}
           </option>
         </select>
       </div>
 
-      <!-- Status -->
+      <!-- 状态 -->
       <div class="space-y-1.5">
-        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <label class="block text-sm font-medium text-warm-700">状态</label>
         <select
           v-model="form.status"
-          class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          class="block w-full rounded-sm border border-warm-300 px-3 py-2 text-sm bg-white focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600"
         >
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
-          <option value="archived">Archived</option>
+          <option value="draft">草稿</option>
+          <option value="published">已发布</option>
+          <option value="archived">已归档</option>
         </select>
       </div>
     </div>
 
-    <!-- Styles (multi-select) -->
+    <!-- 风格（多选） -->
     <div class="space-y-1.5">
-      <label class="block text-sm font-medium text-gray-700">Styles</label>
+      <label class="block text-sm font-medium text-warm-700">建筑风格</label>
       <div class="flex flex-wrap gap-2">
         <button
           v-for="style in styles"
@@ -57,8 +57,8 @@
           :class="[
             'px-3 py-1.5 text-sm rounded-full border transition-colors',
             form.style_ids.includes(style.id)
-              ? 'bg-gray-900 text-white border-gray-900'
-              : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400',
+              ? 'bg-warm-800 text-cream border-warm-800'
+              : 'bg-white text-warm-600 border-warm-300 hover:border-warm-400',
           ]"
           @click="toggleStyle(style.id)"
         >
@@ -67,59 +67,59 @@
       </div>
     </div>
 
-    <!-- Description -->
+    <!-- 简介 -->
     <BaseTextarea
       v-model="form.description"
-      label="Description"
-      placeholder="Short project description (shown on cards)"
+      label="项目简介"
+      placeholder="简短的项目描述（展示在卡片上）"
       rows="2"
     />
 
-    <!-- Content (placeholder for Tiptap editor) -->
+    <!-- 正文 -->
     <div class="space-y-1.5">
-      <label class="block text-sm font-medium text-gray-700">Content</label>
+      <label class="block text-sm font-medium text-warm-700">正文内容</label>
       <BaseTextarea
         v-model="form.content"
-        placeholder="Detailed project description (HTML supported)"
+        placeholder="详细的项目描述（支持 HTML）"
         rows="10"
-        hint="Rich text editor will be available in the next phase"
+        hint="富文本编辑器将在后续版本中集成"
       />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <BaseInput v-model="form.location" label="Location" placeholder="City, Country" />
-      <BaseInput v-model="form.client" label="Client" placeholder="Client name" />
-      <BaseInput v-model="form.area_sqm" label="Area (m²)" placeholder="500" type="number" />
+      <BaseInput v-model="form.location" label="位置" placeholder="城市，国家" />
+      <BaseInput v-model="form.client" label="客户" placeholder="客户名称" />
+      <BaseInput v-model="form.area_sqm" label="面积（m²）" placeholder="500" type="number" />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <BaseInput v-model="form.completion_date" label="Completion Date" type="date" />
+      <BaseInput v-model="form.completion_date" label="完成日期" type="date" />
     </div>
 
-    <!-- Featured -->
+    <!-- 精选 -->
     <label class="flex items-center gap-2 cursor-pointer">
-      <input v-model="form.is_featured" type="checkbox" class="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900" />
-      <span class="text-sm text-gray-700">Featured project (shown on homepage)</span>
+      <input v-model="form.is_featured" type="checkbox" class="w-4 h-4 rounded-sm border-warm-300 text-warm-800 focus:ring-warm-600" />
+      <span class="text-sm text-warm-700">精选项目（在首页展示）</span>
     </label>
 
-    <!-- SEO fields -->
+    <!-- SEO 设置 -->
     <details class="group">
-      <summary class="text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700">
-        SEO Settings
+      <summary class="text-sm font-medium text-warm-500 cursor-pointer hover:text-warm-700">
+        SEO 设置
       </summary>
       <div class="mt-3 space-y-3 pl-2">
-        <BaseInput v-model="form.seo_title" label="SEO Title" placeholder="Custom page title" />
-        <BaseTextarea v-model="form.seo_description" label="SEO Description" placeholder="Custom meta description" rows="2" />
+        <BaseInput v-model="form.seo_title" label="SEO 标题" placeholder="自定义页面标题" />
+        <BaseTextarea v-model="form.seo_description" label="SEO 描述" placeholder="自定义页面描述" rows="2" />
       </div>
     </details>
 
-    <!-- Actions -->
-    <div class="flex items-center gap-3 pt-4 border-t border-gray-200">
+    <!-- 操作按钮 -->
+    <div class="flex items-center gap-3 pt-4 border-t border-warm-200">
       <BaseButton type="submit" :loading="saving">
-        {{ projectId ? 'Save Changes' : 'Create Project' }}
+        {{ projectId ? '保存更改' : '创建项目' }}
       </BaseButton>
       <BaseButton type="button" variant="outline" @click="$emit('cancel')">
-        Cancel
+        取消
       </BaseButton>
       <p v-if="saveMessage" class="text-sm text-green-600">{{ saveMessage }}</p>
     </div>
@@ -161,7 +161,6 @@ const form = reactive<ProjectFormData>({
   ...props.initialData,
 })
 
-// Load filter options
 const { data: categories } = useAsyncData('admin-categories', () => fetchCategories())
 const { data: styles } = useAsyncData('admin-styles', () => fetchStyles())
 
@@ -185,7 +184,7 @@ async function onSubmit() {
   saveMessage.value = ''
   try {
     emit('submit', { ...form })
-    saveMessage.value = 'Saved!'
+    saveMessage.value = '已保存！'
     setTimeout(() => { saveMessage.value = '' }, 3000)
   } finally {
     saving.value = false

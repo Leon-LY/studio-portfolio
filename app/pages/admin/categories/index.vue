@@ -1,40 +1,40 @@
 <template>
   <div>
-    <AdminHeader title="Categories" />
+    <AdminHeader title="分类管理" />
 
     <div class="p-6 max-w-2xl">
-      <div class="bg-white rounded-xl border border-gray-200">
-        <!-- Header -->
-        <div class="flex items-center justify-between p-5 border-b border-gray-100">
-          <h3 class="text-sm font-semibold text-gray-900">Manage Categories</h3>
-          <BaseButton size="sm" @click="showAdd = true">Add Category</BaseButton>
+      <div class="bg-white rounded-sm border border-warm-200 shadow-elevation-1">
+        <!-- 头部 -->
+        <div class="flex items-center justify-between p-5 border-b border-warm-100">
+          <h3 class="text-sm font-semibold text-warm-800">管理分类</h3>
+          <BaseButton size="sm" @click="showAdd = true">添加分类</BaseButton>
         </div>
 
-        <!-- Add form -->
-        <div v-if="showAdd" class="p-5 border-b border-gray-100 bg-gray-50">
+        <!-- 添加表单 -->
+        <div v-if="showAdd" class="p-5 border-b border-warm-100 bg-warm-50">
           <div class="flex gap-3">
-            <BaseInput v-model="newName" label="Name" placeholder="Category name" wrapper-class="flex-1" />
-            <BaseInput v-model="newSlug" label="Slug" placeholder="category-slug" wrapper-class="flex-1" />
+            <BaseInput v-model="newName" label="名称" placeholder="分类名称" wrapper-class="flex-1" />
+            <BaseInput v-model="newSlug" label="标识符" placeholder="category-slug" wrapper-class="flex-1" />
           </div>
           <div class="flex gap-2 mt-3">
-            <BaseButton size="sm" :loading="saving" @click="handleAdd">Save</BaseButton>
-            <BaseButton size="sm" variant="outline" @click="showAdd = false">Cancel</BaseButton>
+            <BaseButton size="sm" :loading="saving" @click="handleAdd">保存</BaseButton>
+            <BaseButton size="sm" variant="outline" @click="showAdd = false">取消</BaseButton>
           </div>
         </div>
 
-        <!-- List -->
-        <div v-if="categories.length > 0" class="divide-y divide-gray-100">
+        <!-- 列表 -->
+        <div v-if="categories.length > 0" class="divide-y divide-warm-100">
           <div
             v-for="cat in categories"
             :key="cat.id"
-            class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+            class="flex items-center justify-between p-4 hover:bg-warm-50 transition-colors"
           >
             <div>
-              <p class="text-sm font-medium text-gray-900">{{ cat.name }}</p>
-              <p class="text-xs text-gray-500">{{ cat.slug }}</p>
+              <p class="text-sm font-medium text-warm-800">{{ cat.name }}</p>
+              <p class="text-xs text-warm-500">{{ cat.slug }}</p>
             </div>
             <button
-              class="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+              class="p-1.5 text-warm-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
               @click="handleDelete(cat.id, cat.name)"
             >
               <Icon name="lucide:trash-2" size="16" />
@@ -45,8 +45,8 @@
         <EmptyState
           v-else
           icon="lucide:folder-tree"
-          title="No categories"
-          description="Add categories like Residential, Commercial, etc."
+          title="暂无分类"
+          description="添加如住宅、商业、公共建筑等分类。"
           wrapper-class="py-8"
         />
       </div>
@@ -55,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminCategories } from '#imports'
 import type { Category } from '~/types/models'
 
 const { fetchAll, create, remove } = useAdminCategories()
@@ -87,7 +86,7 @@ async function handleAdd() {
 }
 
 async function handleDelete(id: string, name: string) {
-  if (!confirm(`Delete category "${name}"?`)) return
+  if (!confirm(`确定要删除分类「${name}」吗？`)) return
   try {
     await remove(id)
     categories.value = await fetchAll()

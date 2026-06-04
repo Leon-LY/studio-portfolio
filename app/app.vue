@@ -2,17 +2,21 @@
   <div>
     <NuxtRouteAnnouncer />
 
-    <!-- Admin layout: sidebar + header + content -->
-    <div v-if="isAdminRoute" class="min-h-screen bg-gray-50">
+    <!-- 后台布局：侧边栏 + 内容 -->
+    <div v-if="isAdminRoute" class="min-h-screen bg-warm-50">
       <AdminSidebar />
       <div class="ml-64">
-        <NuxtPage />
+        <Transition name="page" mode="out-in">
+          <NuxtPage />
+        </Transition>
       </div>
     </div>
 
-    <!-- Portfolio layout: header + content + footer -->
+    <!-- 前台布局：页头 + 内容 + 页脚（带页面过渡） -->
     <div v-else>
-      <NuxtPage />
+      <Transition name="page" mode="out-in">
+        <NuxtPage />
+      </Transition>
     </div>
   </div>
 </template>
@@ -23,7 +27,7 @@ const { checkSession } = useAuth()
 
 const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 
-// Check auth session on app mount
+// 检查认证状态
 onMounted(async () => {
   await checkSession()
 })

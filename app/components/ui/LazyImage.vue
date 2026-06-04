@@ -1,26 +1,32 @@
 <template>
-  <img
-    :src="loadedSrc"
-    :alt="alt"
-    :class="[
-      'transition-opacity duration-500',
-      loaded ? 'opacity-100' : 'opacity-0',
-      className,
-    ]"
-    :style="{ aspectRatio: aspectRatio || undefined, objectFit }"
-    loading="lazy"
-    @load="onLoad"
-    @error="onError"
-  />
+  <div :class="wrapperClass" :style="{ aspectRatio: aspectRatio || undefined }">
+    <!-- 占位 -->
+    <div
+      v-if="!loaded"
+      class="absolute inset-0 bg-warm-100 animate-pulse"
+    />
+    <!-- 图片 -->
+    <img
+      :src="loadedSrc"
+      :alt="alt"
+      :class="[
+        'transition-all duration-700 ease-out',
+        loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105',
+        className,
+      ]"
+      :style="{ objectFit }"
+      loading="lazy"
+      @load="onLoad"
+      @error="onError"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-// LazyImage handles lazy loading + blur-up placeholder for portfolio images
-// Uses native loading="lazy" and opacity transition on load
-defineProps({
+const props = defineProps({
   src: { type: String, required: true },
   alt: { type: String, default: '' },
-  aspectRatio: { type: String, default: '' }, // e.g., '16/9', '4/3'
+  aspectRatio: { type: String, default: '' },
   objectFit: { type: String, default: 'cover' },
   className: { type: String, default: '' },
 })
@@ -29,9 +35,10 @@ const emit = defineEmits(['loaded', 'error'])
 
 const loaded = ref(false)
 const loadedSrc = ref('')
-const hasError = ref(false)
+const wrapperClass = computed(() =>
+  `relative overflow-hidden ${props.aspectRatio ? '' : ''}`,
+)
 
-// Set up src once on mount for SSR compatibility
 onMounted(() => {
   loadedSrc.value = props.src
 })
@@ -42,10 +49,7 @@ function onLoad() {
 }
 
 function onError() {
-  hasError.value = true
   loaded.value = true
   emit('error')
 }
-
-const props = defineProps()
 </script>

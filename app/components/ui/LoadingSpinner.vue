@@ -23,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   size: {
     type: String as PropType<'sm' | 'md' | 'lg'>,
     default: 'md',
   },
-  text: { type: String, default: 'Loading...' },
+  text: { type: String, default: '加载中...' },
 })
 
 const sizes: Record<string, string> = {
@@ -38,8 +38,6 @@ const sizes: Record<string, string> = {
 }
 
 const spinnerClasses = computed(() =>
-  `animate-spin text-gray-600 ${sizes[props.size] || sizes.md}`,
+  `animate-spin text-warm-400 ${sizes[props.size] || sizes.md}`,
 )
-
-const props = defineProps()
 </script>

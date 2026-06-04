@@ -2,53 +2,60 @@
   <div>
     <PortfolioHeader />
 
-    <!-- Page header -->
-    <section class="pt-24 pb-12 bg-gray-50 border-b border-gray-100">
-      <div class="container-wide">
-        <h1 class="text-4xl font-bold text-gray-900">Contact</h1>
-        <p class="mt-2 text-gray-500">Get in touch with us</p>
+    <!-- 页头 -->
+    <section class="pt-28 pb-16 bg-warm-50 border-b border-warm-200">
+      <div class="container-narrow">
+        <p class="text-accent-400 text-sm font-medium tracking-widest uppercase mb-3">联系</p>
+        <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-warm-800">联系我们</h1>
+        <p class="mt-3 text-warm-500 text-lg">与我们取得联系，开启一段对话</p>
       </div>
     </section>
 
-    <!-- Content -->
-    <section class="py-16 bg-white">
+    <!-- 内容 -->
+    <section class="py-section bg-cream">
       <div class="container-narrow">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <!-- Contact info -->
-          <div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Let's Talk</h2>
-            <div class="space-y-4">
-              <div class="flex items-start gap-3">
-                <Icon name="lucide:mail" size="20" class="text-gray-400 mt-0.5" />
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-16">
+          <!-- 联系信息 -->
+          <div class="md:col-span-2">
+            <h2 class="text-2xl font-serif font-bold text-warm-800 mb-8">开始对话</h2>
+            <div class="space-y-8">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center flex-shrink-0">
+                  <Icon name="lucide:mail" size="18" class="text-warm-500" />
+                </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-900">Email</p>
-                  <a href="mailto:info@studio.com" class="text-sm text-gray-500 hover:text-gray-900">
-                    info@studio.com
+                  <p class="text-sm font-medium text-warm-800">邮箱</p>
+                  <a href="mailto:info@studio.com" class="text-sm text-warm-500 hover:text-accent-500 transition-colors">
+                    554295000@qq.com
                   </a>
                 </div>
               </div>
-              <div class="flex items-start gap-3">
-                <Icon name="lucide:map-pin" size="20" class="text-gray-400 mt-0.5" />
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center flex-shrink-0">
+                  <Icon name="lucide:map-pin" size="18" class="text-warm-500" />
+                </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-900">Location</p>
-                  <p class="text-sm text-gray-500">Your City, Country</p>
+                  <p class="text-sm font-medium text-warm-800">地址</p>
+                  <p class="text-sm text-warm-500">中国 · 上海</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Contact form -->
-          <div>
-            <form class="space-y-4" @submit.prevent="handleSubmit">
-              <BaseInput v-model="form.name" label="Name" placeholder="Your name" required />
-              <BaseInput v-model="form.email" label="Email" type="email" placeholder="your@email.com" required />
-              <BaseTextarea v-model="form.message" label="Message" placeholder="Tell us about your project..." rows="4" required />
-              <BaseButton type="submit" full-width>
-                Send Message
+          <!-- 联系表单 -->
+          <div class="md:col-span-3">
+            <form class="space-y-6" @submit.prevent="handleSubmit">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <BaseInput v-model="form.name" label="姓名" placeholder="您的姓名" required />
+                <BaseInput v-model="form.email" label="邮箱" type="email" placeholder="您的邮箱地址" required />
+              </div>
+              <BaseTextarea v-model="form.message" label="留言" placeholder="请告诉我们您的项目情况..." rows="5" required />
+              <BaseButton type="submit" full-width size="lg">
+                发送留言
               </BaseButton>
             </form>
-            <p v-if="sent" class="mt-4 text-sm text-green-600 text-center">
-              Thanks for your message! We'll get back to you soon.
+            <p v-if="sent" class="mt-4 text-sm text-accent-600 text-center font-medium">
+              感谢您的留言！我们会尽快回复您。
             </p>
           </div>
         </div>
@@ -69,7 +76,7 @@ const form = reactive({
 const sent = ref(false)
 
 function handleSubmit() {
-  // In production, send to email service or store in Supabase
+  // 生产环境中应发送到邮件服务或存储到数据库
   console.log('Contact form:', form)
   sent.value = true
   form.name = ''

@@ -26,14 +26,21 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Studio — Architecture & Design',
+      title: '形筑 — 建筑设计工作室',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Architecture and design studio portfolio' },
+        { name: 'description', content: '形筑建筑设计工作室 — 创造能够启发灵感的空间。专注建筑与室内设计，用思考塑造场所。' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        // Google Fonts: 思源宋体（标题）+ 思源黑体（正文）
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap',
+        },
       ],
     },
   },

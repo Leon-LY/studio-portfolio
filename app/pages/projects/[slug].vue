@@ -2,25 +2,25 @@
   <div>
     <PortfolioHeader />
 
-    <!-- Project not found -->
+    <!-- 项目未找到 -->
     <div v-if="!project && !pending" class="pt-20 pb-20">
       <EmptyState
         icon="lucide:file-question"
-        title="Project Not Found"
-        description="This project may have been archived or doesn't exist."
+        title="项目未找到"
+        description="该项目可能已归档或不存在。"
         wrapper-class="py-20"
       >
         <template #action>
           <BaseButton variant="outline" @click="$router.push('/projects')">
-            Browse Projects
+            浏览项目
           </BaseButton>
         </template>
       </EmptyState>
     </div>
 
     <template v-else-if="project">
-      <!-- Hero image -->
-      <section class="relative h-[60vh] min-h-[400px]">
+      <!-- 封面大图 -->
+      <section class="relative h-[65vh] min-h-[450px] bg-warm-200">
         <div v-if="project.cover_image_url" class="absolute inset-0">
           <img
             :src="project.cover_image_url"
@@ -28,89 +28,88 @@
             class="w-full h-full object-cover"
           />
         </div>
-        <div v-else class="absolute inset-0 bg-gray-200" />
-        <div class="absolute inset-0 bg-black/20" />
+        <div class="absolute inset-0 bg-gradient-to-b from-warm-900/30 to-warm-900/10" />
       </section>
 
-      <!-- Project content -->
-      <section class="py-16 bg-white">
+      <!-- 项目内容 -->
+      <section class="py-section bg-cream">
         <div class="container-narrow">
-          <!-- Title & meta -->
-          <div class="mb-12">
-            <div class="flex items-center gap-3 mb-4">
+          <!-- 标题 & 标签 -->
+          <div class="mb-14">
+            <div class="flex items-center gap-3 mb-5">
               <span
                 v-if="project.category"
-                class="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full"
+                class="px-3 py-1 text-xs font-medium bg-accent-100 text-accent-600 rounded-full"
               >
                 {{ project.category.name }}
               </span>
               <span
                 v-for="style in project.styles"
                 :key="style.id"
-                class="px-3 py-1 text-xs font-medium bg-gray-50 text-gray-500 rounded-full border border-gray-200"
+                class="px-3 py-1 text-xs font-medium bg-warm-100 text-warm-500 rounded-full border border-warm-200"
               >
                 {{ style.name }}
               </span>
             </div>
 
-            <h1 class="text-4xl font-bold text-gray-900">{{ project.title }}</h1>
+            <h1 class="text-display-sm sm:text-display-md font-serif font-bold text-warm-800">{{ project.title }}</h1>
 
-            <!-- Project info sidebar -->
-            <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 p-6 bg-gray-50 rounded-xl">
+            <!-- 项目信息 -->
+            <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 bg-warm-50 rounded-sm border border-warm-200">
               <div v-if="project.location">
-                <p class="text-xs text-gray-500 uppercase tracking-wider">Location</p>
-                <p class="mt-1 text-sm font-medium text-gray-900">{{ project.location }}</p>
+                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">位置</p>
+                <p class="text-sm font-medium text-warm-700">{{ project.location }}</p>
               </div>
               <div v-if="project.completion_date">
-                <p class="text-xs text-gray-500 uppercase tracking-wider">Year</p>
-                <p class="mt-1 text-sm font-medium text-gray-900">{{ formatDate(project.completion_date) }}</p>
+                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">年份</p>
+                <p class="text-sm font-medium text-warm-700">{{ formatDate(project.completion_date) }}</p>
               </div>
               <div v-if="project.client">
-                <p class="text-xs text-gray-500 uppercase tracking-wider">Client</p>
-                <p class="mt-1 text-sm font-medium text-gray-900">{{ project.client }}</p>
+                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">客户</p>
+                <p class="text-sm font-medium text-warm-700">{{ project.client }}</p>
               </div>
               <div v-if="project.area_sqm">
-                <p class="text-xs text-gray-500 uppercase tracking-wider">Area</p>
-                <p class="mt-1 text-sm font-medium text-gray-900">{{ project.area_sqm }} m&sup2;</p>
+                <p class="text-xs text-warm-400 uppercase tracking-widest mb-1">面积</p>
+                <p class="text-sm font-medium text-warm-700">{{ project.area_sqm }} m&sup2;</p>
               </div>
             </div>
           </div>
 
-          <!-- Project description -->
-          <div v-if="project.description" class="prose prose-gray max-w-none mb-12">
-            <p class="text-lg text-gray-600 leading-relaxed">{{ project.description }}</p>
+          <!-- 项目描述 -->
+          <div v-if="project.description" class="prose prose-lg prose max-w-none mb-14">
+            <p class="text-lg text-warm-600 leading-relaxed">{{ project.description }}</p>
           </div>
 
-          <!-- Project content (rich HTML) -->
-          <div v-if="project.content" class="prose prose-gray max-w-none mb-12" v-html="project.content" />
+          <!-- 项目正文（富文本） -->
+          <div v-if="project.content" class="prose prose-lg prose max-w-none mb-14" v-html="project.content" />
 
-          <!-- Image Gallery -->
-          <div v-if="project.images && project.images.length > 1" class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 图片图集 -->
+          <div v-if="project.images && project.images.length > 1" class="mb-14">
+            <h2 class="text-2xl font-serif font-bold text-warm-800 mb-8">项目图集</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div
                 v-for="img in project.images"
                 :key="img.id"
-                class="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
-                @click="openLightbox(img)"
+                class="relative aspect-[4/3] rounded-sm overflow-hidden cursor-pointer group bg-warm-100"
+                @click="openGallery(img)"
               >
                 <img
                   :src="getImageUrl(img.storage_path)"
                   :alt="img.alt_text || ''"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
                   loading="lazy"
                 />
-                <div v-if="img.caption" class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
-                  <p class="text-sm text-white">{{ img.caption }}</p>
+                <div v-if="img.caption" class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-warm-900/70 to-transparent">
+                  <p class="text-sm text-cream">{{ img.caption }}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Related projects -->
-          <div v-if="relatedProjects.length > 0" class="border-t border-gray-100 pt-12">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Projects</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 相关项目 -->
+          <div v-if="relatedProjects.length > 0" class="border-t border-warm-200 pt-14">
+            <h2 class="text-2xl font-serif font-bold text-warm-800 mb-8">相关项目</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               <ProjectCard
                 v-for="rp in relatedProjects"
                 :key="rp.id"
@@ -121,28 +120,6 @@
           </div>
         </div>
       </section>
-
-      <!-- Lightbox -->
-      <div
-        v-if="lightboxImage"
-        class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-        @click="lightboxImage = null"
-      >
-        <button
-          class="absolute top-4 right-4 p-2 text-white/70 hover:text-white"
-          @click="lightboxImage = null"
-        >
-          <Icon name="lucide:x" size="24" />
-        </button>
-        <img
-          :src="getImageUrl(lightboxImage.storage_path)"
-          :alt="lightboxImage.alt_text || ''"
-          class="max-h-[90vh] max-w-full object-contain"
-        />
-        <p v-if="lightboxImage.caption" class="absolute bottom-4 text-white/70 text-sm">
-          {{ lightboxImage.caption }}
-        </p>
-      </div>
     </template>
 
     <div v-else class="py-20 text-center">
@@ -168,7 +145,7 @@ const { data: project, pending } = useAsyncData(`project-${slug}`, async () => {
   try { return await fetchProjectBySlug(slug) } catch { return null }
 })
 
-// Related projects
+// 相关项目
 const { data: relatedProjects } = useAsyncData(
   `related-${project.value?.category_id}`,
   async () => {
@@ -178,11 +155,23 @@ const { data: relatedProjects } = useAsyncData(
   { watch: [project] },
 )
 
-// Lightbox state
-const lightboxImage = ref<ProjectImage | null>(null)
+function openGallery(img: ProjectImage) {
+  // 简单的灯箱 —— 后续可替换为 PhotoSwipe
+  if (!project.value?.images) return
+  const images = project.value.images
+  const currentIndex = images.findIndex(i => i.id === img.id)
 
-function openLightbox(img: ProjectImage) {
-  lightboxImage.value = img
+  const overlay = document.createElement('div')
+  overlay.className = 'fixed inset-0 z-50 bg-warm-900/95 flex items-center justify-center p-8 cursor-pointer'
+  overlay.onclick = () => overlay.remove()
+
+  const imgEl = document.createElement('img')
+  imgEl.src = getImageUrl(img.storage_path)
+  imgEl.alt = img.alt_text || ''
+  imgEl.className = 'max-h-[90vh] max-w-full object-contain'
+
+  overlay.appendChild(imgEl)
+  document.body.appendChild(overlay)
 }
 
 function formatDate(date: string) {

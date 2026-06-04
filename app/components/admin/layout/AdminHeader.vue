@@ -1,45 +1,44 @@
 <template>
-  <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-    <!-- Page title / breadcrumb -->
+  <header class="h-16 bg-white border-b border-warm-200 flex items-center justify-between px-6">
+    <!-- 标题 -->
     <div>
-      <h1 class="text-lg font-semibold text-gray-900">{{ title }}</h1>
+      <h1 class="text-lg font-semibold text-warm-800">{{ title }}</h1>
     </div>
 
-    <!-- Right actions -->
+    <!-- 用户菜单 -->
     <div class="flex items-center gap-4">
-      <!-- User menu -->
       <div class="relative">
         <button
-          class="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+          class="flex items-center gap-2 text-sm text-warm-700 hover:text-warm-900 transition-colors"
           @click="menuOpen = !menuOpen"
         >
-          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <Icon name="lucide:user" size="16" class="text-gray-500" />
+          <div class="w-8 h-8 rounded-full bg-warm-100 flex items-center justify-center">
+            <Icon name="lucide:user" size="16" class="text-warm-500" />
           </div>
           <span class="hidden sm:inline font-medium">{{ userName }}</span>
         </button>
 
-        <!-- Dropdown -->
+        <!-- 下拉菜单 -->
         <Transition name="fade">
           <div
             v-if="menuOpen"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+            class="absolute right-0 mt-2 w-48 bg-white rounded-sm shadow-elevation-3 border border-warm-200 py-1 z-50"
           >
-            <div class="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
+            <div class="px-4 py-2 text-xs text-warm-500 border-b border-warm-100">
               {{ userEmail }}
             </div>
             <button
-              class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+              class="w-full text-left px-4 py-2 text-sm text-warm-700 hover:bg-warm-50 transition-colors flex items-center gap-2"
               @click="handleSignOut"
             >
               <Icon name="lucide:log-out" size="16" />
-              Sign Out
+              退出登录
             </button>
           </div>
         </Transition>
       </div>
 
-      <!-- Click outside handler -->
+      <!-- 点击外部关闭 -->
       <div v-if="menuOpen" class="fixed inset-0 z-40" @click="menuOpen = false" />
     </div>
   </header>
@@ -47,7 +46,7 @@
 
 <script setup lang="ts">
 defineProps({
-  title: { type: String, default: 'Dashboard' },
+  title: { type: String, default: '仪表盘' },
 })
 
 const { user, signOut } = useAuth()
@@ -55,7 +54,7 @@ const { user, signOut } = useAuth()
 const menuOpen = ref(false)
 
 const userName = computed(() =>
-  user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || 'Admin',
+  user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || '管理员',
 )
 
 const userEmail = computed(() => user.value?.email || '')

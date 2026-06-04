@@ -1,12 +1,8 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
+  <div class="min-h-screen bg-warm-50">
     <AdminSidebar />
-
-    <!-- Main area -->
     <div class="ml-64">
       <slot />
-      <!-- AdminHeader is usually included in each page -->
     </div>
   </div>
 </template>

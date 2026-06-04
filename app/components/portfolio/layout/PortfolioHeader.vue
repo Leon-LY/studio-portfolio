@@ -1,36 +1,41 @@
 <template>
   <header
     :class="[
-      'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
+      'fixed top-0 left-0 right-0 z-40 transition-all duration-500',
       isScrolled || !transparent
-        ? 'bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm'
+        ? 'bg-cream/95 backdrop-blur-sm border-b border-warm-200 shadow-elevation-1'
         : 'bg-transparent',
     ]"
   >
     <div class="container-wide">
       <div class="flex items-center justify-between h-16 lg:h-20">
         <!-- Logo -->
-        <NuxtLink to="/" class="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">
-          <span :class="isScrolled || !transparent ? 'text-gray-900' : 'text-white'">STUDIO</span>
+        <NuxtLink to="/" class="font-serif text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">
+          <span :class="isScrolled || !transparent ? 'text-warm-800' : 'text-cream'">形筑</span>
         </NuxtLink>
 
-        <!-- Nav -->
-        <nav class="hidden md:flex items-center gap-8">
+        <!-- 导航 — 桌面端 -->
+        <nav class="hidden md:flex items-center gap-10">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="text-sm font-medium transition-colors hover:opacity-80"
-            :class="isScrolled || !transparent ? 'text-gray-700 hover:text-gray-900' : 'text-white/90 hover:text-white'"
+            class="relative text-sm font-medium transition-colors py-1"
+            :class="isScrolled || !transparent ? 'text-warm-600 hover:text-warm-800' : 'text-cream/90 hover:text-cream'"
           >
             {{ link.label }}
+            <span
+              v-if="isActive(link.to)"
+              class="absolute bottom-0 left-0 right-0 h-px bg-accent-400"
+              :class="{ 'bg-cream/60': !isScrolled && transparent }"
+            />
           </NuxtLink>
         </nav>
 
-        <!-- Mobile menu toggle -->
+        <!-- 移动端菜单按钮 -->
         <button
-          class="md:hidden p-2 rounded-lg"
-          :class="isScrolled || !transparent ? 'text-gray-700' : 'text-white'"
+          class="md:hidden p-2 rounded-sm"
+          :class="isScrolled || !transparent ? 'text-warm-700' : 'text-cream'"
           @click="mobileOpen = !mobileOpen"
         >
           <Icon :name="mobileOpen ? 'lucide:x' : 'lucide:menu'" size="24" />
@@ -38,15 +43,15 @@
       </div>
     </div>
 
-    <!-- Mobile nav -->
+    <!-- 移动端导航 -->
     <Transition name="slide">
-      <div v-if="mobileOpen" class="md:hidden bg-white border-t border-gray-100">
-        <div class="container-wide py-4 space-y-2">
+      <div v-if="mobileOpen" class="md:hidden bg-cream border-t border-warm-200">
+        <div class="container-wide py-6 space-y-2">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+            class="block px-4 py-3 text-sm font-medium text-warm-700 hover:text-warm-900 hover:bg-warm-50 rounded-sm transition-colors"
             @click="mobileOpen = false"
           >
             {{ link.label }}
@@ -58,15 +63,21 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   transparent: { type: Boolean, default: false },
 })
 
+const route = useRoute()
+
 const navLinks = [
-  { to: '/projects', label: 'Projects' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/projects', label: '项目' },
+  { to: '/about', label: '关于' },
+  { to: '/contact', label: '联系' },
 ]
+
+function isActive(path: string) {
+  return route.path.startsWith(path)
+}
 
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
@@ -87,7 +98,7 @@ onUnmounted(() => {
 <style scoped>
 .slide-enter-active,
 .slide-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 .slide-enter-from,
 .slide-leave-to {

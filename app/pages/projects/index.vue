@@ -2,51 +2,52 @@
   <div>
     <PortfolioHeader transparent />
 
-    <!-- Page header -->
-    <section class="pt-24 pb-12 bg-gray-50 border-b border-gray-100">
+    <!-- 页头 -->
+    <section class="pt-28 pb-14 bg-warm-50 border-b border-warm-200">
       <div class="container-wide">
-        <h1 class="text-4xl font-bold text-gray-900">Projects</h1>
-        <p class="mt-2 text-gray-500">Explore our complete body of work</p>
+        <p class="text-accent-400 text-sm font-medium tracking-widest uppercase mb-3">作品</p>
+        <h1 class="text-3xl sm:text-display-sm font-serif font-bold text-warm-800">项目作品</h1>
+        <p class="mt-2 text-warm-500">探索我们的完整作品集</p>
       </div>
     </section>
 
-    <!-- Filter bar -->
-    <section class="py-6 bg-white border-b border-gray-100 sticky top-16 z-30">
+    <!-- 筛选栏 -->
+    <section class="py-5 bg-cream border-b border-warm-200 sticky top-16 z-30">
       <div class="container-wide">
         <div class="flex flex-col sm:flex-row gap-4">
-          <!-- Search -->
+          <!-- 搜索 -->
           <div class="flex-1 max-w-sm">
             <div class="relative">
-              <Icon name="lucide:search" size="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Icon name="lucide:search" size="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-warm-400" />
               <input
                 v-model="search"
                 type="text"
-                placeholder="Search projects..."
-                class="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                placeholder="搜索项目..."
+                class="w-full pl-10 pr-4 py-2.5 text-sm border border-warm-300 rounded-sm bg-cream placeholder-warm-400 focus:border-warm-600 focus:outline-none focus:ring-1 focus:ring-warm-600 transition-colors"
                 @input="onSearchChange"
               />
             </div>
           </div>
 
-          <!-- Category filter -->
+          <!-- 分类筛选 -->
           <select
             v-model="selectedCategory"
-            class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
+            class="px-4 py-2.5 text-sm border border-warm-300 rounded-sm bg-cream text-warm-700 focus:border-warm-600 focus:outline-none"
             @change="applyFilters"
           >
-            <option value="">All Categories</option>
+            <option value="">全部分类</option>
             <option v-for="cat in categories" :key="cat.id" :value="cat.slug">
               {{ cat.name }}
             </option>
           </select>
 
-          <!-- Style filter -->
+          <!-- 风格筛选 -->
           <select
             v-model="selectedStyle"
-            class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
+            class="px-4 py-2.5 text-sm border border-warm-300 rounded-sm bg-cream text-warm-700 focus:border-warm-600 focus:outline-none"
             @change="applyFilters"
           >
-            <option value="">All Styles</option>
+            <option value="">全部风格</option>
             <option v-for="style in styles" :key="style.id" :value="style.slug">
               {{ style.name }}
             </option>
@@ -55,24 +56,24 @@
       </div>
     </section>
 
-    <!-- Project grid -->
-    <section class="py-12 bg-white">
+    <!-- 项目网格 -->
+    <section class="py-14 bg-cream">
       <div class="container-wide">
-        <!-- Loading -->
-        <div v-if="pending" class="py-12 text-center">
+        <!-- 加载 -->
+        <div v-if="pending" class="py-20 text-center">
           <LoadingSpinner size="lg" />
         </div>
 
-        <!-- Empty -->
+        <!-- 空状态 -->
         <EmptyState
           v-else-if="projects.length === 0"
           icon="lucide:search"
-          title="No projects found"
-          :description="search ? `No results for \`${search}\`` : 'No projects published yet.'"
+          title="未找到项目"
+          :description="search ? `未找到与「${search}」相关的结果` : '暂无已发布的项目。'"
         />
 
-        <!-- Grid -->
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 网格 -->
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <ProjectCard
             v-for="project in projects"
             :key="project.id"
@@ -80,8 +81,8 @@
           />
         </div>
 
-        <!-- Pagination -->
-        <div v-if="totalPages > 1" class="mt-10 flex justify-center gap-2">
+        <!-- 分页 -->
+        <div v-if="totalPages > 1" class="mt-14 flex justify-center gap-3">
           <BaseButton
             v-for="page in totalPages"
             :key="page"
@@ -107,7 +108,6 @@ const { fetchStyles } = useStyles()
 const route = useRoute()
 const router = useRouter()
 
-// Filters from URL query
 const search = ref((route.query.search as string) || '')
 const selectedCategory = ref((route.query.category as string) || '')
 const selectedStyle = ref((route.query.style as string) || '')
@@ -121,7 +121,6 @@ const { data: styles } = useAsyncData('project-styles', async () => {
   try { return await fetchStyles() } catch { return [] }
 })
 
-// Debounced search
 let searchTimer: ReturnType<typeof setTimeout>
 function onSearchChange() {
   clearTimeout(searchTimer)
@@ -151,7 +150,7 @@ function updateURL() {
   })
 }
 
-// Fetch projects with filters
+// 获取带筛选参数的项目列表
 const { data: result, pending } = useAsyncData(
   () => `projects-${search.value}-${selectedCategory.value}-${selectedStyle.value}-${currentPage.value}`,
   async () => {

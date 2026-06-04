@@ -1,40 +1,40 @@
 <template>
   <div>
-    <AdminHeader title="Styles" />
+    <AdminHeader title="风格管理" />
 
     <div class="p-6 max-w-2xl">
-      <div class="bg-white rounded-xl border border-gray-200">
-        <!-- Header -->
-        <div class="flex items-center justify-between p-5 border-b border-gray-100">
-          <h3 class="text-sm font-semibold text-gray-900">Manage Styles</h3>
-          <BaseButton size="sm" @click="showAdd = true">Add Style</BaseButton>
+      <div class="bg-white rounded-sm border border-warm-200 shadow-elevation-1">
+        <!-- 头部 -->
+        <div class="flex items-center justify-between p-5 border-b border-warm-100">
+          <h3 class="text-sm font-semibold text-warm-800">管理风格</h3>
+          <BaseButton size="sm" @click="showAdd = true">添加风格</BaseButton>
         </div>
 
-        <!-- Add form -->
-        <div v-if="showAdd" class="p-5 border-b border-gray-100 bg-gray-50">
+        <!-- 添加表单 -->
+        <div v-if="showAdd" class="p-5 border-b border-warm-100 bg-warm-50">
           <div class="flex gap-3">
-            <BaseInput v-model="newName" label="Name" placeholder="Style name" wrapper-class="flex-1" />
-            <BaseInput v-model="newSlug" label="Slug" placeholder="style-slug" wrapper-class="flex-1" />
+            <BaseInput v-model="newName" label="名称" placeholder="风格名称" wrapper-class="flex-1" />
+            <BaseInput v-model="newSlug" label="标识符" placeholder="style-slug" wrapper-class="flex-1" />
           </div>
           <div class="flex gap-2 mt-3">
-            <BaseButton size="sm" :loading="saving" @click="handleAdd">Save</BaseButton>
-            <BaseButton size="sm" variant="outline" @click="showAdd = false">Cancel</BaseButton>
+            <BaseButton size="sm" :loading="saving" @click="handleAdd">保存</BaseButton>
+            <BaseButton size="sm" variant="outline" @click="showAdd = false">取消</BaseButton>
           </div>
         </div>
 
-        <!-- List -->
-        <div v-if="styles.length > 0" class="divide-y divide-gray-100">
+        <!-- 列表 -->
+        <div v-if="styles.length > 0" class="divide-y divide-warm-100">
           <div
             v-for="style in styles"
             :key="style.id"
-            class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+            class="flex items-center justify-between p-4 hover:bg-warm-50 transition-colors"
           >
             <div>
-              <p class="text-sm font-medium text-gray-900">{{ style.name }}</p>
-              <p class="text-xs text-gray-500">{{ style.slug }}</p>
+              <p class="text-sm font-medium text-warm-800">{{ style.name }}</p>
+              <p class="text-xs text-warm-500">{{ style.slug }}</p>
             </div>
             <button
-              class="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+              class="p-1.5 text-warm-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors"
               @click="handleDelete(style.id, style.name)"
             >
               <Icon name="lucide:trash-2" size="16" />
@@ -45,8 +45,8 @@
         <EmptyState
           v-else
           icon="lucide:palette"
-          title="No styles"
-          description="Add styles like Modern, Minimalist, Classical, etc."
+          title="暂无风格"
+          description="添加如现代、极简、新中式等风格。"
           wrapper-class="py-8"
         />
       </div>
@@ -86,7 +86,7 @@ async function handleAdd() {
 }
 
 async function handleDelete(id: string, name: string) {
-  if (!confirm(`Delete style "${name}"?`)) return
+  if (!confirm(`确定要删除风格「${name}」吗？`)) return
   try {
     await remove(id)
     styles.value = await fetchAll()

@@ -1,34 +1,34 @@
 <template>
   <div>
-    <AdminHeader title="Edit Project" />
+    <AdminHeader title="编辑项目" />
 
     <div class="p-6 max-w-4xl">
-      <!-- Loading -->
+      <!-- 加载中 -->
       <div v-if="pending" class="py-12 text-center">
-        <LoadingSpinner size="lg" text="Loading project..." />
+        <LoadingSpinner size="lg" text="加载项目中..." />
       </div>
 
-      <!-- Not found -->
+      <!-- 未找到 -->
       <EmptyState
         v-else-if="!project"
         icon="lucide:file-question"
-        title="Project Not Found"
+        title="项目未找到"
         wrapper-class="py-12"
       >
         <template #action>
           <NuxtLink to="/admin/projects">
-            <BaseButton variant="outline">Back to Projects</BaseButton>
+            <BaseButton variant="outline">返回项目列表</BaseButton>
           </NuxtLink>
         </template>
       </EmptyState>
 
-      <!-- Edit form -->
+      <!-- 编辑表单 -->
       <template v-else>
         <ProjectForm :initial-data="formData" :project-id="project.id" @submit="handleUpdate" @cancel="navigateTo('/admin/projects')" />
 
-        <!-- Image management section -->
-        <div class="mt-10 pt-8 border-t border-gray-200">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">Project Images</h2>
+        <!-- 图片管理 -->
+        <div class="mt-10 pt-8 border-t border-warm-200">
+          <h2 class="text-lg font-semibold text-warm-800 mb-4">项目图片</h2>
           <ImageManager :project-id="project.id" />
         </div>
       </template>
@@ -44,7 +44,6 @@ const { fetchProjectById, updateProject } = useAdminProjects()
 
 const projectId = route.params.id as string
 
-// Fetch project
 const { data: project, pending } = useAsyncData(`admin-project-${projectId}`, () => fetchProjectById(projectId))
 
 const formData = computed<Partial<ProjectFormData>>(() => {
@@ -70,11 +69,10 @@ const formData = computed<Partial<ProjectFormData>>(() => {
 async function handleUpdate(form: ProjectFormData) {
   try {
     await updateProject(projectId, form)
-    // Refresh the page data
     refreshNuxtData(`admin-project-${projectId}`)
   } catch (e: any) {
-    console.error('Failed to update project:', e)
-    alert(`Failed to update project: ${e.message}`)
+    console.error('更新项目失败:', e)
+    alert(`更新项目失败：${e.message}`)
   }
 }
 </script>

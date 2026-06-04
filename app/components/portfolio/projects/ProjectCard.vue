@@ -3,36 +3,36 @@
     :to="`/projects/${project.slug}`"
     :class="cardClasses"
   >
-    <!-- Cover image -->
+    <!-- 封面图 -->
     <div :class="imageClasses">
       <div
         v-if="project.cover_image_url"
-        class="w-full h-full bg-gray-100"
+        class="w-full h-full bg-warm-100"
       >
         <img
           :src="project.cover_image_url"
           :alt="project.title"
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
           loading="lazy"
         />
       </div>
       <div
         v-else
-        class="w-full h-full bg-gray-100 flex items-center justify-center"
+        class="w-full h-full bg-warm-100 flex items-center justify-center"
       >
-        <Icon name="lucide:image" size="32" class="text-gray-300" />
+        <Icon name="lucide:image" size="32" class="text-warm-300" />
       </div>
 
-      <!-- Overlay on hover -->
-      <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+      <!-- Hover overlay -->
+      <div class="absolute inset-0 bg-warm-900/0 group-hover:bg-warm-900/5 transition-colors duration-500" />
     </div>
 
-    <!-- Info -->
-    <div class="p-4">
+    <!-- 信息 -->
+    <div :class="infoClasses">
       <div class="flex items-center gap-2 mb-2">
         <span
           v-if="project.category"
-          class="text-xs text-gray-500 font-medium uppercase tracking-wider"
+          class="text-xs text-accent-500 font-medium uppercase tracking-wider"
         >
           {{ project.category.name }}
         </span>
@@ -40,17 +40,17 @@
       <h3 :class="titleClasses">{{ project.title }}</h3>
       <p
         v-if="project.description && variant !== 'compact'"
-        class="mt-1 text-sm text-gray-500 line-clamp-2"
+        class="mt-2 text-sm text-warm-500 line-clamp-2 leading-relaxed"
       >
         {{ project.description }}
       </p>
 
-      <!-- Style tags -->
-      <div v-if="project.styles && project.styles.length > 0 && variant !== 'compact'" class="mt-3 flex flex-wrap gap-1.5">
+      <!-- 风格标签 -->
+      <div v-if="project.styles && project.styles.length > 0 && variant !== 'compact'" class="mt-4 flex flex-wrap gap-1.5">
         <span
           v-for="style in project.styles"
           :key="style.id"
-          class="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full"
+          class="px-2.5 py-0.5 text-xs bg-warm-100 text-warm-500 rounded-full"
         >
           {{ style.name }}
         </span>
@@ -74,13 +74,8 @@ const props = defineProps({
 })
 
 const cardClasses = computed(() => {
-  const base = 'group block bg-white rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg'
-  const variants: Record<string, string> = {
-    featured: 'border border-gray-100 hover:border-gray-200',
-    grid: 'border border-gray-100 hover:border-gray-200',
-    compact: 'border border-gray-100 hover:border-gray-200',
-  }
-  return `${base} ${variants[props.variant] || variants.grid}`
+  const base = 'group block bg-cream rounded-sm overflow-hidden border border-warm-100 hover:-translate-y-1 hover:shadow-elevation-4 transition-all duration-500'
+  return base
 })
 
 const imageClasses = computed(() => {
@@ -92,12 +87,19 @@ const imageClasses = computed(() => {
   return variants[props.variant] || variants.grid
 })
 
-const titleClasses = computed(() => {
+const infoClasses = computed(() => {
   const variants: Record<string, string> = {
-    compact: 'text-base font-semibold text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-1',
-    featured: 'text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-1',
-    grid: 'text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-1',
+    compact: 'p-4',
+    featured: 'p-6',
+    grid: 'p-5',
   }
   return variants[props.variant] || variants.grid
+})
+
+const titleClasses = computed(() => {
+  const base = 'font-semibold text-warm-800 group-hover:text-warm-700 transition-colors line-clamp-1'
+  if (props.variant === 'compact') return `${base} text-base`
+  // 列表模式使用衬线字体
+  return `font-serif text-lg ${base}`
 })
 </script>

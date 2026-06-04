@@ -149,6 +149,8 @@ const { fetchFeaturedProjects } = useProjects()
 const { fetchCategories } = useCategories()
 const { revealRef } = useScrollReveal()
 
+let revealContainer: Element | null = null
+
 function revealAndSave(el: any) {
   revealRef(el)
   if (el) revealContainer = el instanceof Element ? el : el.$el
@@ -183,7 +185,6 @@ const categories = ref<any[] | null>(null)
 const pending = ref(true)
 
 // Re-trigger scroll reveal after data loads
-let revealContainer: Element | null = null
 function observeReveal() {
   if (!revealContainer) return
   revealContainer.querySelectorAll('.reveal-hidden').forEach(child => {

@@ -25,6 +25,9 @@
 </template>
 
 <script setup lang="ts">
+import BaseModal from '~/components/ui/BaseModal.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+
 defineProps({
   modelValue: { type: Boolean, default: false },
   title: { type: String, default: '确认操作' },

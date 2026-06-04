@@ -11,6 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
+
 const props = defineProps({
   variant: {
     type: String as PropType<'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'>,

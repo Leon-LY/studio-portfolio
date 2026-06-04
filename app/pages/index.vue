@@ -192,10 +192,20 @@ const pending = ref(true)
 const heroImage = ref<string | null>(null)
 
 onMounted(async () => {
+  // Load hero image: prefer site setting > first project cover
+  try {
+    const res = await fetch('/api/settings')
+    if (res.ok) {
+      const settings = await res.json()
+      if (settings.hero_image) heroImage.value = settings.hero_image
+    }
+  } catch {}
   try {
     projects.value = await fetchFeaturedProjects()
-    const first = projects.value?.find((p: any) => p.cover_image_url)
-    if (first) heroImage.value = getImageUrl(first.cover_image_url)
+    if (!heroImage.value) {
+      const first = projects.value?.find((p: any) => p.cover_image_url)
+      if (first) heroImage.value = getImageUrl(first.cover_image_url)
+    }
   } catch { projects.value = [] }
   try { categories.value = await fetchCategories() } catch { categories.value = [] }
   pending.value = false

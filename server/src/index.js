@@ -11,6 +11,7 @@ import imagesRouter from './routes/images.js'
 import filesRouter from './routes/files.js'
 import paymentsRouter from './routes/payments.js'
 import usersRouter from './routes/users.js'
+import settingsRouter from './routes/settings.js'
 import contactRouter from './routes/contact.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -55,6 +56,9 @@ app.use('/api/payments', paymentsRouter)
 
 // Users (auth required for all routes)
 app.use('/api/users', usersRouter)
+
+// Site settings (hero image etc.)
+app.use('/api/settings', settingsRouter)
 
 // Contact form
 app.use('/api/contact', contactRouter)

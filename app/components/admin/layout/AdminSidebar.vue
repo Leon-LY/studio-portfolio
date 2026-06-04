@@ -61,6 +61,7 @@ const navItems = [
   { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },
   { to: '/admin/categories', label: '分类', icon: 'lucide:folder-tree' },
   { to: '/admin/styles', label: '风格', icon: 'lucide:palette' },
+  { to: '/admin/settings', label: '站点设置', icon: 'lucide:settings' },
   { to: '/admin/users', label: '用户管理', icon: 'lucide:users' },
   { to: '/admin/manual', label: '操作手册', icon: 'lucide:book-open' },
 ]

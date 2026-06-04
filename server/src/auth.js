@@ -13,7 +13,7 @@ if (!JWT_SECRET) {
 
 // Simple in-memory rate limiter for login
 const loginAttempts = new Map() // IP → { count, resetAt }
-const MAX_LOGIN_ATTEMPTS = 10
+const MAX_LOGIN_ATTEMPTS = 20
 const LOGIN_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
 
 function checkRateLimit(ip) {

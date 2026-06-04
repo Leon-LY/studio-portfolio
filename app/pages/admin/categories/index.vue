@@ -55,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Category } from '~/types/models'
 
 const { fetchAll, create, remove } = useAdminCategories()

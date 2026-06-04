@@ -143,6 +143,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Project, ProjectStatus } from '~/types/models'
 
 const { fetchProjects, updateStatus, deleteProject } = useAdminProjects()

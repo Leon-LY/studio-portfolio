@@ -88,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Project, PaymentOverview } from '~/types/models'
 import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
 import BaseButton from '~/components/ui/BaseButton.vue'

@@ -66,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Project, ProjectFile } from '~/types/models'
 
 const { fetchProjects: fetchAdminProjects } = useAdminProjects()

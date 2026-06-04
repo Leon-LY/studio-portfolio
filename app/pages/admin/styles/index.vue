@@ -55,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Style } from '~/types/models'
 
 const { fetchAll, create, remove } = useAdminStyles()

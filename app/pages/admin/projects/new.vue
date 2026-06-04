@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { ProjectFormData } from '~/types/models'
 import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
 import ProjectForm from '~/components/admin/projects/ProjectForm.vue'

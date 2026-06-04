@@ -320,6 +320,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 const sections = [
   { id: 'overview', num: '1', title: '系统概述' },
   { id: 'dashboard', num: '2', title: '仪表盘' },

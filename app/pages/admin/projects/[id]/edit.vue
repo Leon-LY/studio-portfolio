@@ -105,6 +105,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Project, ProjectFormData, ProjectFile, PaymentMilestone } from '~/types/models'
 
 const route = useRoute()

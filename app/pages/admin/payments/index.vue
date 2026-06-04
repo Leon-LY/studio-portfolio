@@ -96,6 +96,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: "admin" }) 
 import type { Project, PaymentMilestone } from '~/types/models'
 
 const { fetchProjects: fetchAdminProjects } = useAdminProjects()

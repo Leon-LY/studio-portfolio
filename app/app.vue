@@ -1,29 +1,14 @@
 <template>
   <div>
     <NuxtRouteAnnouncer />
-
-    <!-- 后台布局：侧边栏 + 内容 -->
-    <div v-if="isAdminRoute" class="min-h-screen bg-stone-50">
-      <AdminSidebar />
-      <div class="ml-64">
-        <NuxtPage />
-      </div>
-    </div>
-
-    <!-- 前台布局：页面过渡（交叉淡入淡出） -->
-    <div v-else>
-      <Transition name="page">
-        <NuxtPage />
-      </Transition>
-    </div>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
 const { checkSession } = useAuth()
-
-const isAdminRoute = computed(() => route.path.startsWith('/admin') && route.path !== '/admin/login')
 
 onMounted(async () => {
   await checkSession()

@@ -25,7 +25,7 @@
 const route = useRoute()
 const { checkSession } = useAuth()
 
-const isAdminRoute = computed(() => route.path.startsWith('/admin'))
+const isAdminRoute = computed(() => route.path.startsWith('/admin') && route.path !== '/admin/login')
 
 // 检查认证状态
 onMounted(async () => {

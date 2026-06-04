@@ -18,8 +18,8 @@
       <div class="container-wide relative z-10">
         <div class="max-w-4xl">
           <!-- 标签 -->
-          <p class="text-accent-300 text-sm font-medium tracking-[0.2em] uppercase mb-8 animate-fade-in">
-            Fangwai Design Studio
+          <p class="text-accent-300 text-sm font-medium tracking-[0.2em] uppercase mb-6 animate-fade-in">
+            方外设计
           </p>
           <!-- 主标题 -->
           <h1 class="font-serif text-display-xl font-bold text-canvas tracking-tight animate-fade-in-up">

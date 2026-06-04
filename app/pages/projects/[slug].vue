@@ -142,19 +142,17 @@ const { fetchProjectBySlug, fetchRelatedProjects } = useProjects()
 
 const slug = route.params.slug as string
 
-const { data: project, pending } = useAsyncData(`project-${slug}`, async () => {
-  try { return await fetchProjectBySlug(slug) } catch { return null }
-}, { server: false, lazy: true })
+const project = ref<any>(null)
+const relatedProjects = ref<any[]>([])
+const pending = ref(true)
 
-// 相关项目
-const { data: relatedProjects } = useAsyncData(
-  `related-${project.value?.category_id}`,
-  async () => {
-    if (!project.value?.category_id) return []
-    try { return await fetchRelatedProjects(project.value.category_id, slug) } catch { return [] }
-  },
-  { watch: [project] },
-)
+onMounted(async () => {
+  try { project.value = await fetchProjectBySlug(slug) } catch { project.value = null }
+  pending.value = false
+  if (project.value?.category_id) {
+    try { relatedProjects.value = await fetchRelatedProjects(project.value.category_id, slug) } catch { relatedProjects.value = [] }
+  }
+})
 
 function openGallery(img: ProjectImage) {
   // 简单的灯箱 —— 后续可替换为 PhotoSwipe

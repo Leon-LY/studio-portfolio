@@ -166,10 +166,13 @@ const catIcons: Record<string, string> = {
   urban: 'lucide:city',
 }
 
-const { data: projects, pending } = useAsyncData('featured-projects', async () => {
-  try { return await fetchFeaturedProjects() } catch { return [] }
-}, { server: false, lazy: true })
-const { data: categories } = useAsyncData('categories', async () => {
-  try { return await fetchCategories() } catch { return [] }
-}, { server: false, lazy: true })
+const projects = ref<any[] | null>(null)
+const categories = ref<any[] | null>(null)
+const pending = ref(true)
+
+onMounted(async () => {
+  try { projects.value = await fetchFeaturedProjects() } catch { projects.value = [] }
+  try { categories.value = await fetchCategories() } catch { categories.value = [] }
+  pending.value = false
+})
 </script>

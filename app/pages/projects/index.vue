@@ -164,12 +164,13 @@ const selectedStyle = ref((route.query.style as string) || '')
 const currentPage = ref(parseInt(route.query.page as string) || 1)
 const perPage = 12
 
-const { data: categories } = useAsyncData('project-categories', async () => {
-  try { return await fetchCategories() } catch { return [] }
-}, { server: false, lazy: true })
-const { data: styles } = useAsyncData('project-styles', async () => {
-  try { return await fetchStyles() } catch { return [] }
-}, { server: false, lazy: true })
+const categories = ref<any[] | null>(null)
+const styles = ref<any[] | null>(null)
+
+onMounted(async () => {
+  try { categories.value = await fetchCategories() } catch { categories.value = [] }
+  try { styles.value = await fetchStyles() } catch { styles.value = [] }
+})
 
 const categoryName = computed(() => {
   const cat = categories.value?.find(c => c.slug === selectedCategory.value)
@@ -224,21 +225,25 @@ function updateURL() {
   })
 }
 
-const { data: result, pending } = useAsyncData(
-  () => `projects-${search.value}-${selectedCategory.value}-${selectedStyle.value}-${currentPage.value}`,
-  async () => {
-    try {
-      return await fetchProjects({
-        search: search.value,
-        category: selectedCategory.value,
-        style: selectedStyle.value,
-        page: currentPage.value,
-        perPage,
-      })
-    } catch { return { data: [], count: 0, page: 1, perPage: 12, totalPages: 0 } }
-  },
-  { watch: [search, selectedCategory, selectedStyle, currentPage], server: false, lazy: true },
-)
+const result = ref<any>(null)
+const pending = ref(true)
+
+async function loadProjects() {
+  pending.value = true
+  try {
+    result.value = await fetchProjects({
+      search: search.value,
+      category: selectedCategory.value,
+      style: selectedStyle.value,
+      page: currentPage.value,
+      perPage,
+    })
+  } catch { result.value = { data: [], count: 0, page: 1, perPage: 12, totalPages: 0 } }
+  pending.value = false
+}
+
+onMounted(() => loadProjects())
+watch([search, selectedCategory, selectedStyle, currentPage], () => loadProjects())
 
 const projects = computed(() => result.value?.data || [])
 const totalPages = computed(() => result.value?.totalPages || 0)

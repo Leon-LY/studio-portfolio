@@ -3,6 +3,15 @@
     <AdminHeader title="编辑项目" />
 
     <div class="p-6 max-w-4xl">
+      <!-- 创建成功提示 -->
+      <div v-if="justCreated" class="mb-6 p-4 bg-green-50 border border-green-200 rounded-sm flex items-center gap-3">
+        <Icon name="lucide:check-circle" size="20" class="text-green-600" />
+        <div>
+          <p class="text-sm font-medium text-green-800">项目创建成功！</p>
+          <p class="text-xs text-green-600 mt-0.5">现在可以编辑项目详情、上传图片和文件。</p>
+        </div>
+      </div>
+
       <!-- 加载中 -->
       <div v-if="pending" class="py-12 text-center">
         <LoadingSpinner size="lg" text="加载项目中..." />
@@ -50,12 +59,12 @@
 
         <!-- Tab: 项目文件 -->
         <div v-if="activeTab === 'files'" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-4">
-          <FileUploader :project-id="project.id" @uploaded="refreshFiles" />
+          <FileUploader :project-id="project.id" :categories="fileCategories" @uploaded="refreshFiles" />
           <div v-if="fileLoading" class="py-4 text-center">
             <LoadingSpinner size="sm" text="加载文件中..." />
           </div>
           <div v-else class="mt-4">
-            <FileList :files="projectFiles" @deleted="handleFileDelete" />
+            <FileList :files="projectFiles" :categories="fileCategories" @deleted="handleFileDelete" />
           </div>
         </div>
 
@@ -124,6 +133,8 @@ import PaymentForm from '~/components/admin/payments/PaymentForm.vue'
 const route = useRoute()
 const { fetchProjectById, updateProject } = useAdminProjects()
 
+const justCreated = computed(() => route.query.created === '1')
+
 const projectId = route.params.id as string
 
 const { data: project, pending } = useAsyncData(`admin-project-${projectId}`, () => fetchProjectById(projectId))
@@ -172,13 +183,19 @@ async function handleUpdate(form: ProjectFormData) {
 // Files management
 // ============================================================
 const projectFiles = ref<ProjectFile[]>([])
+const fileCategories = ref<any[]>([])
 const fileLoading = ref(false)
 
 async function loadFiles() {
   if (!projectId) return
   fileLoading.value = true
   try {
-    projectFiles.value = await adminApi.getProjectFiles(projectId)
+    const [files, cats] = await Promise.all([
+      adminApi.getProjectFiles(projectId),
+      adminApi.getFileCategories(),
+    ])
+    projectFiles.value = files
+    fileCategories.value = cats
   } catch (e: any) {
     console.error('Failed to load files:', e)
   } finally {

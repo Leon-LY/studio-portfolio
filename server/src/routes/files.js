@@ -33,10 +33,11 @@ const ALLOWED_EXTENSIONS = [
 const fileStorage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, FILES_DIR),
   filename: (_req, file, cb) => {
-    // Keep original extension, prepend UUID prefix to prevent collisions
+    // Use timestamp + random suffix to prevent collisions, keep original extension
     const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
     const ext = path.extname(file.originalname)
-    const safeName = Buffer.from(file.originalname).toString('base64').slice(0, 20)
+    // Encode original name for filesystem safety while preserving readability
+    const safeName = Buffer.from(file.originalname, 'utf8').toString('hex').slice(0, 24)
     cb(null, `${unique}-${safeName}${ext}`)
   },
 })

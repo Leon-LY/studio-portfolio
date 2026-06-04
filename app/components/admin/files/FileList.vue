@@ -40,16 +40,18 @@
                 </div>
               </div>
             </td>
-            <!-- Category -->
+            <!-- Category — editable inline -->
             <td class="py-3 px-2 hidden sm:table-cell">
-              <span
-                v-if="file.category_name"
-                class="inline-flex items-center gap-1 text-xs text-stone-500"
+              <select
+                class="text-xs border border-stone-200 rounded-sm px-1.5 py-1 bg-white text-stone-600 focus:border-stone-400 focus:outline-none max-w-[100px]"
+                :value="file.category_id || ''"
+                @change="handleCategoryChange(file, $event)"
               >
-                <Icon v-if="file.category_icon" :name="file.category_icon" size="12" />
-                {{ file.category_name }}
-              </span>
-              <span v-else class="text-xs text-stone-300">-</span>
+                <option value="">-</option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                  {{ cat.icon ? '' : '' }}{{ cat.name }}
+                </option>
+              </select>
             </td>
             <!-- Size -->
             <td class="py-3 px-2 hidden md:table-cell text-xs text-stone-500">
@@ -65,6 +67,7 @@
                 <a
                   :href="`/api/files/download/${file.id}`"
                   target="_blank"
+                  rel="noopener noreferrer"
                   class="p-1.5 text-stone-400 hover:text-accent-500 transition-colors rounded hover:bg-stone-100"
                   title="下载"
                 >
@@ -106,12 +109,28 @@ import FileIcon from '~/components/ui/FileIcon.vue'
 
 defineProps({
   files: { type: Array as () => ProjectFile[], required: true },
+  categories: { type: Array as () => any[], default: () => [] },
 })
 
-const emit = defineEmits(['deleted'])
+const emit = defineEmits(['deleted', 'update:category'])
 
 const showDeleteConfirm = ref(false)
 const fileToDelete = ref<ProjectFile | null>(null)
+
+async function handleCategoryChange(file: ProjectFile, event: Event) {
+  const select = event.target as HTMLSelectElement
+  const categoryId = select.value || null
+  try {
+    await adminApi.updateFile(file.id, { category_id: categoryId })
+    // Update local state
+    file.category_id = categoryId
+    emit('update:category', file)
+  } catch (e: any) {
+    alert(`更新分类失败：${e.message}`)
+    // Revert select
+    select.value = file.category_id || ''
+  }
+}
 
 function formatSize(bytes: number): string {
   if (!bytes) return '-'

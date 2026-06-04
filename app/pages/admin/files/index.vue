@@ -40,7 +40,7 @@
 
         <!-- Upload Area -->
         <div class="mb-6">
-          <FileUploader :project-id="selectedProjectId" @uploaded="handleUploaded" />
+          <FileUploader :project-id="selectedProjectId" :categories="filesCategories" @uploaded="handleUploaded" />
         </div>
 
         <!-- Loading -->
@@ -50,7 +50,7 @@
 
         <!-- File List -->
         <div v-else class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-4">
-          <FileList :files="filteredFiles" @deleted="handleDelete" />
+          <FileList :files="filteredFiles" :categories="filesCategories" @deleted="handleDelete" />
         </div>
       </template>
 

@@ -1,5 +1,29 @@
 <template>
   <div>
+    <!-- Upload options row: category selector -->
+    <div v-if="categories && categories.length > 0" class="mb-3">
+      <label class="block text-xs font-medium text-stone-600 mb-1.5">文件分类</label>
+      <div class="flex flex-wrap gap-1.5">
+        <button
+          class="px-2.5 py-1 text-xs rounded-full border transition-colors"
+          :class="selectedCategoryId === '' ? 'bg-stone-800 text-canvas border-stone-800' : 'bg-white text-stone-500 border-stone-300 hover:border-stone-400'"
+          @click="selectedCategoryId = ''"
+        >
+          未分类
+        </button>
+        <button
+          v-for="cat in categories"
+          :key="cat.id"
+          class="px-2.5 py-1 text-xs rounded-full border transition-colors"
+          :class="selectedCategoryId === cat.id ? 'bg-stone-800 text-canvas border-stone-800' : 'bg-white text-stone-500 border-stone-300 hover:border-stone-400'"
+          @click="selectedCategoryId = cat.id"
+        >
+          <Icon v-if="cat.icon" :name="cat.icon" size="11" class="mr-1 inline" />
+          {{ cat.name }}
+        </button>
+      </div>
+    </div>
+
     <!-- Drop Zone -->
     <div
       class="border-2 border-dashed rounded-sm p-8 text-center transition-colors cursor-pointer"
@@ -47,6 +71,7 @@ const { uploadFile, isUploading, error } = useProjectFiles(props.projectId)
 const fileInput = ref<HTMLInputElement>()
 const isDragging = ref(false)
 const uploadProgress = ref(0)
+const selectedCategoryId = ref('')
 
 const acceptStr = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.dwg,.dxf,.skp,.rvt,.rfa,.zip,.rar,.7z,.txt,.csv,.jpg,.jpeg,.png,.webp,.gif'
 
@@ -72,7 +97,11 @@ async function handleDrop(e: DragEvent) {
 async function doUpload(file: File) {
   uploadProgress.value = 0
   try {
-    await uploadFile(file)
+    const metadata: { category_id?: string; description?: string } = {}
+    if (selectedCategoryId.value) {
+      metadata.category_id = selectedCategoryId.value
+    }
+    await uploadFile(file, metadata)
     uploadProgress.value = 100
     emit('uploaded')
   } catch {

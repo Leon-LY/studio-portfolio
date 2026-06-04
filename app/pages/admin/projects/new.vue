@@ -19,7 +19,7 @@ const { createProject } = useAdminProjects()
 async function handleCreate(form: ProjectFormData) {
   try {
     const project = await createProject(form)
-    await navigateTo(`/admin/projects/${project.id}/edit`)
+    await navigateTo(`/admin/projects/${project.id}/edit?created=1`)
   } catch (e: any) {
     console.error('创建项目失败:', e)
     alert(`创建项目失败：${e.message}`)

@@ -1,6 +1,9 @@
 import pg from 'pg'
 
-const { Pool } = pg
+const { Pool, types } = pg
+
+// Parse DATE columns as YYYY-MM-DD strings (no timezone shift)
+types.setTypeParser(1082, (val) => val) // 1082 = DATE OID
 
 // PostgreSQL connection — uses the existing investlearn-db container
 // Connect to the 'studio' database inside it

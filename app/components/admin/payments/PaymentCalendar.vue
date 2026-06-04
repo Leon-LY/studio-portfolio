@@ -73,6 +73,11 @@ const displayMonth = computed(() => `${currentYear.value}年 ${currentMonth.valu
 
 const monthKey = computed(() => `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}`)
 
+// Normalize a date value to YYYY-MM-DD string (handles ISO strings, Date objects, etc.)
+function toDateKey(val: any): string {
+  return String(val || '').slice(0, 10)
+}
+
 // Generate calendar cells
 const calendarCells = computed(() => {
   const year = currentYear.value
@@ -81,10 +86,10 @@ const calendarCells = computed(() => {
   const daysInMonth = new Date(year, month, 0).getDate()
   const daysInPrevMonth = new Date(year, month - 1, 0).getDate()
 
-  // Build map of date -> milestones
+  // Build map of date -> milestones (normalized to YYYY-MM-DD)
   const milestoneMap: Record<string, PaymentMilestone[]> = {}
   for (const m of calendarData.value) {
-    const d = m.due_date
+    const d = toDateKey(m.due_date)
     if (!milestoneMap[d]) milestoneMap[d] = []
     milestoneMap[d].push(m)
   }

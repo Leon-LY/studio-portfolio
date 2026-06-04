@@ -60,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import type { PropType } from 'vue'
 import type { Project } from '~/types/models'
 
 const props = defineProps({

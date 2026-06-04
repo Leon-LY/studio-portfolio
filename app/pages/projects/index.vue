@@ -108,8 +108,8 @@
         </EmptyState>
 
         <!-- 网格 -->
-        <div v-else :ref="revealRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div v-for="(project, idx) in projects" :key="project.id" class="reveal-hidden" :data-delay="`${idx % 3 * 80}ms`">
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div v-for="(project, idx) in projects" :key="project.id">
             <ProjectCard :project="project" />
           </div>
         </div>
@@ -150,6 +150,11 @@
 </template>
 
 <script setup lang="ts">
+import ProjectCard from '~/components/portfolio/projects/ProjectCard.vue'
+import PortfolioHeader from '~/components/portfolio/layout/PortfolioHeader.vue'
+import PortfolioFooter from '~/components/portfolio/layout/PortfolioFooter.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
 
 const { fetchProjects } = useProjects()
 const { revealRef } = useScrollReveal()
@@ -244,18 +249,6 @@ async function loadProjects() {
 
 onMounted(() => loadProjects())
 watch([search, selectedCategory, selectedStyle, currentPage], () => loadProjects())
-
-// Re-trigger reveal after data loads
-watch(result, async (val) => {
-  if (val?.data?.length > 0) {
-    await nextTick()
-    document.querySelectorAll('.reveal-hidden').forEach(el => {
-      const delay = (el as HTMLElement).dataset.delay || '0ms'
-      ;(el as HTMLElement).style.setProperty('--reveal-delay', delay)
-      el.classList.add('reveal-visible')
-    })
-  }
-})
 
 const projects = computed(() => result.value?.data || [])
 const totalPages = computed(() => result.value?.totalPages || 0)

@@ -134,6 +134,12 @@
 import type { ProjectImage } from '~/types/models'
 import { getImageUrl } from '~/composables/useApi'
 import { sanitizeHtml } from '~/composables/useSanitize'
+import ProjectCard from '~/components/portfolio/projects/ProjectCard.vue'
+import PortfolioHeader from '~/components/portfolio/layout/PortfolioHeader.vue'
+import PortfolioFooter from '~/components/portfolio/layout/PortfolioFooter.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 
 definePageMeta({ validate: true })
 

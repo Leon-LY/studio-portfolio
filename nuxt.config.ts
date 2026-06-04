@@ -14,17 +14,9 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
   ],
 
-  // ============================================================
-  // Rendering: Portfolio = Static (SSG), Admin = Client-only (CSR)
-  // ============================================================
-  routeRules: {
-    '/admin/**': { ssr: false },
-  },
-
   nitro: {
     prerender: {
       crawlLinks: true,
-      ignore: ['/admin/**'],
       routes: ['/'],
     },
   },

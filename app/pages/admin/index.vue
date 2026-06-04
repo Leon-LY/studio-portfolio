@@ -89,6 +89,10 @@
 
 <script setup lang="ts">
 import type { Project, PaymentOverview } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import StatusBadge from '~/components/admin/projects/StatusBadge.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
 
 const { fetchProjects } = useAdminProjects()
 

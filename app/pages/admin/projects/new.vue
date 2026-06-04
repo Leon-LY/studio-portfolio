@@ -10,6 +10,8 @@
 
 <script setup lang="ts">
 import type { ProjectFormData } from '~/types/models'
+import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
+import ProjectForm from '~/components/admin/projects/ProjectForm.vue'
 
 const { createProject } = useAdminProjects()
 

@@ -144,7 +144,7 @@ const slug = route.params.slug as string
 
 const { data: project, pending } = useAsyncData(`project-${slug}`, async () => {
   try { return await fetchProjectBySlug(slug) } catch { return null }
-})
+}, { server: false, lazy: true })
 
 // 相关项目
 const { data: relatedProjects } = useAsyncData(

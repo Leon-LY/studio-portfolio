@@ -117,7 +117,7 @@
           <h2 class="text-display-sm font-serif font-bold text-stone-900 text-center">按类型浏览</h2>
         </div>
 
-        <div v-if="categories.length > 0" class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div v-if="categories && categories.length > 0" class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
           <NuxtLink
             v-for="(cat, idx) in categories"
             :key="cat.id"
@@ -168,8 +168,8 @@ const catIcons: Record<string, string> = {
 
 const { data: projects, pending } = useAsyncData('featured-projects', async () => {
   try { return await fetchFeaturedProjects() } catch { return [] }
-})
+}, { server: false, lazy: true })
 const { data: categories } = useAsyncData('categories', async () => {
   try { return await fetchCategories() } catch { return [] }
-})
+}, { server: false, lazy: true })
 </script>

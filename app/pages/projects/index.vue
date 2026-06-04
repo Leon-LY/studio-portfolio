@@ -166,10 +166,10 @@ const perPage = 12
 
 const { data: categories } = useAsyncData('project-categories', async () => {
   try { return await fetchCategories() } catch { return [] }
-})
+}, { server: false, lazy: true })
 const { data: styles } = useAsyncData('project-styles', async () => {
   try { return await fetchStyles() } catch { return [] }
-})
+}, { server: false, lazy: true })
 
 const categoryName = computed(() => {
   const cat = categories.value?.find(c => c.slug === selectedCategory.value)
@@ -237,7 +237,7 @@ const { data: result, pending } = useAsyncData(
       })
     } catch { return { data: [], count: 0, page: 1, perPage: 12, totalPages: 0 } }
   },
-  { watch: [search, selectedCategory, selectedStyle, currentPage] },
+  { watch: [search, selectedCategory, selectedStyle, currentPage], server: false, lazy: true },
 )
 
 const projects = computed(() => result.value?.data || [])

@@ -16,8 +16,24 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      crawlLinks: true,
-      routes: ['/'],
+      crawlLinks: false,
+      routes: [
+        // Public pages (shell only, data fetched client-side)
+        '/',
+        '/projects',
+        '/about',
+        '/contact',
+        // Admin pages
+        '/admin/login',
+        '/admin',
+        '/admin/projects',
+        '/admin/projects/new',
+        '/admin/payments',
+        '/admin/files',
+        '/admin/categories',
+        '/admin/styles',
+        '/admin/manual',
+      ],
     },
   },
 

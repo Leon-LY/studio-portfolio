@@ -83,8 +83,8 @@
           </span>
         </p>
 
-        <!-- 骨架屏加载 -->
-        <div v-if="pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 骨架屏加载（SSR shell or initial load） -->
+        <div v-if="pending || !result" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div v-for="n in 6" :key="n" class="rounded-sm overflow-hidden">
             <div class="skeleton aspect-[4/3] rounded-sm" />
             <div class="mt-3 space-y-2 p-1">

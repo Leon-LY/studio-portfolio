@@ -79,8 +79,8 @@
           </NuxtLink>
         </div>
 
-        <!-- 加载中：骨架屏 -->
-        <div v-if="pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 加载中：骨架屏（SSR shell or initial load） -->
+        <div v-if="pending || !projects" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div v-for="n in 3" :key="n" class="rounded-sm overflow-hidden">
             <div class="skeleton aspect-[4/3]" />
             <div class="mt-4 space-y-2">
@@ -91,7 +91,7 @@
         </div>
 
         <!-- 项目网格 -->
-        <div v-else-if="projects && projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
+        <div v-else-if="projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
           <div v-for="project in projects" :key="project.id" class="reveal-hidden" :data-delay="`${Math.random() * 200}ms`">
             <ProjectCard :project="project" variant="featured" />
           </div>

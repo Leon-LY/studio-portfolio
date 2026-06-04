@@ -120,9 +120,22 @@ router.get('/featured', async (req, res) => {
         stylesMap[row.project_id].push({ id: row.id, name: row.name, slug: row.slug, created_at: row.created_at })
       }
     }
+    // Batch fetch images
+    const imagesMap = {}
+    if (projectIds.length > 0) {
+      const { rows: allImgRows } = await query(
+        'SELECT * FROM project_images WHERE project_id = ANY($1::uuid[]) ORDER BY sort_order',
+        [projectIds],
+      )
+      for (const row of allImgRows) {
+        if (!imagesMap[row.project_id]) imagesMap[row.project_id] = []
+        imagesMap[row.project_id].push(row)
+      }
+    }
     for (const project of rows) {
       project.category = project.cat_id ? { id: project.cat_id, name: project.cat_name, slug: project.cat_slug } : null
       project.styles = stylesMap[project.id] || []
+      project.images = imagesMap[project.id] || []
     }
     res.json(rows)
   } catch (err) {

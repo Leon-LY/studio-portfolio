@@ -30,7 +30,7 @@
                   <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center">
                     <Icon name="lucide:map-pin" size="18" class="text-stone-500" />
                   </span>
-                  <span class="text-sm">中国 · 上海</span>
+                  <span class="text-sm">山东 · 威海</span>
                 </div>
               </div>
             </div>

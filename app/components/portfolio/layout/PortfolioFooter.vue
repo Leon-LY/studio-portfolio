@@ -31,7 +31,7 @@
                 554295000@qq.com
               </a>
             </li>
-            <li class="text-sm text-stone-400">中国 · 上海</li>
+            <li class="text-sm text-stone-400">山东 · 威海</li>
           </ul>
         </div>
       </div>

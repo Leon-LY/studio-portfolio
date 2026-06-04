@@ -1,38 +1,52 @@
 <template>
   <div>
     <!-- ============================================================
-         Hero — 全屏建筑感
+         Hero — 全屏项目摄影 + 视差
          ============================================================ -->
     <section class="relative h-screen min-h-[700px] flex items-center overflow-hidden">
-      <!-- 深色基底 + 建筑网格纹理（视差） -->
+      <!-- 背景层：项目封面图 or 深色基底 -->
       <div class="absolute inset-0 bg-ink">
-        <!-- 对角线光束 — 随滚动视差 -->
-        <div class="absolute inset-0" :style="{ transform: `translateY(${scrollY * 0.15}px)` }" style="will-change: transform; background: radial-gradient(ellipse at 30% 50%, rgba(200, 164, 78, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);" />
-        <!-- 建筑网格叠加 — 微视差 -->
-        <div class="absolute inset-0 opacity-[0.04]" :style="{ transform: `translateY(${scrollY * 0.08}px)` }" style="will-change: transform; background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 80px 80px;" />
-        <!-- 底部渐变 fade -->
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/80" />
+        <!-- 项目封面图（全屏、视差） -->
+        <img
+          v-if="heroImage"
+          :src="heroImage"
+          class="absolute inset-0 w-full h-full object-cover animate-reveal-image"
+          :style="parallaxStyle"
+          alt=""
+        />
+        <!-- 渐变遮罩：顶部浓黑保证文字可读，中间略透让图片呼吸，底部浓黑过渡到内容区 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-ink/90 via-ink/45 via-40% to-ink/95" />
+
+        <!-- 建筑网格叠加（2% 不透明度，微视差） -->
+        <div
+          class="absolute inset-0 opacity-[0.02] bg-grid"
+          :style="{ transform: `translateY(${scrollY * 0.05}px)` }"
+        />
+
+        <!-- 光束效果 — 仅无图片时作为回退 -->
+        <div
+          v-if="!heroImage"
+          class="absolute inset-0"
+          :style="{ transform: `translateY(${scrollY * 0.15}px)` }"
+          style="background: radial-gradient(ellipse at 30% 50%, rgba(200, 164, 78, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);"
+        />
       </div>
 
       <!-- Hero 内容 -->
       <div class="container-wide relative z-10">
         <div class="max-w-4xl">
-          <!-- 工作室名称 — 最显眼 -->
           <h1 class="font-serif text-display-xl font-bold text-canvas tracking-tight animate-fade-in-up">
             方外设计
           </h1>
-          <!-- Slogan — 金线分隔 -->
-          <div class="flex items-center gap-5 mt-6 mb-6 animate-fade-in" style="animation-delay: 0.15s">
-            <span class="h-px w-12 bg-accent-400/60" />
+          <div class="flex items-center gap-5 mt-5 mb-5 animate-fade-in" style="animation-delay: 0.15s">
+            <span class="h-px w-10 bg-accent-400/60" />
             <p class="font-display text-display-sm text-accent-300 tracking-wide">
               方寸之外 · 别有天地
             </p>
           </div>
-          <!-- 副标题 -->
-          <p class="text-lg sm:text-xl text-stone-400 max-w-xl leading-relaxed font-light animate-fade-in" style="animation-delay: 0.3s">
+          <p class="text-lg sm:text-xl text-stone-400 max-w-lg leading-relaxed font-light animate-fade-in" style="animation-delay: 0.3s">
             以思考重塑空间的边界，创造既美观又实用的建筑。<br />每一个项目，都是光线、材料与人的对话。
           </p>
-          <!-- CTA -->
           <div class="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.5s">
             <NuxtLink
               to="/projects"
@@ -51,11 +65,16 @@
         </div>
       </div>
 
-      <!-- 滚动指示器 — 自定义慢速脉冲 -->
+      <!-- 滚动指示器 -->
       <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-pulse-subtle">
         <Icon name="lucide:chevron-down" size="24" class="text-canvas/40" />
       </div>
     </section>
+
+    <!-- Hero → 内容过渡带 -->
+    <div class="relative -mt-32 h-32 pointer-events-none" aria-hidden="true">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent to-canvas" />
+    </div>
 
     <!-- 前台导航 -->
     <PortfolioHeader />
@@ -144,18 +163,14 @@ import ProjectCard from '~/components/portfolio/projects/ProjectCard.vue'
 import PortfolioHeader from '~/components/portfolio/layout/PortfolioHeader.vue'
 import PortfolioFooter from '~/components/portfolio/layout/PortfolioFooter.vue'
 import EmptyState from '~/components/ui/EmptyState.vue'
+import { getImageUrl } from '~/composables/useApi'
 
 const { fetchFeaturedProjects } = useProjects()
 const { fetchCategories } = useCategories()
 const { revealRef } = useScrollReveal()
+const { parallaxStyle, scrollY } = useHeroParallax()
 
-// Hero parallax
-const scrollY = ref(0)
-function onHeroScroll() { scrollY.value = window.scrollY }
-onMounted(() => window.addEventListener('scroll', onHeroScroll, { passive: true }))
-onUnmounted(() => window.removeEventListener('scroll', onHeroScroll))
-
-// Category icon mapping — different icon per category
+// Category icon mapping
 const catIcons: Record<string, string> = {
   residential: 'lucide:home',
   commercial: 'lucide:building-2',
@@ -174,9 +189,14 @@ const catIcons: Record<string, string> = {
 const projects = ref<any[] | null>(null)
 const categories = ref<any[] | null>(null)
 const pending = ref(true)
+const heroImage = ref<string | null>(null)
 
 onMounted(async () => {
-  try { projects.value = await fetchFeaturedProjects() } catch { projects.value = [] }
+  try {
+    projects.value = await fetchFeaturedProjects()
+    const first = projects.value?.find((p: any) => p.cover_image_url)
+    if (first) heroImage.value = getImageUrl(first.cover_image_url)
+  } catch { projects.value = [] }
   try { categories.value = await fetchCategories() } catch { categories.value = [] }
   pending.value = false
 })

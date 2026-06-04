@@ -5,8 +5,13 @@ import { authMiddleware } from '../auth.js'
 const router = Router()
 
 // GET /api/categories — public
-router.get('/', async (_req, res) => {
+router.get('/', async (req, res) => {
   try {
+    const { slug } = req.query
+    if (slug) {
+      const { rows } = await query('SELECT * FROM categories WHERE slug = $1', [slug])
+      return res.json(rows[0] || null)
+    }
     const { rows } = await query('SELECT * FROM categories ORDER BY sort_order')
     res.json(rows)
   } catch (err) {
@@ -45,7 +50,8 @@ router.put('/:id', authMiddleware, async (req, res) => {
 // DELETE /api/categories/:id — admin
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    await query('DELETE FROM categories WHERE id = $1', [req.params.id])
+    const { rowCount } = await query('DELETE FROM categories WHERE id = $1', [req.params.id])
+    if (rowCount === 0) return res.status(404).json({ error: 'Not found' })
     res.json({ success: true })
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete category' })

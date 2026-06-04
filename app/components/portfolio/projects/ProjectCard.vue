@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import type { Project } from '~/types/models'
 
-defineProps({
+const props = defineProps({
   project: {
     type: Object as PropType<Project>,
     required: true,
@@ -72,8 +72,6 @@ defineProps({
     default: 'grid',
   },
 })
-
-const props = defineProps()
 
 const cardClasses = computed(() => {
   const base = 'group block bg-white rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg'

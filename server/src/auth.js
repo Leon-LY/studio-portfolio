@@ -2,14 +2,28 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { query } from './db.js'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'studio-jwt-secret-change-me'
+const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES = '7d'
+
+// Fail fast in production if JWT_SECRET is not set
+if (!JWT_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('FATAL: JWT_SECRET environment variable is required in production')
+    process.exit(1)
+  }
+  console.warn('WARNING: JWT_SECRET not set — using insecure default (dev only)')
+}
+
+// Get the JWT secret (with dev fallback)
+function getSecret() {
+  return JWT_SECRET || 'studio-jwt-secret-dev-only'
+}
 
 // Generate JWT token
 export function generateToken(user) {
   return jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
+    getSecret(),
     { expiresIn: JWT_EXPIRES },
   )
 }
@@ -23,7 +37,7 @@ export function authMiddleware(req, res, next) {
 
   try {
     const token = header.split(' ')[1]
-    req.user = jwt.verify(token, JWT_SECRET)
+    req.user = jwt.verify(token, getSecret())
     next()
   } catch {
     return res.status(401).json({ error: 'Invalid token' })
@@ -41,7 +55,7 @@ export async function login(req, res) {
     const { rows } = await query('SELECT * FROM admins WHERE email = $1', [email])
     const admin = rows[0]
 
-    if (!admin || !bcrypt.compareSync(password, admin.password)) {
+    if (!admin || !(await bcrypt.compare(password, admin.password))) {
       return res.status(401).json({ error: 'Invalid email or password' })
     }
 
@@ -64,7 +78,7 @@ export async function createAdmin(req, res) {
   }
 
   try {
-    const hashed = bcrypt.hashSync(password, 10)
+    const hashed = await bcrypt.hash(password, 10)
     const { rows } = await query(
       'INSERT INTO admins (email, password, full_name, role) VALUES ($1, $2, $3, $4) RETURNING id, email, full_name, role',
       [email, hashed, full_name || '', 'admin'],

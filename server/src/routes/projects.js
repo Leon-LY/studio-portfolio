@@ -58,14 +58,29 @@ router.get('/', async (req, res) => {
 
     const { rows } = await query(sql, params)
 
-    // Fetch styles for each project
-    for (const project of rows) {
-      project.category = project.cat_id ? { id: project.cat_id, name: project.cat_name, slug: project.cat_slug } : null
-      const { rows: styleRows } = await query(
-        'SELECT s.* FROM styles s JOIN project_styles ps ON s.id = ps.style_id WHERE ps.project_id = $1',
-        [project.id],
+    // Fetch styles for all projects in one batch query
+    const projectIds = rows.map(p => p.id)
+    if (projectIds.length > 0) {
+      const { rows: allStyleRows } = await query(
+        `SELECT ps.project_id, s.id, s.name, s.slug, s.created_at
+         FROM styles s JOIN project_styles ps ON s.id = ps.style_id
+         WHERE ps.project_id = ANY($1::uuid[])`,
+        [projectIds],
       )
-      project.styles = styleRows
+      const stylesMap = {}
+      for (const row of allStyleRows) {
+        if (!stylesMap[row.project_id]) stylesMap[row.project_id] = []
+        stylesMap[row.project_id].push({ id: row.id, name: row.name, slug: row.slug, created_at: row.created_at })
+      }
+      for (const project of rows) {
+        project.category = project.cat_id ? { id: project.cat_id, name: project.cat_name, slug: project.cat_slug } : null
+        project.styles = stylesMap[project.id] || []
+      }
+    } else {
+      for (const project of rows) {
+        project.category = project.cat_id ? { id: project.cat_id, name: project.cat_name, slug: project.cat_slug } : null
+        project.styles = []
+      }
     }
 
     res.json({
@@ -90,13 +105,24 @@ router.get('/featured', async (req, res) => {
        WHERE p.status = 'published' AND p.is_featured = true
        ORDER BY p.sort_order DESC LIMIT 6`,
     )
+    // Batch fetch styles
+    const projectIds = rows.map(p => p.id)
+    const stylesMap = {}
+    if (projectIds.length > 0) {
+      const { rows: allStyleRows } = await query(
+        `SELECT ps.project_id, s.id, s.name, s.slug, s.created_at
+         FROM styles s JOIN project_styles ps ON s.id = ps.style_id
+         WHERE ps.project_id = ANY($1::uuid[])`,
+        [projectIds],
+      )
+      for (const row of allStyleRows) {
+        if (!stylesMap[row.project_id]) stylesMap[row.project_id] = []
+        stylesMap[row.project_id].push({ id: row.id, name: row.name, slug: row.slug, created_at: row.created_at })
+      }
+    }
     for (const project of rows) {
       project.category = project.cat_id ? { id: project.cat_id, name: project.cat_name, slug: project.cat_slug } : null
-      const { rows: styleRows } = await query(
-        'SELECT s.* FROM styles s JOIN project_styles ps ON s.id = ps.style_id WHERE ps.project_id = $1',
-        [project.id],
-      )
-      project.styles = styleRows
+      project.styles = stylesMap[project.id] || []
     }
     res.json(rows)
   } catch (err) {
@@ -280,7 +306,8 @@ router.patch('/:id/status', authMiddleware, async (req, res) => {
 // DELETE /api/projects/:id
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    await query('DELETE FROM projects WHERE id = $1', [req.params.id])
+    const { rowCount } = await query('DELETE FROM projects WHERE id = $1', [req.params.id])
+    if (rowCount === 0) return res.status(404).json({ error: 'Not found' })
     res.json({ success: true })
   } catch (err) {
     console.error('DELETE /projects/:id error:', err)

@@ -31,7 +31,8 @@ router.post('/', authMiddleware, async (req, res) => {
 // DELETE /api/styles/:id — admin
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    await query('DELETE FROM styles WHERE id = $1', [req.params.id])
+    const { rowCount } = await query('DELETE FROM styles WHERE id = $1', [req.params.id])
+    if (rowCount === 0) return res.status(404).json({ error: 'Not found' })
     res.json({ success: true })
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete style' })

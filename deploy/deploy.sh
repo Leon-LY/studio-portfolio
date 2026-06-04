@@ -7,8 +7,7 @@
 #   ./deploy/deploy.sh
 #
 # Prerequisites:
-#   1. Set SUPABASE_URL + SUPABASE_ANON_KEY in .env (or export them)
-#   2. SSH key already set up for the target server
+#   1. SSH key already set up for the target server
 # ============================================================
 
 set -e
@@ -25,8 +24,6 @@ if [ -f .env ]; then
   export $(cat .env | grep -v '^#' | xargs)
 fi
 
-echo "SUPABASE_URL=$SUPABASE_URL"
-
 # Clean and build
 rm -rf $BUILD_DIR
 npx nuxi generate
@@ -37,6 +34,5 @@ echo "=== Deploying to $SERVER ==="
 rsync -avz --delete $BUILD_DIR/ "$SERVER:$REMOTE_PATH/"
 
 echo "=== Done ==="
-echo "Portfolio:  https://your-domain.com"
-echo "Admin:      https://your-domain.com/admin/login"
-echo "Supabase:   $SUPABASE_URL"
+echo "Portfolio:  http://49.232.49.175"
+echo "Admin:      http://49.232.49.175/admin/login"

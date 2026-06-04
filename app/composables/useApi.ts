@@ -138,7 +138,7 @@ export const adminApi = {
     const form = new FormData()
     form.append('image', file)
     form.append('project_id', projectId)
-    const res = await fetch(`${API_BASE}/api/images/upload`, {
+    const res = await fetch(`${getApiBase()}/api/images/upload`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: form,

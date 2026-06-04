@@ -71,10 +71,16 @@ const navLinks = [
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
 
+function onScroll() {
+  isScrolled.value = window.scrollY > 10
+}
+
 onMounted(() => {
-  window.addEventListener('scroll', () => {
-    isScrolled.value = window.scrollY > 10
-  })
+  window.addEventListener('scroll', onScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
 })
 </script>
 

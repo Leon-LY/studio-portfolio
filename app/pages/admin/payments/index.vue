@@ -71,7 +71,7 @@
 
       <!-- Calendar View -->
       <template v-if="activeTab === 'calendar'">
-        <PaymentCalendar />
+        <PaymentCalendar @edit="openEditForm" />
       </template>
 
       <!-- Payment Form Modal -->

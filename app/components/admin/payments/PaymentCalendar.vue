@@ -43,9 +43,10 @@
             <div
               v-for="m in cell.milestones"
               :key="m.id"
-              class="text-xs px-1 py-0.5 rounded truncate cursor-help"
+              class="text-xs px-1 py-0.5 rounded truncate cursor-pointer hover:ring-1 hover:ring-stone-400 transition-all"
               :class="statusBg(m.status)"
-              :title="`${m.title} — ¥${m.amount}`"
+              :title="`${m.title} — ¥${m.amount}（点击编辑）`"
+              @click.stop="$emit('edit', m)"
             >
               ¥{{ m.amount.toLocaleString() }}
             </div>
@@ -60,6 +61,8 @@
 import type { PaymentMilestone } from '~/types/models'
 import BaseButton from '~/components/ui/BaseButton.vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
+
+defineEmits(['edit'])
 
 const { calendarData, fetchCalendar } = usePayments()
 

@@ -6,9 +6,7 @@
     <div v-if="isAdminRoute" class="min-h-screen bg-stone-50">
       <AdminSidebar />
       <div class="ml-64">
-        <Transition name="page" mode="out-in">
-          <NuxtPage />
-        </Transition>
+        <NuxtPage />
       </div>
     </div>
 

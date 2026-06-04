@@ -54,7 +54,7 @@ const { user, signOut } = useAuth()
 const menuOpen = ref(false)
 
 const userName = computed(() =>
-  user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || '管理员',
+  user.value?.full_name || user.value?.email?.split('@')[0] || '管理员',
 )
 
 const userEmail = computed(() => user.value?.email || '')

@@ -64,7 +64,7 @@
          精选作品
          ============================================================ -->
     <section class="py-section bg-canvas">
-      <div class="container-wide" :ref="revealAndSave">
+      <div class="container-wide" :ref="revealRef">
         <div class="flex items-end justify-between mb-14 reveal-hidden">
           <div>
             <p class="text-accent-500 text-sm font-medium tracking-widest uppercase mb-3">Selected Works</p>
@@ -91,7 +91,7 @@
         </div>
 
         <!-- 项目网格 -->
-        <div v-else-if="projects.length > 0" :ref="revealAndSave" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
+        <div v-else-if="projects.length > 0" :ref="revealRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
           <div v-for="project in projects" :key="project.id" class="reveal-hidden" :data-delay="`${Math.random() * 200}ms`">
             <ProjectCard :project="project" variant="featured" />
           </div>
@@ -111,7 +111,7 @@
          按类型浏览
          ============================================================ -->
     <section class="py-section bg-stone-50">
-      <div class="container-wide" :ref="revealAndSave">
+      <div class="container-wide" :ref="revealRef">
         <div class="reveal-hidden">
           <p class="text-accent-500 text-sm font-medium tracking-widest uppercase text-center mb-3">Categories</p>
           <h2 class="text-display-sm font-serif font-bold text-stone-900 text-center">按类型浏览</h2>
@@ -149,13 +149,6 @@ const { fetchFeaturedProjects } = useProjects()
 const { fetchCategories } = useCategories()
 const { revealRef } = useScrollReveal()
 
-let revealContainer: Element | null = null
-
-function revealAndSave(el: any) {
-  revealRef(el)
-  if (el) revealContainer = el instanceof Element ? el : el.$el
-}
-
 const debugMsg = ref('init')
 
 // Hero parallax
@@ -186,12 +179,11 @@ const pending = ref(true)
 
 // Re-trigger scroll reveal after data loads
 function observeReveal() {
-  if (!revealContainer) return
-  revealContainer.querySelectorAll('.reveal-hidden').forEach(child => {
-    // manually add visible class since IntersectionObserver already ran
-    const delay = (child as HTMLElement).dataset.delay || '0ms'
-    ;(child as HTMLElement).style.setProperty('--reveal-delay', delay)
-    child.classList.add('reveal-visible')
+  document.querySelectorAll('.reveal-hidden').forEach(child => {
+    const el = child as HTMLElement
+    const delay = el.dataset.delay || '0ms'
+    el.style.setProperty('--reveal-delay', delay)
+    el.classList.add('reveal-visible')
   })
 }
 

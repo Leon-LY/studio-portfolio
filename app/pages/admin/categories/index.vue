@@ -43,6 +43,14 @@
               </div>
             </div>
             <div class="flex items-center gap-3">
+              <!-- 编辑按钮 -->
+              <button
+                class="p-1.5 text-stone-400 hover:text-accent-500 rounded-sm hover:bg-stone-100 transition-colors"
+                title="编辑分类"
+                @click="openEdit(cat)"
+              >
+                <Icon name="lucide:pencil" size="14" />
+              </button>
               <!-- 首页展示开关 -->
               <button
                 class="flex items-center gap-1.5 text-xs transition-colors"
@@ -73,6 +81,19 @@
       </div>
     </div>
 
+    <!-- 编辑 Modal -->
+    <BaseModal v-model="showEdit" title="编辑分类" content-class="w-full max-w-sm">
+      <form @submit.prevent="handleEdit" class="space-y-4">
+        <BaseInput v-model="editForm.name" label="名称" required />
+        <BaseInput v-model="editForm.slug" label="标识符" required />
+        <BaseTextarea v-model="editForm.description" label="描述" rows="2" />
+        <div class="flex justify-end gap-3 pt-2">
+          <BaseButton variant="outline" type="button" @click="showEdit = false">取消</BaseButton>
+          <BaseButton type="submit" :loading="saving">保存</BaseButton>
+        </div>
+      </form>
+    </BaseModal>
+
     <!-- 删除确认 -->
     <ConfirmDialog
       v-if="confirmDelete"
@@ -95,6 +116,8 @@ import BaseButton from '~/components/ui/BaseButton.vue'
 import BaseInput from '~/components/ui/BaseInput.vue'
 import EmptyState from '~/components/ui/EmptyState.vue'
 import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
+import BaseModal from '~/components/ui/BaseModal.vue'
+import BaseTextarea from '~/components/ui/BaseTextarea.vue'
 
 const { fetchAll, create, update, remove } = useAdminCategories()
 
@@ -104,6 +127,29 @@ const newName = ref('')
 const newSlug = ref('')
 const saving = ref(false)
 const confirmDelete = ref<Category | null>(null)
+const showEdit = ref(false)
+const editingCat = ref<Category | null>(null)
+const editForm = reactive({ name: '', slug: '', description: '' })
+
+function openEdit(cat: Category) {
+  editingCat.value = cat
+  editForm.name = cat.name
+  editForm.slug = cat.slug
+  editForm.description = cat.description || ''
+  showEdit.value = true
+}
+
+async function handleEdit() {
+  if (!editingCat.value) return
+  saving.value = true
+  try {
+    await update(editingCat.value.id, editForm)
+    await loadCategories()
+    refreshNuxtData('admin-categories')
+    showEdit.value = false
+  } catch (e: any) { alert(e.message) }
+  finally { saving.value = false }
+}
 
 function slugify(text: string): string {
   return text

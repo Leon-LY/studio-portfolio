@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { query } from '../db.js'
+import { authMiddleware } from '../auth.js'
 
 const router = Router()
 
@@ -51,6 +52,33 @@ router.post('/', async (req, res) => {
     // Fall back to console log if DB insert fails
     console.log('Contact form submission (fallback):', { name, email, projectType, message })
     res.status(500).json({ error: '提交失败，请稍后重试' })
+  }
+})
+
+// GET /api/contacts — list submissions (admin)
+router.get('/', authMiddleware, async (req, res) => {
+  const { is_read } = req.query
+  try {
+    let sql = 'SELECT * FROM contacts'
+    const params = []
+    if (is_read === 'true') { sql += ' WHERE is_read = true' }
+    else if (is_read === 'false') { sql += ' WHERE is_read = false' }
+    sql += ' ORDER BY created_at DESC'
+    const { rows } = await query(sql, params)
+    res.json(rows)
+  } catch (err) {
+    console.error('GET /contacts error:', err)
+    res.status(500).json({ error: '获取留言失败' })
+  }
+})
+
+// PUT /api/contacts/:id/read — mark as read
+router.put('/:id/read', authMiddleware, async (req, res) => {
+  try {
+    await query('UPDATE contacts SET is_read = true WHERE id = $1', [req.params.id])
+    res.json({ success: true })
+  } catch (err) {
+    res.status(500).json({ error: '标记已读失败' })
   }
 })
 

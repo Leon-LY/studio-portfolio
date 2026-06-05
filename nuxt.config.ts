@@ -28,6 +28,7 @@ export default defineNuxtConfig({
         '/admin',
         '/admin/projects',
         '/admin/projects/new',
+        '/admin/contacts',
         '/admin/payments',
         '/admin/files',
         '/admin/categories',

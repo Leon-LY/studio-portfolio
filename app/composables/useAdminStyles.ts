@@ -13,8 +13,8 @@ export function useAdminStyles() {
     return adminApi.createStyle({ name, slug })
   }
 
-  async function update(_id: string, _updates: Partial<Style>) {
-    throw new Error('风格更新功能尚未实现')
+  async function update(id: string, updates: Partial<Style>) {
+    return adminApi.updateStyle(id, updates)
   }
 
   async function remove(id: string) {

@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import bcrypt from 'bcryptjs'
 import { query } from '../db.js'
-import { authMiddleware } from '../auth.js'
+import { authMiddleware, requireRole } from '../auth.js'
 
 const router = Router()
 
-// All routes require auth
+// All routes require admin role
 router.use(authMiddleware)
+router.use(requireRole('admin'))
 
 // GET /api/users — list all users
 router.get('/', async (_req, res) => {

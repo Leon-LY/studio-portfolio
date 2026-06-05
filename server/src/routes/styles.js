@@ -28,6 +28,22 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 })
 
+// PUT /api/styles/:id — admin (rename)
+router.put('/:id', authMiddleware, async (req, res) => {
+  const { name, slug } = req.body
+  try {
+    const { rows: existing } = await query('SELECT * FROM styles WHERE id = $1', [req.params.id])
+    if (existing.length === 0) return res.status(404).json({ error: 'Not found' })
+    const { rows } = await query(
+      'UPDATE styles SET name=$1, slug=$2 WHERE id=$3 RETURNING *',
+      [name ?? existing[0].name, slug ?? existing[0].slug, req.params.id],
+    )
+    res.json(rows[0])
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update style' })
+  }
+})
+
 // DELETE /api/styles/:id — admin
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {

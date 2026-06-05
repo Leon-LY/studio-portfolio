@@ -134,6 +134,9 @@ export const adminApi = {
   createStyle(data: any) {
     return apiFetch<any>('/api/styles', { method: 'POST', body: JSON.stringify(data) })
   },
+  updateStyle(id: string, data: any) {
+    return apiFetch<any>(`/api/styles/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
   deleteStyle(id: string) {
     return apiFetch<any>(`/api/styles/${id}`, { method: 'DELETE' })
   },
@@ -248,6 +251,10 @@ export const adminApi = {
   updateUser(id: string, data: { full_name?: string; role?: string }) {
     return apiFetch<any>(`/api/users/${id}`, { method: 'PUT', body: JSON.stringify(data) })
   },
+  // Contacts
+  getContacts() { return apiFetch<any[]>('/api/contacts') },
+  markContactRead(id: string) { return apiFetch<any>(`/api/contacts/${id}/read`, { method: 'PUT' }) },
+
   changePassword(id: string, data: { current_password?: string; new_password: string }) {
     return apiFetch<any>(`/api/users/${id}/password`, { method: 'PUT', body: JSON.stringify(data) })
   },

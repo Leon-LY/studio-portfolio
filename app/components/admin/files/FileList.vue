@@ -114,21 +114,16 @@ function isImage(ext: string) { return imageExts.includes(ext.toLowerCase()) }
 function isOffice(ext: string) { return officeExts.includes(ext.toLowerCase()) }
 
 function getDownloadUrl(fileId: string) { return `/api/files/download/${fileId}` }
+function getPreviewUrl(fileId: string) { return `/api/files/preview/${fileId}` }
 
 function previewFile(file: ProjectFile) {
   const ext = (file.file_extension || '').toLowerCase()
-  const url = getDownloadUrl(file.id)
-
   if (isImage(ext)) {
-    // 图片：灯箱预览
-    previewImages.value = [{ src: url, alt: file.original_name }]
+    previewImages.value = [{ src: getPreviewUrl(file.id), alt: file.original_name }]
     showPreview.value = true
-  } else if (ext === '.pdf') {
-    // PDF：新标签页浏览器打开
-    window.open(url, '_blank')
   } else {
-    // Office、CAD 及其他：直接下载到本地用对应软件打开
-    window.open(url, '_blank')
+    // PDF/Office/CAD/其他: 新标签页打开（Office 会自动转为 PDF 预览）
+    window.open(getPreviewUrl(file.id), '_blank')
   }
 }
 

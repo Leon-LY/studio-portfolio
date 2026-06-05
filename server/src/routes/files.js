@@ -2,6 +2,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
+import { execSync } from 'child_process'
 import { fileURLToPath } from 'url'
 import { query } from '../db.js'
 import { authMiddleware } from '../auth.js'
@@ -55,6 +56,79 @@ const fileUpload = multer({
 })
 
 const router = Router()
+const PREVIEW_DIR = path.join(UPLOAD_DIR, 'previews')
+
+// Ensure preview directory exists
+if (!fs.existsSync(PREVIEW_DIR)) {
+  fs.mkdirSync(PREVIEW_DIR, { recursive: true })
+}
+
+// Office extensions that LibreOffice can convert
+const OFFICE_EXTS = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.ods', '.odp']
+
+// Convert Office file to PDF using LibreOffice headless
+function convertToPdf(inputPath, outputDir) {
+  try {
+    execSync(
+      `soffice --headless --norestore --nofirststartwizard --convert-to pdf --outdir "${outputDir}" "${inputPath}"`,
+      { timeout: 60000, env: { ...process.env, HOME: process.env.HOME || '/tmp' } },
+    )
+    const baseName = path.basename(inputPath, path.extname(inputPath))
+    const pdfPath = path.join(outputDir, `${baseName}.pdf`)
+    return fs.existsSync(pdfPath) ? pdfPath : null
+  } catch (err) {
+    console.error('LibreOffice conversion failed:', err.message)
+    return null
+  }
+}
+
+// GET /api/files/preview/:id — preview file (Office → PDF, images direct)
+router.get('/preview/:id', async (req, res) => {
+  try {
+    const { rows } = await query('SELECT * FROM project_files WHERE id = $1', [req.params.id])
+    if (rows.length === 0) return res.status(404).json({ error: '文件未找到' })
+    const file = rows[0]
+    const ext = (file.file_extension || '').toLowerCase()
+    const filePath = path.join(UPLOAD_DIR, file.storage_path)
+
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: '文件已从磁盘中删除' })
+
+    // Images: serve directly
+    if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'].includes(ext)) {
+      res.setHeader('Content-Type', file.file_type || 'image/png')
+      return fs.createReadStream(filePath).pipe(res)
+    }
+
+    // PDF: serve directly
+    if (ext === '.pdf') {
+      res.setHeader('Content-Type', 'application/pdf')
+      return fs.createReadStream(filePath).pipe(res)
+    }
+
+    // Office files: convert to PDF and serve
+    if (OFFICE_EXTS.includes(ext)) {
+      const pdfPath = path.join(PREVIEW_DIR, `${file.id}.pdf`)
+      // Use cached PDF if recent (same file size = same content)
+      if (!fs.existsSync(pdfPath)) {
+        const converted = convertToPdf(filePath, PREVIEW_DIR)
+        if (!converted) return res.status(500).json({ error: '文件转换失败' })
+        // Rename to id-based name for caching
+        if (converted !== pdfPath) fs.renameSync(converted, pdfPath)
+      }
+      res.setHeader('Content-Type', 'application/pdf')
+      res.setHeader('Content-Disposition', `inline; filename="${file.original_name}.pdf"`)
+      return fs.createReadStream(pdfPath).pipe(res)
+    }
+
+    // Other: download
+    res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(file.original_name)}`)
+    res.setHeader('Content-Type', file.file_type || 'application/octet-stream')
+    fs.createReadStream(filePath).pipe(res)
+  } catch (err) {
+    console.error('Preview error:', err)
+    res.status(500).json({ error: '预览失败' })
+  }
+})
 
 // ============================================================
 // File Categories (protected)

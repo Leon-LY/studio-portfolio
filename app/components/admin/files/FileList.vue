@@ -8,7 +8,6 @@
       />
     </div>
 
-    <!-- File Table -->
     <div v-else class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
@@ -26,21 +25,23 @@
             :key="file.id"
             class="border-b border-stone-100 hover:bg-stone-50 transition-colors"
           >
-            <!-- File name + icon -->
             <td class="py-3 px-2">
               <div class="flex items-center gap-3">
                 <FileIcon :extension="file.file_extension || ''" size="md" />
                 <div class="min-w-0">
-                  <p class="text-sm font-medium text-stone-800 truncate max-w-[200px] sm:max-w-xs">
+                  <button
+                    class="text-sm font-medium text-stone-800 hover:text-accent-500 transition-colors truncate max-w-[200px] sm:max-w-xs text-left block"
+                    :title="`预览 ${file.original_name}`"
+                    @click="previewFile(file)"
+                  >
                     {{ file.original_name }}
-                  </p>
+                  </button>
                   <p v-if="file.description" class="text-xs text-stone-400 truncate max-w-[200px] sm:max-w-xs">
                     {{ file.description }}
                   </p>
                 </div>
               </div>
             </td>
-            <!-- Category — editable inline -->
             <td class="py-3 px-2 hidden sm:table-cell">
               <select
                 class="text-xs border border-stone-200 rounded-sm px-1.5 py-1 bg-white text-stone-600 focus:border-stone-400 focus:outline-none max-w-[100px]"
@@ -48,36 +49,20 @@
                 @change="handleCategoryChange(file, $event)"
               >
                 <option value="">-</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                  {{ cat.icon ? '' : '' }}{{ cat.name }}
-                </option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
               </select>
             </td>
-            <!-- Size -->
-            <td class="py-3 px-2 hidden md:table-cell text-xs text-stone-500">
-              {{ formatSize(file.file_size_bytes) }}
-            </td>
-            <!-- Date -->
-            <td class="py-3 px-2 hidden md:table-cell text-xs text-stone-500">
-              {{ formatDate(file.created_at) }}
-            </td>
-            <!-- Actions -->
+            <td class="py-3 px-2 hidden md:table-cell text-xs text-stone-500">{{ formatSize(file.file_size_bytes) }}</td>
+            <td class="py-3 px-2 hidden md:table-cell text-xs text-stone-500">{{ formatDate(file.created_at) }}</td>
             <td class="py-3 px-2 text-right">
               <div class="flex items-center justify-end gap-1">
-                <a
-                  :href="`/api/files/download/${file.id}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="p-1.5 text-stone-400 hover:text-accent-500 transition-colors rounded hover:bg-stone-100"
-                  title="下载"
-                >
+                <button class="p-1.5 text-stone-400 hover:text-accent-500 transition-colors rounded hover:bg-stone-100" title="预览" @click="previewFile(file)">
+                  <Icon name="lucide:eye" size="16" />
+                </button>
+                <a :href="`/api/files/download/${file.id}`" target="_blank" rel="noopener noreferrer" class="p-1.5 text-stone-400 hover:text-accent-500 transition-colors rounded hover:bg-stone-100" title="下载">
                   <Icon name="lucide:download" size="16" />
                 </a>
-                <button
-                  class="p-1.5 text-stone-400 hover:text-red-500 transition-colors rounded hover:bg-red-50"
-                  title="删除"
-                  @click="requestDelete(file)"
-                >
+                <button class="p-1.5 text-stone-400 hover:text-red-500 transition-colors rounded hover:bg-red-50" title="删除" @click="requestDelete(file)">
                   <Icon name="lucide:trash-2" size="16" />
                 </button>
               </div>
@@ -87,7 +72,10 @@
       </table>
     </div>
 
-    <!-- Delete Confirmation -->
+    <!-- 图片预览灯箱 -->
+    <ImageLightbox v-model="showPreview" :images="previewImages" :initial-index="0" />
+
+    <!-- 删除确认 -->
     <ConfirmDialog
       v-if="fileToDelete"
       :model-value="showDeleteConfirm"
@@ -106,6 +94,7 @@ import type { ProjectFile } from '~/types/models'
 import EmptyState from '~/components/ui/EmptyState.vue'
 import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
 import FileIcon from '~/components/ui/FileIcon.vue'
+import ImageLightbox from '~/components/ui/ImageLightbox.vue'
 
 defineProps({
   files: { type: Array as () => ProjectFile[], required: true },
@@ -113,21 +102,37 @@ defineProps({
 })
 
 const emit = defineEmits(['deleted', 'update:category'])
-
 const showDeleteConfirm = ref(false)
 const fileToDelete = ref<ProjectFile | null>(null)
+const showPreview = ref(false)
+const previewImages = ref<{ src: string; alt: string }[]>([])
+
+const imageExts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.svg']
+
+function isImage(ext: string) { return imageExts.includes(ext.toLowerCase()) }
+
+function previewFile(file: ProjectFile) {
+  const ext = file.file_extension || ''
+  if (isImage(ext)) {
+    previewImages.value = [{ src: `/api/files/download/${file.id}`, alt: file.original_name }]
+    showPreview.value = true
+  } else if (ext === '.pdf') {
+    window.open(`/api/files/download/${file.id}`, '_blank')
+  } else {
+    // 其他文件直接下载
+    window.open(`/api/files/download/${file.id}`, '_blank')
+  }
+}
 
 async function handleCategoryChange(file: ProjectFile, event: Event) {
   const select = event.target as HTMLSelectElement
   const categoryId = select.value || null
   try {
     await adminApi.updateFile(file.id, { category_id: categoryId })
-    // Update local state
     file.category_id = categoryId
     emit('update:category', file)
   } catch (e: any) {
     alert(`更新分类失败：${e.message}`)
-    // Revert select
     select.value = file.category_id || ''
   }
 }
@@ -140,20 +145,13 @@ function formatSize(bytes: number): string {
 }
 
 function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString('zh-CN', {
-    year: 'numeric', month: 'short', day: 'numeric',
-  })
+  return new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-function requestDelete(file: ProjectFile) {
-  fileToDelete.value = file
-  showDeleteConfirm.value = true
-}
+function requestDelete(file: ProjectFile) { fileToDelete.value = file; showDeleteConfirm.value = true }
 
 function handleDeleteConfirm() {
-  if (fileToDelete.value) {
-    emit('deleted', fileToDelete.value)
-  }
+  if (fileToDelete.value) { emit('deleted', fileToDelete.value) }
   fileToDelete.value = null
 }
 </script>

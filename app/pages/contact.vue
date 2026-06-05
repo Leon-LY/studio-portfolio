@@ -20,17 +20,17 @@
             <div>
               <h3 class="text-xs text-stone-400 uppercase tracking-widest font-medium mb-4">联系方式</h3>
               <div class="space-y-4">
-                <a href="mailto:554295000@qq.com" class="flex items-center gap-3 text-stone-600 hover:text-accent-500 transition-colors group">
+                <a :href="`mailto:${contactEmail}`" class="flex items-center gap-3 text-stone-600 hover:text-accent-500 transition-colors group">
                   <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center group-hover:bg-accent-50 transition-colors">
                     <Icon name="lucide:mail" size="18" class="text-stone-500 group-hover:text-accent-400" />
                   </span>
-                  <span class="text-sm">554295000@qq.com</span>
+                  <span class="text-sm">{{ contactEmail }}</span>
                 </a>
                 <div class="flex items-center gap-3 text-stone-500">
                   <span class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center">
                     <Icon name="lucide:map-pin" size="18" class="text-stone-500" />
                   </span>
-                  <span class="text-sm">山东 · 威海</span>
+                  <span class="text-sm">{{ contactAddress }}</span>
                 </div>
               </div>
             </div>
@@ -89,6 +89,19 @@
 </template>
 
 <script setup lang="ts">
+const contactEmail = ref('554295000@qq.com')
+const contactAddress = ref('山东 · 威海')
+onMounted(async () => {
+  try {
+    const res = await fetch('/api/settings')
+    if (res.ok) {
+      const s = await res.json()
+      if (s.contact_email) contactEmail.value = s.contact_email
+      if (s.contact_address) contactAddress.value = s.contact_address
+    }
+  } catch {}
+})
+
 const sending = ref(false)
 const sent = ref(false)
 const error = ref('')

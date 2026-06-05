@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { query } from '../db.js'
+import jwt from 'jsonwebtoken'
 import { authMiddleware } from '../auth.js'
 
 const router = Router()
@@ -12,8 +13,15 @@ router.get('/', async (req, res) => {
       const { rows } = await query('SELECT * FROM categories WHERE slug = $1', [slug])
       return res.json(rows[0] || null)
     }
-    // Admin can request all categories with ?all=1
-    const filter = all === '1' ? '' : 'WHERE is_visible = true'
+    // ?all=1 requires valid admin token to see hidden categories
+    let showAll = false
+    if (all === '1') {
+      const header = req.headers.authorization
+      if (header && header.startsWith('Bearer ')) {
+        try { jwt.verify(header.split(' ')[1], process.env.JWT_SECRET); showAll = true } catch {}
+      }
+    }
+    const filter = showAll ? '' : 'WHERE is_visible = true'
     const { rows } = await query(`SELECT * FROM categories ${filter} ORDER BY sort_order`)
     res.json(rows)
   } catch (err) {
@@ -24,6 +32,7 @@ router.get('/', async (req, res) => {
 // POST /api/categories — admin
 router.post('/', authMiddleware, async (req, res) => {
   const { name, slug, description, is_visible } = req.body
+  if (!name || !slug) return res.status(400).json({ error: 'name 和 slug 为必填项' })
   try {
     const { rows } = await query(
       'INSERT INTO categories (name, slug, description, is_visible) VALUES ($1,$2,$3,$4) RETURNING *',

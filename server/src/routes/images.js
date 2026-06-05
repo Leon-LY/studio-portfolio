@@ -3,7 +3,7 @@ import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
-import { query } from '../db.js'
+import { query, getClient } from '../db.js'
 import { authMiddleware } from '../auth.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -134,19 +134,21 @@ router.put('/reorder', authMiddleware, async (req, res) => {
   if (!project_id || !Array.isArray(image_ids)) {
     return res.status(400).json({ error: 'project_id 和 image_ids 为必填项' })
   }
+  const client = await getClient()
   try {
-    // Wrap in a transaction so partial failures don't leave inconsistent sort_order
-    await query('BEGIN')
+    await client.query('BEGIN')
     for (let i = 0; i < image_ids.length; i++) {
-      await query('UPDATE project_images SET sort_order = $1 WHERE id = $2 AND project_id = $3',
+      await client.query('UPDATE project_images SET sort_order = $1 WHERE id = $2 AND project_id = $3',
         [i, image_ids[i], project_id],
       )
     }
-    await query('COMMIT')
+    await client.query('COMMIT')
     res.json({ success: true })
   } catch (err) {
-    await query('ROLLBACK').catch(() => {})
+    await client.query('ROLLBACK').catch(() => {})
     res.status(500).json({ error: 'Failed to reorder' })
+  } finally {
+    client.release()
   }
 })
 

@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
   if (!project_id) return res.status(400).json({ error: 'project_id 为必填项' })
   try {
     const { rows } = await query(
-      `SELECT pe.*, ec.name as category_name, ec.icon as category_icon
+      `SELECT pe.*, ec.name as category_name
        FROM project_expenses pe
        LEFT JOIN expense_categories ec ON pe.category_id = ec.id
        WHERE pe.project_id = $1
@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
     const { rows } = await query(
       `INSERT INTO project_expenses (project_id, category_id, amount, description, expense_date)
        VALUES ($1,$2,$3,$4,$5) RETURNING *`,
-      [project_id, category_id || null, amount, description || null, expense_date || new Date().toISOString().split('T')[0]],
+      [project_id, category_id || null, amount, description || '', expense_date || new Date().toISOString().split('T')[0]],
     )
     res.status(201).json(rows[0])
   } catch (err) {

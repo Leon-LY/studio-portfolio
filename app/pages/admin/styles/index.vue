@@ -1,45 +1,67 @@
 <template>
   <div>
     <AdminHeader title="风格管理" />
-
-    <div class="p-6 max-w-2xl">
-      <div class="bg-white rounded-sm border border-stone-200 shadow-elevation-1">
-        <div class="flex items-center justify-between p-5 border-b border-stone-100">
-          <h3 class="text-sm font-semibold text-stone-800">管理风格</h3>
-          <BaseButton size="sm" @click="showAdd = true">添加风格</BaseButton>
-        </div>
-
-        <div v-if="showAdd" class="p-5 border-b border-stone-100 bg-stone-50">
-          <BaseInput v-model="newName" label="风格名称" placeholder="例如：现代、极简、新中式" hint="标识符根据名称自动生成" wrapper-class="max-w-sm" @input="onNameChange" />
-          <p v-if="newSlug" class="text-xs text-stone-400 mt-2">标识符：<code class="bg-stone-200 px-1 py-0.5 rounded text-stone-600">{{ newSlug }}</code></p>
-          <div class="flex gap-2 mt-3">
-            <BaseButton size="sm" :loading="saving" @click="handleAdd">保存</BaseButton>
-            <BaseButton size="sm" variant="outline" @click="showAdd = false; resetForm()">取消</BaseButton>
-          </div>
-        </div>
-
-        <div v-if="styles.length > 0" class="divide-y divide-stone-100">
-          <div v-for="s in styles" :key="s.id" class="flex items-center justify-between p-4 hover:bg-stone-50 transition-colors">
+    <div class="p-6">
+      <div class="flex gap-6 items-start">
+        <div class="flex-1 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-stone-100">
             <div>
-              <p class="text-sm font-medium text-stone-800">{{ s.name }}</p>
-              <p class="text-xs text-stone-500">{{ s.slug }}</p>
+              <h3 class="text-sm font-semibold text-stone-800">风格列表</h3>
+              <p class="text-xs text-stone-400 mt-0.5">共 {{ styles.length }} 个风格</p>
             </div>
-            <div class="flex items-center gap-2">
-              <button class="p-1.5 text-stone-400 hover:text-accent-500 rounded-sm hover:bg-stone-100 transition-colors" title="编辑" @click="openEdit(s)">
-                <Icon name="lucide:pencil" size="14" />
-              </button>
-              <button class="p-1.5 text-stone-400 hover:text-red-600 rounded-sm hover:bg-red-50 transition-colors" @click="confirmDelete = s">
-                <Icon name="lucide:trash-2" size="14" />
-              </button>
+            <BaseButton size="sm" @click="showAdd = true">添加风格</BaseButton>
+          </div>
+          <div v-if="showAdd" class="px-5 py-4 border-b border-stone-100 bg-stone-50">
+            <BaseInput v-model="newName" label="风格名称" placeholder="例如：现代、极简、新中式" hint="标识符根据名称自动生成" @input="onNameChange" />
+            <p v-if="newSlug" class="text-xs text-stone-400 mt-1.5">标识符：<code class="bg-stone-200 px-1 py-0.5 rounded text-stone-600">{{ newSlug }}</code></p>
+            <div class="flex gap-2 mt-3">
+              <BaseButton size="sm" :loading="saving" @click="handleAdd">保存</BaseButton>
+              <BaseButton size="sm" variant="outline" @click="showAdd = false; resetForm()">取消</BaseButton>
             </div>
           </div>
+          <div v-if="styles.length > 0" class="divide-y divide-stone-50">
+            <div v-for="s in styles" :key="s.id" class="flex items-center justify-between px-5 py-3.5 hover:bg-stone-50 transition-colors">
+              <div class="flex items-center gap-4 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center flex-shrink-0">
+                  <Icon name="lucide:palette" size="18" class="text-stone-400" />
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium text-stone-800">{{ s.name }}</p>
+                  <p class="text-xs text-stone-400">{{ s.slug }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 flex-shrink-0">
+                <button class="p-1.5 text-stone-400 hover:text-accent-500 rounded-sm hover:bg-stone-100 transition-colors" title="编辑" @click="openEdit(s)">
+                  <Icon name="lucide:pencil" size="14" />
+                </button>
+                <button class="p-1.5 text-stone-400 hover:text-red-500 rounded-sm hover:bg-red-50 transition-colors" title="删除" @click="confirmDelete = s">
+                  <Icon name="lucide:trash-2" size="14" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <EmptyState v-else icon="lucide:palette" title="暂无风格" description="添加如现代、极简、新中式等风格" wrapper-class="py-10" />
         </div>
 
-        <EmptyState v-else icon="lucide:palette" title="暂无风格" description="添加如现代、极简、新中式等风格。" wrapper-class="py-8" />
+        <div class="w-64 flex-shrink-0 space-y-4 hidden lg:block">
+          <div class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-5">
+            <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">使用说明</h4>
+            <ul class="text-xs text-stone-500 space-y-2.5">
+              <li class="flex gap-2"><span class="text-accent-500 mt-0.5">✏</span> 铅笔图标编辑名称</li>
+              <li class="flex gap-2"><span class="text-red-400 mt-0.5">🗑</span> 垃圾桶图标删除风格</li>
+            </ul>
+          </div>
+          <div class="bg-stone-50 rounded-sm border border-stone-200 p-5">
+            <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">全部风格</h4>
+            <div class="flex flex-wrap gap-1.5">
+              <span v-for="s in styles" :key="s.id" class="px-2.5 py-1 text-xs bg-white border border-stone-200 rounded-full text-stone-600">{{ s.name }}</span>
+            </div>
+            <p v-if="styles.length === 0" class="text-xs text-stone-400">暂无风格</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Edit Modal -->
     <BaseModal v-model="showEdit" title="编辑风格" content-class="w-full max-w-sm">
       <form @submit.prevent="handleEdit" class="space-y-4">
         <BaseInput v-model="editForm.name" label="名称" required />
@@ -66,14 +88,10 @@ import EmptyState from '~/components/ui/EmptyState.vue'
 import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
 
 const { fetchAll, create, update, remove } = useAdminStyles()
-
 const styles = ref<Style[]>([])
-const showAdd = ref(false)
-const showEdit = ref(false)
-const newName = ref('')
-const newSlug = ref('')
-const saving = ref(false)
-const confirmDelete = ref<Style | null>(null)
+const showAdd = ref(false); const showEdit = ref(false)
+const newName = ref(''); const newSlug = ref('')
+const saving = ref(false); const confirmDelete = ref<Style | null>(null)
 const editingStyle = ref<Style | null>(null)
 const editForm = reactive({ name: '', slug: '' })
 
@@ -81,30 +99,11 @@ function slugify(t: string) { return t.toLowerCase().replace(/[^\w一-鿿]+/g, '
 function onNameChange() { newSlug.value = slugify(newName.value) }
 function resetForm() { newName.value = ''; newSlug.value = '' }
 
-onMounted(async () => { try { styles.value = await fetchAll() } catch {} })
+async function loadStyles() { try { styles.value = await fetchAll() } catch {} }
+onMounted(() => loadStyles())
 
-async function handleAdd() {
-  if (!newName.value) return
-  saving.value = true
-  try { await create(newName.value, newSlug.value || slugify(newName.value)); styles.value = await fetchAll(); resetForm(); showAdd.value = false; refreshNuxtData('admin-styles') }
-  catch (e: any) { alert(e.message) }
-  finally { saving.value = false }
-}
-
+async function handleAdd() { if (!newName.value) return; saving.value = true; try { await create(newName.value, newSlug.value || slugify(newName.value)); await loadStyles(); resetForm(); showAdd.value = false; refreshNuxtData('admin-styles') } catch (e: any) { alert(e.message) } finally { saving.value = false } }
 function openEdit(s: Style) { editingStyle.value = s; editForm.name = s.name; editForm.slug = s.slug; showEdit.value = true }
-
-async function handleEdit() {
-  if (!editingStyle.value) return
-  saving.value = true
-  try { await update(editingStyle.value.id, editForm); styles.value = await fetchAll(); refreshNuxtData('admin-styles'); showEdit.value = false }
-  catch (e: any) { alert(e.message) }
-  finally { saving.value = false }
-}
-
-async function handleDeleteConfirm() {
-  if (!confirmDelete.value) return
-  try { await remove(confirmDelete.value.id); styles.value = await fetchAll(); refreshNuxtData('admin-styles') }
-  catch (e: any) { alert(e.message) }
-  confirmDelete.value = null
-}
+async function handleEdit() { if (!editingStyle.value) return; saving.value = true; try { await update(editingStyle.value.id, editForm); await loadStyles(); refreshNuxtData('admin-styles'); showEdit.value = false } catch (e: any) { alert(e.message) } finally { saving.value = false } }
+async function handleDeleteConfirm() { if (!confirmDelete.value) return; try { await remove(confirmDelete.value.id); await loadStyles(); refreshNuxtData('admin-styles') } catch (e: any) { alert(e.message) } confirmDelete.value = null }
 </script>

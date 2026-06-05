@@ -108,19 +108,35 @@ const showPreview = ref(false)
 const previewImages = ref<{ src: string; alt: string }[]>([])
 
 const imageExts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.svg']
+const officeExts = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx']
 
 function isImage(ext: string) { return imageExts.includes(ext.toLowerCase()) }
+function isOffice(ext: string) { return officeExts.includes(ext.toLowerCase()) }
+
+function getDownloadUrl(fileId: string) { return `/api/files/download/${fileId}` }
 
 function previewFile(file: ProjectFile) {
-  const ext = file.file_extension || ''
+  const ext = (file.file_extension || '').toLowerCase()
+  const url = getDownloadUrl(file.id)
+
   if (isImage(ext)) {
-    previewImages.value = [{ src: `/api/files/download/${file.id}`, alt: file.original_name }]
+    // 图片用灯箱预览
+    previewImages.value = [{ src: url, alt: file.original_name }]
     showPreview.value = true
+  } else if (isOffice(ext)) {
+    // Word/Excel/PPT 用微软 Office Web Viewer 在线预览
+    const fullUrl = encodeURIComponent(`http://49.232.49.175:3000${url}`)
+    window.open(`https://view.officeapps.live.com/op/embed.aspx?src=${fullUrl}`, '_blank')
   } else if (ext === '.pdf') {
-    window.open(`/api/files/download/${file.id}`, '_blank')
+    // PDF 用浏览器内置查看器
+    window.open(url, '_blank')
+  } else if (ext === '.dwg' || ext === '.dxf') {
+    // CAD 文件用 Autodesk Viewer（需要公网 URL）
+    const fullUrl = encodeURIComponent(`http://49.232.49.175:3000${url}`)
+    window.open(`https://viewer.autodesk.com/?url=${fullUrl}`, '_blank')
   } else {
     // 其他文件直接下载
-    window.open(`/api/files/download/${file.id}`, '_blank')
+    window.open(url, '_blank')
   }
 }
 

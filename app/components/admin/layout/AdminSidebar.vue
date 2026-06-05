@@ -70,6 +70,7 @@ const navItems = [
 
 function isActive(path: string) {
   if (path === '/admin') return route.path === '/admin'
+  if (path === '/admin/projects') return route.path.startsWith('/admin/projects') && route.path !== '/admin/projects/board'
   return route.path.startsWith(path)
 }
 </script>

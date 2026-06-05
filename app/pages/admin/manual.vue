@@ -151,20 +151,22 @@
           <h2 class="text-base font-serif font-bold text-stone-900">4. 项目看板</h2>
         </div>
         <div class="p-6 space-y-4 text-sm leading-relaxed">
-          <p class="text-stone-600">左侧菜单「看板」进入。可视化项目管理工具，6 列对应 6 个阶段：</p>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="px-3 py-1.5 bg-stone-100 rounded-full text-stone-600 font-medium">1. 前期接洽</span>
-            <span class="px-3 py-1.5 bg-stone-100 rounded-full text-stone-600 font-medium">2. 方案设计</span>
-            <span class="px-3 py-1.5 bg-stone-100 rounded-full text-stone-600 font-medium">3. 扩初设计</span>
-            <span class="px-3 py-1.5 bg-stone-100 rounded-full text-stone-600 font-medium">4. 施工图设计</span>
-            <span class="px-3 py-1.5 bg-stone-100 rounded-full text-stone-600 font-medium">5. 施工配合</span>
-            <span class="px-3 py-1.5 bg-stone-100 rounded-full text-stone-600 font-medium">6. 项目竣工</span>
-          </div>
+          <p class="text-stone-600">左侧菜单「看板」进入。可视化项目管理工具，项目按阶段分列展示。</p>
           <ul class="text-stone-600 space-y-1.5">
             <li><strong>拖拽项目卡片</strong>到目标列即可切换阶段</li>
             <li><strong>点击卡片</strong>直接跳转到编辑页</li>
             <li>与项目表单中的「项目阶段」下拉框<strong>同步</strong></li>
           </ul>
+          <div class="p-4 bg-amber-50 rounded-sm border border-amber-200">
+            <h4 class="font-semibold text-stone-700 mb-1.5">管理阶段</h4>
+            <p class="text-xs text-stone-500">点击顶部「管理阶段」按钮可<strong>完全自定义阶段</strong>：</p>
+            <ul class="text-xs text-stone-500 space-y-1 mt-1.5">
+              <li><strong>新增</strong> — 底部输入框输入名称回车</li>
+              <li><strong>修改</strong> — 直接点击阶段名称编辑，失焦自动保存</li>
+              <li><strong>排序</strong> — 上下箭头调整阶段顺序</li>
+              <li><strong>删除</strong> — 垃圾桶图标（该阶段下的项目回到"未设置"）</li>
+            </ul>
+          </div>
         </div>
       </section>
 

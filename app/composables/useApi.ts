@@ -177,11 +177,12 @@ export const adminApi = {
   getProjectFiles(projectId: string) {
     return apiFetch<any[]>(`/api/files/${projectId}`)
   },
-  async uploadFile(projectId: string, file: File, metadata: { category_id?: string; description?: string } = {}) {
+  async uploadFile(projectId: string, file: File, metadata: { category_id?: string; description?: string; original_name?: string } = {}) {
     const token = getToken()
     const form = new FormData()
     form.append('file', file)
     form.append('project_id', projectId)
+    form.append('original_name', metadata.original_name || file.name)
     if (metadata.category_id) form.append('category_id', metadata.category_id)
     if (metadata.description) form.append('description', metadata.description)
     const res = await fetch(`${getApiBase()}/api/files/upload`, {

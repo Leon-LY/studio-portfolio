@@ -140,8 +140,8 @@ router.post('/upload', authMiddleware, fileUpload.single('file'), async (req, re
     const { project_id, category_id, description } = req.body
     if (!project_id) return res.status(400).json({ error: 'project_id 为必填项' })
 
-    // Fix encoding: multer/busboy may interpret UTF-8 filenames as Latin-1
-    const originalName = Buffer.from(req.file.originalname, 'latin1').toString('utf8')
+    // Use filename from form data (reliable), fall back to multer's parsed name
+    const originalName = req.body.original_name || Buffer.from(req.file.originalname, 'latin1').toString('utf8')
     const ext = path.extname(originalName).toLowerCase()
 
     // Get current sort_order

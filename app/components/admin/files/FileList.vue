@@ -120,22 +120,14 @@ function previewFile(file: ProjectFile) {
   const url = getDownloadUrl(file.id)
 
   if (isImage(ext)) {
-    // 图片用灯箱预览
+    // 图片：灯箱预览
     previewImages.value = [{ src: url, alt: file.original_name }]
     showPreview.value = true
-  } else if (isOffice(ext)) {
-    // Word/Excel/PPT 用微软 Office Web Viewer 在线预览
-    const fullUrl = encodeURIComponent(`http://49.232.49.175:3000${url}`)
-    window.open(`https://view.officeapps.live.com/op/embed.aspx?src=${fullUrl}`, '_blank')
   } else if (ext === '.pdf') {
-    // PDF 用浏览器内置查看器
+    // PDF：新标签页浏览器打开
     window.open(url, '_blank')
-  } else if (ext === '.dwg' || ext === '.dxf') {
-    // CAD 文件用 Autodesk Viewer（需要公网 URL）
-    const fullUrl = encodeURIComponent(`http://49.232.49.175:3000${url}`)
-    window.open(`https://viewer.autodesk.com/?url=${fullUrl}`, '_blank')
   } else {
-    // 其他文件直接下载
+    // Office、CAD 及其他：直接下载到本地用对应软件打开
     window.open(url, '_blank')
   }
 }

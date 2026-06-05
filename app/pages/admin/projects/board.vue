@@ -12,15 +12,13 @@
               <span class="text-xs text-stone-400 bg-stone-100 px-1.5 py-0.5 rounded-full">{{ stageProjects[stage.id]?.length || 0 }}</span>
             </div>
           </div>
-          <div class="flex-1 p-2 space-y-2 overflow-y-auto">
+          <div class="flex-1 p-2 space-y-2 overflow-y-auto" @dragover.prevent @drop="onDrop($event, stage.id)">
             <div
               v-for="project in stageProjects[stage.id] || []"
               :key="project.id"
               class="bg-white p-3 rounded-sm border border-stone-200 hover:shadow-elevation-2 transition-shadow cursor-pointer group"
               draggable="true"
               @dragstart="onDragStart($event, project)"
-              @dragover.prevent
-              @drop="onDrop($event, stage.id)"
               @click="navigateTo(`/admin/projects/${project.id}/edit`)"
             >
               <div class="flex items-center gap-2 mb-1.5">

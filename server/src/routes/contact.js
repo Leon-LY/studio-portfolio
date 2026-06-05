@@ -27,23 +27,23 @@ router.post('/', async (req, res) => {
     return res.status(429).json({ error: '提交过于频繁，请1小时后再试' })
   }
 
-  const { name, email, projectType, message } = req.body
+  const { name, phone, message } = req.body
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: '请填写所有必填字段（姓名、邮箱、留言）' })
+  if (!name || !phone || !message) {
+    return res.status(400).json({ error: '请填写所有必填字段（姓名、手机号、留言）' })
   }
 
-  // Basic email validation
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: '请填写有效的邮箱地址' })
+  // Basic phone validation (Chinese mobile)
+  if (!/^1[3-9]\d{9}$/.test(phone.replace(/\s/g, ''))) {
+    return res.status(400).json({ error: '请填写有效的手机号码' })
   }
 
   try {
     // Persist to database
     await query(
-      `INSERT INTO contacts (name, email, project_type, message, ip_address)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [name, email, projectType || null, message, ip],
+      `INSERT INTO contacts (name, phone, message, ip_address)
+       VALUES ($1, $2, $3, $4)`,
+      [name, phone, message, ip],
     )
     console.log('Contact form submission saved:', { name, email, projectType })
     res.status(201).json({ success: true, message: '留言已收到，我们会尽快与您联系。' })

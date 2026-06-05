@@ -9,8 +9,7 @@
             <tr class="border-b border-stone-100 bg-stone-50">
               <th class="text-left text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3 w-8">状态</th>
               <th class="text-left text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3">姓名</th>
-              <th class="text-left text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">邮箱</th>
-              <th class="text-left text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3 hidden md:table-cell">项目类型</th>
+              <th class="text-left text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">手机号</th>
               <th class="text-left text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3 hidden lg:table-cell">时间</th>
               <th class="text-right text-xs font-medium text-stone-400 uppercase tracking-wider px-4 py-3 w-20">操作</th>
             </tr>
@@ -25,8 +24,7 @@
                 <td class="px-4 py-3">
                   <span class="font-medium text-stone-800">{{ c.name }}</span>
                 </td>
-                <td class="px-4 py-3 hidden sm:table-cell text-stone-500">{{ c.email }}</td>
-                <td class="px-4 py-3 hidden md:table-cell text-stone-500">{{ c.project_type || '-' }}</td>
+                <td class="px-4 py-3 hidden sm:table-cell text-stone-500">{{ c.phone || c.email || '-' }}</td>
                 <td class="px-4 py-3 hidden lg:table-cell text-xs text-stone-400">{{ formatDate(c.created_at) }}</td>
                 <td class="px-4 py-3 text-right">
                   <button
@@ -42,8 +40,7 @@
                 <td colspan="6" class="px-6 py-4">
                   <div class="text-sm text-stone-700 whitespace-pre-wrap">{{ c.message }}</div>
                   <div class="mt-2 flex gap-4 text-xs text-stone-400">
-                    <span>邮箱：<a :href="`mailto:${c.email}`" class="text-accent-500 hover:underline">{{ c.email }}</a></span>
-                    <span v-if="c.project_type">项目类型：{{ c.project_type }}</span>
+                    <span>手机号：{{ c.phone || c.email || '-' }}</span>
                     <span>{{ formatDate(c.created_at) }}</span>
                   </div>
                 </td>

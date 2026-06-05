@@ -52,22 +52,7 @@
             <form @submit.prevent="handleSubmit" class="space-y-5">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <BaseInput v-model="form.name" label="姓名" placeholder="您的姓名" required />
-                <BaseInput v-model="form.email" label="邮箱" type="email" placeholder="your@email.com" required />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-stone-700 mb-1.5">项目类型</label>
-                <select
-                  v-model="form.projectType"
-                  class="w-full px-4 py-2.5 text-sm border border-stone-300 rounded-sm bg-white text-stone-700 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 transition-colors"
-                >
-                  <option value="">请选择</option>
-                  <option value="residential">住宅</option>
-                  <option value="commercial">商业</option>
-                  <option value="public">公共建筑</option>
-                  <option value="landscape">景观</option>
-                  <option value="renovation">改造</option>
-                  <option value="other">其他</option>
-                </select>
+                <BaseInput v-model="form.phone" label="手机号" type="tel" placeholder="您的手机号码" required />
               </div>
               <BaseTextarea v-model="form.message" label="留言" placeholder="请描述您的项目需求、规模、时间计划等信息..." rows="5" required />
               <BaseButton type="submit" full-width size="lg" :loading="sending">
@@ -113,13 +98,12 @@ const sent = ref(false)
 const error = ref('')
 const form = reactive({
   name: '',
-  email: '',
-  projectType: '',
+  phone: '',
   message: '',
 })
 
 async function handleSubmit() {
-  if (!form.name || !form.email || !form.message) {
+  if (!form.name || !form.phone || !form.message) {
     error.value = '请填写所有必填字段。'
     return
   }
@@ -137,8 +121,7 @@ async function handleSubmit() {
     }
     sent.value = true
     form.name = ''
-    form.email = ''
-    form.projectType = ''
+    form.phone = ''
     form.message = ''
   } catch (e: any) {
     error.value = e.message || '发送失败，请稍后重试或直接发送邮件至 554295000@qq.com'

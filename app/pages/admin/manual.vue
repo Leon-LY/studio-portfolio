@@ -363,6 +363,7 @@
           <h2 class="text-base font-serif font-bold text-stone-900">13. 技术支持</h2>
         </div>
         <div class="p-6 text-sm leading-relaxed text-stone-600 space-y-1">
+          <p>👨‍💻 <strong>开发者</strong>：Leon — <a href="tel:18389118642" class="text-accent-500 hover:underline">18389118642</a></p>
           <p>📧 <strong>邮箱</strong>：<a href="mailto:554295000@qq.com" class="text-accent-500 hover:underline">554295000@qq.com</a></p>
           <p>📍 <strong>地址</strong>：山东 · 威海</p>
           <p>🔖 <strong>版本</strong>：v2.2</p>

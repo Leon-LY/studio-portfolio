@@ -55,6 +55,11 @@
         <div class="p-5 space-y-4">
           <BaseInput v-model="form.site_name" label="站点名称" placeholder="方外设计" />
           <BaseInput v-model="form.site_description" label="站点描述" placeholder="建筑设计工作室" hint="显示在浏览器标签页和搜索结果中" />
+          <BaseInput v-model="form.hero_slogan" label="首页 Slogan" placeholder="方寸之外 · 别有天地" hint="显示在首页 Hero 区域" />
+          <BaseTextarea v-model="form.hero_subtitle" label="首页副标题" placeholder="以思考重塑空间的边界..." :rows="2" />
+          <BaseInput v-model="form.contact_email" label="联系邮箱" placeholder="email@example.com" />
+          <BaseInput v-model="form.contact_address" label="联系地址" placeholder="山东 · 威海" />
+          <BaseInput v-model="form.contact_phone" label="联系电话" placeholder="手机号码" />
           <div class="flex gap-2">
             <BaseButton size="sm" :loading="saving" @click="saveInfo">保存信息</BaseButton>
           </div>
@@ -69,6 +74,7 @@ definePageMeta({ layout: "admin" })
 import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
 import BaseButton from '~/components/ui/BaseButton.vue'
 import BaseInput from '~/components/ui/BaseInput.vue'
+import BaseTextarea from '~/components/ui/BaseTextarea.vue'
 
 const fileInput = ref<HTMLInputElement>()
 const isDragging = ref(false)
@@ -78,14 +84,19 @@ const error = ref('')
 const success = ref('')
 const heroImage = ref('')
 
-const form = reactive({ site_name: '', site_description: '' })
+const form = reactive({ site_name: '', site_description: '', hero_slogan: '', hero_subtitle: '', contact_email: '', contact_address: '', contact_phone: '' })
 
 onMounted(async () => {
   try {
-    const settings = await (await fetch('/api/settings', { headers: authHeader() })).json()
-    heroImage.value = settings.hero_image || ''
-    form.site_name = settings.site_name || ''
-    form.site_description = settings.site_description || ''
+    const s = await (await fetch('/api/settings', { headers: authHeader() })).json()
+    heroImage.value = s.hero_image || ''
+    form.site_name = s.site_name || ''
+    form.site_description = s.site_description || ''
+    form.hero_slogan = s.hero_slogan || ''
+    form.hero_subtitle = s.hero_subtitle || ''
+    form.contact_email = s.contact_email || ''
+    form.contact_address = s.contact_address || ''
+    form.contact_phone = s.contact_phone || ''
   } catch {}
 })
 

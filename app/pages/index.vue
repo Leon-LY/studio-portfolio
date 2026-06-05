@@ -41,7 +41,7 @@
           <div class="flex items-center gap-5 mt-5 mb-5 animate-fade-in" style="animation-delay: 0.15s">
             <span class="h-px w-10 bg-accent-400/60" />
             <p class="font-display text-display-sm text-accent-300 tracking-wide">
-              方寸之外 · 别有天地
+              {{ siteSlogan }}
             </p>
           </div>
           <p class="text-lg sm:text-xl text-stone-400 max-w-lg leading-relaxed font-light animate-fade-in" style="animation-delay: 0.3s">
@@ -190,14 +190,18 @@ const projects = ref<any[] | null>(null)
 const categories = ref<any[] | null>(null)
 const pending = ref(true)
 const heroImage = ref<string | null>(null)
+const siteSlogan = ref('方寸之外 · 别有天地')
+const siteSubtitle = ref('以思考重塑空间的边界，创造既美观又实用的建筑。每一个项目，都是光线、材料与人的对话。')
 
 onMounted(async () => {
-  // Load hero image: prefer site setting > first project cover
+  // Load hero image + site settings
   try {
     const res = await fetch('/api/settings')
     if (res.ok) {
-      const settings = await res.json()
-      if (settings.hero_image) heroImage.value = settings.hero_image
+      const s = await res.json()
+      if (s.hero_image) heroImage.value = s.hero_image
+      if (s.hero_slogan) siteSlogan.value = s.hero_slogan
+      if (s.hero_subtitle) siteSubtitle.value = s.hero_subtitle
     }
   } catch {}
   try {

@@ -75,7 +75,10 @@
                 <span class="text-sm text-stone-500">{{ formatDate(project.updated_at) }}</span>
               </td>
               <td class="px-4 py-3 text-right">
-                <div class="flex items-center justify-end gap-1.5">
+                <div class="flex items-center justify-end gap-0.5">
+                  <!-- 排序 -->
+                  <button class="p-1 text-stone-300 hover:text-stone-500 transition-colors" title="上移" @click="moveProject(project, -1)"><Icon name="lucide:chevron-up" size="14" /></button>
+                  <button class="p-1 text-stone-300 hover:text-stone-500 transition-colors" title="下移" @click="moveProject(project, 1)"><Icon name="lucide:chevron-down" size="14" /></button>
                   <NuxtLink :to="`/admin/projects/${project.id}/edit`">
                     <BaseButton variant="ghost" size="sm">编辑</BaseButton>
                   </NuxtLink>
@@ -219,6 +222,18 @@ async function handleDelete() {
       alert(`删除失败：${e.message}`)
     }
   }
+}
+
+async function moveProject(project: Project, direction: number) {
+  const idx = projects.value.findIndex(p => p.id === project.id)
+  const other = projects.value[idx + direction]
+  if (!other) return
+  try {
+    await adminApi.updateProject(project.id, { sort_order: other.sort_order })
+    await adminApi.updateProject(other.id, { sort_order: project.sort_order })
+    projects.value[idx] = { ...project, sort_order: other.sort_order }
+    projects.value[idx + direction] = { ...other, sort_order: project.sort_order }
+  } catch (e: any) { alert(e.message) }
 }
 
 function formatDate(date: string) {

@@ -91,7 +91,7 @@
                 v-for="img in project.images"
                 :key="img.id"
                 class="relative aspect-[4/3] rounded-sm overflow-hidden cursor-pointer group bg-stone-100"
-                @click="openGallery(img)"
+                @click="openLightbox(img)"
               >
                 <img
                   :src="getImageUrl(img.storage_path)"
@@ -126,6 +126,9 @@
       <LoadingSpinner size="lg" />
     </div>
 
+    <!-- 图片灯箱 -->
+    <ImageLightbox v-model="lightboxOpen" :images="lightboxImages" :initial-index="lightboxIndex" />
+
     <PortfolioFooter />
   </div>
 </template>
@@ -140,6 +143,7 @@ import PortfolioFooter from '~/components/portfolio/layout/PortfolioFooter.vue'
 import EmptyState from '~/components/ui/EmptyState.vue'
 import BaseButton from '~/components/ui/BaseButton.vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
+import ImageLightbox from '~/components/ui/ImageLightbox.vue'
 
 const route = useRoute()
 const { fetchProjectBySlug, fetchRelatedProjects } = useProjects()
@@ -158,23 +162,16 @@ onMounted(async () => {
   }
 })
 
-function openGallery(img: ProjectImage) {
-  // 简单的灯箱 —— 后续可替换为 PhotoSwipe
+const lightboxOpen = ref(false)
+const lightboxIndex = ref(0)
+const lightboxImages = computed(() =>
+  (project.value?.images || []).map((i: ProjectImage) => ({ src: getImageUrl(i.storage_path), alt: i.alt_text || '' }))
+)
+
+function openLightbox(img: ProjectImage) {
   if (!project.value?.images) return
-  const images = project.value.images
-  const currentIndex = images.findIndex(i => i.id === img.id)
-
-  const overlay = document.createElement('div')
-  overlay.className = 'fixed inset-0 z-50 bg-stone-900/95 flex items-center justify-center p-8 cursor-pointer'
-  overlay.onclick = () => overlay.remove()
-
-  const imgEl = document.createElement('img')
-  imgEl.src = getImageUrl(img.storage_path)
-  imgEl.alt = img.alt_text || ''
-  imgEl.className = 'max-h-[90vh] max-w-full object-contain'
-
-  overlay.appendChild(imgEl)
-  document.body.appendChild(overlay)
+  lightboxIndex.value = project.value.images.findIndex((i: ProjectImage) => i.id === img.id)
+  lightboxOpen.value = true
 }
 
 function formatDate(date: string) {

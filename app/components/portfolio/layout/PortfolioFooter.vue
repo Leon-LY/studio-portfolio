@@ -26,12 +26,15 @@
         <div>
           <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-widest">联系方式</h4>
           <ul class="mt-5 space-y-3">
+            <li v-if="contact.phone">
+              <span class="text-sm text-stone-400">{{ contact.phone }}</span>
+            </li>
             <li>
-              <a href="mailto:554295000@qq.com" class="text-sm text-stone-400 hover:text-canvas transition-colors">
-                554295000@qq.com
+              <a :href="`mailto:${contact.email}`" class="text-sm text-stone-400 hover:text-canvas transition-colors">
+                {{ contact.email }}
               </a>
             </li>
-            <li class="text-sm text-stone-400">山东 · 威海</li>
+            <li v-if="contact.address" class="text-sm text-stone-400">{{ contact.address }}</li>
           </ul>
         </div>
       </div>
@@ -64,4 +67,17 @@ const navLinks = [
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+const contact = reactive({ email: '554295000@qq.com', phone: '', address: '山东 · 威海' })
+onMounted(async () => {
+  try {
+    const res = await fetch('/api/settings')
+    if (res.ok) {
+      const s = await res.json()
+      if (s.contact_email) contact.email = s.contact_email
+      if (s.contact_phone) contact.phone = s.contact_phone
+      if (s.contact_address) contact.address = s.contact_address
+    }
+  } catch {}
+})
 </script>

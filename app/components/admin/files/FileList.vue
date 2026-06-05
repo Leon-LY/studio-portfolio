@@ -119,7 +119,8 @@ function getPreviewUrl(fileId: string) { return `/api/files/preview/${fileId}` }
 function previewFile(file: ProjectFile) {
   const ext = (file.file_extension || '').toLowerCase()
   if (isImage(ext)) {
-    previewImages.value = [{ src: getPreviewUrl(file.id), alt: file.original_name }]
+    // 图片直接用下载端点（更快，Nginx 直出），灯箱预览
+    previewImages.value = [{ src: getDownloadUrl(file.id), alt: file.original_name }]
     showPreview.value = true
   } else {
     // PDF/Office/CAD/其他: 新标签页打开（Office 会自动转为 PDF 预览）

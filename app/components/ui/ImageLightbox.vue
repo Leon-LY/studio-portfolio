@@ -12,8 +12,12 @@
         <button v-if="images.length > 1" class="absolute left-4 top-1/2 -translate-y-1/2 p-3 text-white/60 hover:text-white transition-colors z-10" @click.stop="prev" aria-label="上一张">
           <Icon name="lucide:chevron-left" size="32" />
         </button>
+        <!-- Loading spinner -->
+        <div v-if="!loaded" class="absolute inset-0 flex items-center justify-center">
+          <div class="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        </div>
         <!-- Image -->
-        <img :src="currentSrc" :alt="currentAlt" class="max-h-[90vh] max-w-[90vw] object-contain select-none" @load="loaded = true" :class="{ 'opacity-0': !loaded }" />
+        <img :src="currentSrc" :alt="currentAlt" class="max-h-[90vh] max-w-[90vw] object-contain select-none transition-opacity duration-300" @load="loaded = true" :class="{ 'opacity-0': !loaded }" />
         <!-- Next -->
         <button v-if="images.length > 1" class="absolute right-4 top-1/2 -translate-y-1/2 p-3 text-white/60 hover:text-white transition-colors z-10" @click.stop="next" aria-label="下一张">
           <Icon name="lucide:chevron-right" size="32" />

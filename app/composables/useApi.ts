@@ -264,8 +264,8 @@ export const adminApi = {
   deleteExpense(id: string) { return apiFetch<any>(`/api/expenses/${id}`, { method: 'DELETE' }) },
 
   // Contacts
-  getContacts() { return apiFetch<any[]>('/api/contacts') },
-  markContactRead(id: string) { return apiFetch<any>(`/api/contacts/${id}/read`, { method: 'PUT' }) },
+  getContacts() { return apiFetch<any[]>('/api/contact') },
+  markContactRead(id: string) { return apiFetch<any>(`/api/contact/${id}/read`, { method: 'PUT' }) },
 
   changePassword(id: string, data: { current_password?: string; new_password: string }) {
     return apiFetch<any>(`/api/users/${id}/password`, { method: 'PUT', body: JSON.stringify(data) })

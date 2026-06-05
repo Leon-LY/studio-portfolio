@@ -254,6 +254,10 @@ export const adminApi = {
   },
   // Stages
   getStages() { return apiFetch<any[]>('/api/stages') },
+  createStage(data: any) { return apiFetch<any>('/api/stages', { method: 'POST', body: JSON.stringify(data) }) },
+  updateStage(id: string, data: any) { return apiFetch<any>(`/api/stages/${id}`, { method: 'PUT', body: JSON.stringify(data) }) },
+  deleteStage(id: string) { return apiFetch<any>(`/api/stages/${id}`, { method: 'DELETE' }) },
+  reorderStages(ids: string[]) { return apiFetch<any>('/api/stages/reorder', { method: 'PUT', body: JSON.stringify({ ids }) }) },
   updateProjectStage(projectId: string, stageId: string) {
     return apiFetch<any>(`/api/stages/project/${projectId}`, { method: 'PUT', body: JSON.stringify({ stage_id: stageId }) })
   },

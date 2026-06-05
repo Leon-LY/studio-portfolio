@@ -3,6 +3,10 @@
     <AdminHeader title="项目看板" />
 
     <div class="p-6">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-sm text-stone-500">拖拽项目卡片到不同阶段列即可切换阶段</p>
+        <BaseButton size="sm" variant="outline" @click="showStageMgr = true">管理阶段</BaseButton>
+      </div>
       <div v-if="loading" class="flex justify-center py-12"><LoadingSpinner size="lg" text="加载中..." /></div>
       <div v-else class="flex gap-4 overflow-x-auto pb-4" style="min-height:60vh">
         <div v-for="stage in stages" :key="stage.id" class="flex-shrink-0 w-64 bg-stone-50 rounded-sm border border-stone-200 flex flex-col">
@@ -40,6 +44,25 @@
         </div>
       </div>
     </div>
+
+    <!-- 阶段管理 Modal -->
+    <BaseModal v-model="showStageMgr" title="管理项目阶段" content-class="w-full max-w-lg">
+      <div class="space-y-3">
+        <div v-for="(s, i) in stages" :key="s.id" class="flex items-center gap-3 p-2 rounded-sm hover:bg-stone-50 group">
+          <span class="w-3 h-3 rounded-full flex-shrink-0" :style="{ background: s.color || '#78756c' }" />
+          <input v-model="s.name" class="flex-1 text-sm border border-stone-200 rounded-sm px-2 py-1 focus:border-stone-400 focus:outline-none" @blur="updateStage(s)" />
+          <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button class="p-1 text-stone-300 hover:text-stone-500 disabled:opacity-30" :disabled="i === 0" @click="moveStage(i, -1)"><Icon name="lucide:chevron-up" size="14" /></button>
+            <button class="p-1 text-stone-300 hover:text-stone-500 disabled:opacity-30" :disabled="i === stages.length - 1" @click="moveStage(i, 1)"><Icon name="lucide:chevron-down" size="14" /></button>
+            <button class="p-1 text-stone-300 hover:text-red-500" @click="deleteStage(s)"><Icon name="lucide:trash-2" size="14" /></button>
+          </div>
+        </div>
+        <div class="flex gap-2 pt-2 border-t border-stone-100">
+          <BaseInput v-model="newStageName" placeholder="新阶段名称" wrapper-class="flex-1" @keyup.enter="addStage" />
+          <BaseButton size="sm" @click="addStage">添加</BaseButton>
+        </div>
+      </div>
+    </BaseModal>
   </div>
 </template>
 
@@ -48,6 +71,9 @@ definePageMeta({ layout: "admin" })
 import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 import StatusBadge from '~/components/admin/projects/StatusBadge.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+import BaseModal from '~/components/ui/BaseModal.vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
 
 interface Stage { id: string; name: string; sort_order: number }
 interface ProjectRow { id: string; title: string; cover_image_url: string; client: string; status: string; stage_id: string }
@@ -71,17 +97,45 @@ const stageProjects = computed(() => {
   return map
 })
 
+async function loadAllProjects() {
+  try { const p = await adminApi.getProjects({ perPage: 999 }); allProjects.value = p.data || [] } catch {}
+}
+
 onMounted(async () => {
-  try {
-    const [s, p] = await Promise.all([
-      adminApi.getStages(),
-      adminApi.getProjects({ perPage: 999 }),
-    ])
-    stages.value = s
-    allProjects.value = p.data || []
-  } catch {}
+  try { await Promise.all([loadStages(), loadAllProjects()]) } catch {}
   loading.value = false
 })
+
+const showStageMgr = ref(false)
+const newStageName = ref('')
+
+async function loadStages() {
+  try { stages.value = await adminApi.getStages() } catch {}
+}
+
+async function addStage() {
+  if (!newStageName.value.trim()) return
+  try { await adminApi.createStage({ name: newStageName.value.trim() }); newStageName.value = ''; await loadStages() }
+  catch (e: any) { alert(e.message) }
+}
+
+async function updateStage(s: any) {
+  try { await adminApi.updateStage(s.id, { name: s.name }) } catch {}
+}
+
+async function deleteStage(s: any) {
+  if (!confirm(`确定删除阶段「${s.name}」吗？该阶段下的项目将移至"未设置"。`)) return
+  try { await adminApi.deleteStage(s.id); await loadStages(); await loadAllProjects() }
+  catch (e: any) { alert(e.message) }
+}
+
+async function moveStage(i: number, dir: number) {
+  const other = stages.value[i + dir]; if (!other) return
+  const ids = stages.value.map(s => s.id);
+  [ids[i], ids[i + dir]] = [ids[i + dir], ids[i]];
+  [stages.value[i], stages.value[i + dir]] = [stages.value[i + dir], stages.value[i]];
+  try { await adminApi.reorderStages(ids) } catch { await loadStages() }
+}
 
 let draggedProject: ProjectRow | null = null
 function onDragStart(_e: DragEvent, project: ProjectRow) { draggedProject = project }

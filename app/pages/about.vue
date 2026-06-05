@@ -86,6 +86,9 @@
 </template>
 
 <script setup lang="ts">
+import PortfolioHeader from '~/components/portfolio/layout/PortfolioHeader.vue'
+import PortfolioFooter from '~/components/portfolio/layout/PortfolioFooter.vue'
+
 const services = [
   { name: '建筑设计', desc: '从概念方案到施工图设计', icon: 'lucide:building-2' },
   { name: '景观设计', desc: '场地规划与外部空间设计', icon: 'lucide:trees' },

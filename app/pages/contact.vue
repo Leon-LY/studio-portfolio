@@ -89,6 +89,12 @@
 </template>
 
 <script setup lang="ts">
+import PortfolioHeader from '~/components/portfolio/layout/PortfolioHeader.vue'
+import PortfolioFooter from '~/components/portfolio/layout/PortfolioFooter.vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
+import BaseTextarea from '~/components/ui/BaseTextarea.vue'
+import BaseButton from '~/components/ui/BaseButton.vue'
+
 const contactEmail = ref('554295000@qq.com')
 const contactAddress = ref('山东 · 威海')
 onMounted(async () => {

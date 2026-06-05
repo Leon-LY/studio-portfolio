@@ -2,7 +2,7 @@
   <div>
     <AdminHeader title="留言管理" />
 
-    <div class="p-6 max-w-4xl">
+    <div class="p-6">
       <div v-if="contacts.length > 0" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 overflow-hidden">
         <table class="w-full text-sm">
           <thead>

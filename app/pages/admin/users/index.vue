@@ -2,7 +2,7 @@
   <div>
     <AdminHeader title="用户管理" />
 
-    <div class="p-6 max-w-4xl">
+    <div class="p-6">
       <!-- 新建用户按钮 -->
       <div class="mb-6 flex justify-between items-center">
         <p class="text-sm text-stone-500">管理系统管理员和编辑者账号</p>

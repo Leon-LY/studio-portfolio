@@ -292,6 +292,37 @@
         </section>
 
         <!-- ============================================================ -->
+        <!-- 6.5. 项目看板 -->
+        <!-- ============================================================ -->
+        <section id="board">
+          <h2 class="font-serif">6.5. 项目看板</h2>
+          <p>访问路径：左侧菜单 → 「看板」</p>
+          <p>看板是一个<strong>可视化项目管理工具</strong>，将项目按阶段分列展示，帮助您一目了然地了解每个项目的当前进度。</p>
+
+          <h3>6.5.1 看板布局</h3>
+          <p>看板分为 6 列，对应项目生命周期的 6 个阶段：</p>
+          <ol>
+            <li><strong>前期接洽</strong> — 项目初次接触、需求沟通阶段</li>
+            <li><strong>方案设计</strong> — 概念方案、初步设计阶段</li>
+            <li><strong>扩初设计</strong> — 深化方案、技术深化阶段</li>
+            <li><strong>施工图设计</strong> — 出图、图纸审核阶段</li>
+            <li><strong>施工配合</strong> — 现场配合、工程监理阶段</li>
+            <li><strong>项目竣工</strong> — 项目完成、交付验收阶段</li>
+          </ol>
+          <p>每列顶部显示该阶段的项目数量。每张卡片显示项目封面缩略图、标题、客户名称和状态标签。</p>
+
+          <h3>6.5.2 如何使用</h3>
+          <ul>
+            <li><strong>拖拽项目</strong>：鼠标按住项目卡片，拖到目标阶段列中松开，即可切换项目阶段</li>
+            <li><strong>编辑项目</strong>：点击卡片直接跳转到项目编辑页</li>
+            <li><strong>初次使用</strong>：在新建或编辑项目时，表单中有「项目阶段」下拉选择，选择后项目即出现在对应看板列中</li>
+          </ul>
+
+          <h3>6.5.3 与项目表单的关系</h3>
+          <p>看板中的阶段与项目编辑表单中的「项目阶段」下拉框是<strong>同步的</strong>。在看板中拖拽和在表单中选择效果完全相同。</p>
+        </section>
+
+        <!-- ============================================================ -->
         <!-- 7. 风格管理 -->
         <!-- ============================================================ -->
         <section :id="sections[6].id">
@@ -312,6 +343,50 @@
 
           <h3>7.3 删除风格</h3>
           <p>删除风格后，所有使用该风格的项目会自动解除关联（项目本身不受影响，只是不再有这个风格标签）。</p>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- 7.5. 留言管理 -->
+        <!-- ============================================================ -->
+        <section id="contacts">
+          <h2 class="font-serif">7.5. 留言管理</h2>
+          <p>访问路径：左侧菜单 → 「留言」</p>
+          <p>当前台联系表单有人提交时，留言会自动存入数据库并在此页面显示。</p>
+
+          <h3>7.5.1 留言列表</h3>
+          <ul>
+            <li><strong>未读标识</strong>：橙色圆点表示未读，灰色对勾表示已读</li>
+            <li><strong>点击行展开</strong>：查看完整留言内容、邮箱、项目类型</li>
+            <li><strong>标为已读</strong>：处理完留言后点击按钮标记</li>
+            <li><strong>仪表盘提醒</strong>：仪表盘会显示未读留言数量徽标，点击可跳转到此页面</li>
+          </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- 7.6. 站点设置 -->
+        <!-- ============================================================ -->
+        <section id="settings">
+          <h2 class="font-serif">7.6. 站点设置</h2>
+          <p>访问路径：左侧菜单 → 「站点设置」</p>
+          <p>站点设置用于<strong>自定义前台网站的显示内容</strong>，无需修改代码。</p>
+
+          <h3>7.6.1 Hero 背景图</h3>
+          <ul>
+            <li><strong>上传</strong>：拖拽或点击上传背景图（推荐 1920×1080，JPG/PNG/WebP）</li>
+            <li><strong>预览</strong>：上传后立即显示当前背景图</li>
+            <li><strong>移除</strong>：点击图片右上角叉号移除，首页自动使用第一个精选项目封面图作为回退</li>
+          </ul>
+
+          <h3>7.6.2 站点信息</h3>
+          <ul>
+            <li><strong>站点名称</strong> — 浏览器标签页标题（默认"方外设计"）</li>
+            <li><strong>站点描述</strong> — 搜索引擎摘要（默认"建筑设计工作室"）</li>
+            <li><strong>首页 Slogan</strong> — Hero 区的标语（默认"方寸之外 · 别有天地"）</li>
+            <li><strong>首页副标题</strong> — Hero 区的说明文字</li>
+            <li><strong>联系邮箱</strong> — Footer 和联系页显示的邮箱</li>
+            <li><strong>联系地址</strong> — Footer 和联系页显示的地址</li>
+            <li><strong>联系电话</strong> — Footer 显示的电话</li>
+          </ul>
         </section>
 
         <!-- ============================================================ -->
@@ -397,14 +472,35 @@
           <details class="mb-4 border border-stone-200 rounded-sm">
             <summary class="px-5 py-3 cursor-pointer font-medium text-stone-800 hover:bg-stone-50 transition-colors">Q: 回款节点的「逾期」是如何判断的？</summary>
             <div class="px-5 py-3 text-stone-600 text-sm border-t border-stone-200">
-              系统自动检查：当<strong>到期日期已经过去</strong>，但状态仍然为「待收款」时，该节点会被标记为逾期（红色显示在日历和列表中）。建议在收到款项后及时点击绿色对勾标记为已收款，避免误判逾期。
+              系统自动检查：当<strong>到期日期已经过去</strong>，但状态仍然为「待收款」时，该节点会被标记为逾期（红色显示）。建议在收到款项后及时点击绿色对勾标记为已收款。
             </div>
           </details>
 
           <details class="mb-4 border border-stone-200 rounded-sm">
-            <summary class="px-5 py-3 cursor-pointer font-medium text-stone-800 hover:bg-stone-50 transition-colors">Q: 前台网站换了新项目，为什么我手机上看还是旧的？</summary>
+            <summary class="px-5 py-3 cursor-pointer font-medium text-stone-800 hover:bg-stone-50 transition-colors">Q: 前台网站换了新项目，为什么手机上看还是旧的？</summary>
             <div class="px-5 py-3 text-stone-600 text-sm border-t border-stone-200">
-              可能是浏览器缓存。试试<strong>强制刷新</strong>：在浏览器中按 Ctrl+F5（Windows）或 Cmd+Shift+R（Mac），或者在手机浏览器中清除缓存后重新打开。前台数据是实时加载的，发布后即可看到最新内容。
+              可能是浏览器缓存。试试<strong>强制刷新</strong>：Ctrl+F5（Windows）或 Cmd+Shift+R（Mac），或在手机浏览器中清除缓存后重新打开。前台数据是实时加载的，发布后刷新即可。
+            </div>
+          </details>
+
+          <details class="mb-4 border border-stone-200 rounded-sm">
+            <summary class="px-5 py-3 cursor-pointer font-medium text-stone-800 hover:bg-stone-50 transition-colors">Q: 编辑者和管理员有什么区别？</summary>
+            <div class="px-5 py-3 text-stone-600 text-sm border-t border-stone-200">
+              <strong>管理员</strong>可以增删改查所有内容（项目、分类、风格、文件、回款），管理用户账号，修改他人密码。<strong>编辑者</strong>可以编辑现有项目、上传文件和图片、管理回款，但<strong>不能删除项目</strong>，<strong>不能管理用户</strong>。系统在后端强制执行这些限制。
+            </div>
+          </details>
+
+          <details class="mb-4 border border-stone-200 rounded-sm">
+            <summary class="px-5 py-3 cursor-pointer font-medium text-stone-800 hover:bg-stone-50 transition-colors">Q: 如何调整首页项目的显示顺序？</summary>
+            <div class="px-5 py-3 text-stone-600 text-sm border-t border-stone-200">
+              在项目列表中，每个项目右侧有上下箭头按钮。点击可将项目与相邻项目交换排序位置。排序越靠上的项目在首页「精选作品」区域越靠前显示。
+            </div>
+          </details>
+
+          <details class="mb-4 border border-stone-200 rounded-sm">
+            <summary class="px-5 py-3 cursor-pointer font-medium text-stone-800 hover:bg-stone-50 transition-colors">Q: 为什么分类在首页不显示？</summary>
+            <div class="px-5 py-3 text-stone-600 text-sm border-t border-stone-200">
+              请检查分类管理页面中该分类的<strong>眼睛图标</strong>是否处于睁开状态。眼睛关闭表示该分类在首页隐藏（但在项目筛选页中仍可用）。点击眼睛图标即可切换。
             </div>
           </details>
 
@@ -446,7 +542,10 @@ const sections = [
   { id: 'payments', num: '4', title: '回款管理' },
   { id: 'files', num: '5', title: '文件管理' },
   { id: 'categories', num: '6', title: '分类管理' },
+  { id: 'board', num: '6.5', title: '项目看板' },
   { id: 'styles', num: '7', title: '风格管理' },
+  { id: 'contacts', num: '7.5', title: '留言管理' },
+  { id: 'settings', num: '7.6', title: '站点设置' },
   { id: 'users', num: '8', title: '用户管理' },
   { id: 'faq', num: '9', title: '常见问题' },
   { id: 'support', num: '10', title: '技术支持' },

@@ -45,12 +45,11 @@ router.post('/', async (req, res) => {
        VALUES ($1, $2, $3, $4)`,
       [name, phone, message, ip],
     )
-    console.log('Contact form submission saved:', { name, email, projectType })
+    console.log('Contact form submission saved:', { name, phone })
     res.status(201).json({ success: true, message: '留言已收到，我们会尽快与您联系。' })
   } catch (err) {
     console.error('Contact form error:', err)
-    // Fall back to console log if DB insert fails
-    console.log('Contact form submission (fallback):', { name, email, projectType, message })
+    console.log('Contact form submission (fallback):', { name, phone, message })
     res.status(500).json({ error: '提交失败，请稍后重试' })
   }
 })

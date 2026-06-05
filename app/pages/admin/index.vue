@@ -30,6 +30,32 @@
         </div>
       </div>
 
+      <!-- 即将到期回款 + 未读留言 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
+          <h3 class="text-sm font-semibold text-stone-800 mb-4">近期回款（30天内）</h3>
+          <div v-if="upcomingPayments.length > 0" class="space-y-2">
+            <div v-for="p in upcomingPayments" :key="p.id" class="flex items-center justify-between text-sm">
+              <div class="min-w-0">
+                <p class="text-stone-700 truncate">{{ p.title }}</p>
+                <p class="text-xs text-stone-400">{{ p.project_title }} · {{ p.due_date }}</p>
+              </div>
+              <span class="font-medium text-stone-700 ml-2">{{ formatAmount(p.amount) }}</span>
+            </div>
+          </div>
+          <p v-else class="text-sm text-stone-400">暂无近期回款</p>
+        </div>
+        <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-stone-800">未读留言</h3>
+            <span v-if="unreadCount > 0" class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-amber-500 rounded-full">{{ unreadCount }}</span>
+          </div>
+          <p v-if="unreadCount > 0" class="text-sm text-stone-500">{{ unreadCount }} 条未读留言</p>
+          <p v-else class="text-sm text-stone-400">暂无未读留言</p>
+          <NuxtLink v-if="unreadCount > 0" to="/admin/contacts" class="inline-block mt-2 text-xs text-accent-500 hover:underline">查看留言 →</NuxtLink>
+        </div>
+      </div>
+
       <!-- 快捷操作 -->
       <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
         <h3 class="text-sm font-semibold text-stone-800 mb-4">快捷操作</h3>
@@ -104,6 +130,8 @@ const stats = ref([
 ])
 const recentProjects = ref<Project[]>([])
 const paymentOverview = ref<PaymentOverview | null>(null)
+const upcomingPayments = ref<any[]>([])
+const unreadCount = ref(0)
 
 onMounted(async () => {
   try {
@@ -121,6 +149,21 @@ onMounted(async () => {
       { label: '草稿', value: all[0].count },
     ]
     paymentOverview.value = all[2]
+
+    // Upcoming payments + unread contacts
+    try {
+      const month = new Date().toISOString().slice(0, 7)
+      const [calendar, contacts] = await Promise.all([
+        adminApi.getPaymentCalendar(month),
+        adminApi.getContacts(),
+      ])
+      const today = new Date().toISOString().slice(0, 10)
+      const thirtyDays = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10)
+      upcomingPayments.value = (calendar || []).filter((m: any) =>
+        m.status === 'pending' && m.due_date >= today && m.due_date <= thirtyDays
+      ).slice(0, 5)
+      unreadCount.value = (contacts || []).filter((c: any) => !c.is_read).length
+    } catch {}
   } catch (e) {
     console.error('Failed to load dashboard:', e)
   }

@@ -163,6 +163,7 @@ const formData = computed<Partial<ProjectFormData>>(() => {
     client: project.value.client || '',
     area_sqm: project.value.area_sqm,
     is_featured: project.value.is_featured,
+    stage_id: project.value.stage_id || null,
     style_ids: project.value.styles?.map(s => s.id) || [],
     seo_title: project.value.seo_title || '',
     seo_description: project.value.seo_description || '',

@@ -251,6 +251,18 @@ export const adminApi = {
   updateUser(id: string, data: { full_name?: string; role?: string }) {
     return apiFetch<any>(`/api/users/${id}`, { method: 'PUT', body: JSON.stringify(data) })
   },
+  // Stages
+  getStages() { return apiFetch<any[]>('/api/stages') },
+  updateProjectStage(projectId: string, stageId: string) {
+    return apiFetch<any>(`/api/stages/project/${projectId}`, { method: 'PUT', body: JSON.stringify({ stage_id: stageId }) })
+  },
+
+  // Expenses
+  getExpenseCategories() { return apiFetch<any[]>('/api/expenses/categories') },
+  getExpenses(projectId: string) { return apiFetch<any[]>(`/api/expenses?project_id=${projectId}`) },
+  createExpense(data: any) { return apiFetch<any>('/api/expenses', { method: 'POST', body: JSON.stringify(data) }) },
+  deleteExpense(id: string) { return apiFetch<any>(`/api/expenses/${id}`, { method: 'DELETE' }) },
+
   // Contacts
   getContacts() { return apiFetch<any[]>('/api/contacts') },
   markContactRead(id: string) { return apiFetch<any>(`/api/contacts/${id}/read`, { method: 'PUT' }) },

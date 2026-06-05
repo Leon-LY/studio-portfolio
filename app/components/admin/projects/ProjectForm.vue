@@ -44,6 +44,15 @@
           <option value="archived">已归档</option>
         </select>
       </div>
+
+      <!-- 阶段 -->
+      <div class="space-y-1.5">
+        <label class="block text-sm font-medium text-stone-700">项目阶段</label>
+        <select v-model="form.stage_id" class="block w-full rounded-sm border border-stone-300 px-3 py-2 text-sm bg-white focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600">
+          <option :value="null">未设置</option>
+          <option v-for="s in stages" :key="s.id" :value="s.id">{{ s.name }}</option>
+        </select>
+      </div>
     </div>
 
     <!-- 风格（多选） -->
@@ -160,6 +169,7 @@ const form = reactive<ProjectFormData>({
   client: '',
   area_sqm: null,
   is_featured: false,
+  stage_id: null as string | null,
   style_ids: [],
   seo_title: '',
   seo_description: '',
@@ -168,6 +178,8 @@ const form = reactive<ProjectFormData>({
 
 const { data: categories } = useAsyncData('admin-categories', () => fetchCategories())
 const { data: styles } = useAsyncData('admin-styles', () => fetchStyles())
+const stages = ref<any[]>([])
+onMounted(async () => { try { stages.value = await adminApi.getStages() } catch {} })
 
 function autoGenerateSlug() {
   if (!form.slug || form.slug === generateSlug(form.title)) {

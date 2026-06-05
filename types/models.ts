@@ -27,6 +27,7 @@ export interface Project {
   description: string | null
   content: string | null
   category_id: string | null
+  stage_id: string | null
   status: ProjectStatus
   completion_date: string | null
   location: string | null
@@ -85,6 +86,7 @@ export interface ProjectFormData {
   description: string
   content: string
   category_id: string | null
+  stage_id: string | null
   status: ProjectStatus
   completion_date: string | null
   location: string

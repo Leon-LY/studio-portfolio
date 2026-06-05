@@ -11,6 +11,8 @@ import imagesRouter from './routes/images.js'
 import filesRouter from './routes/files.js'
 import paymentsRouter from './routes/payments.js'
 import usersRouter from './routes/users.js'
+import stagesRouter from './routes/stages.js'
+import expensesRouter from './routes/expenses.js'
 import settingsRouter from './routes/settings.js'
 import contactRouter from './routes/contact.js'
 
@@ -56,6 +58,10 @@ app.use('/api/payments', paymentsRouter)
 
 // Users (auth required for all routes)
 app.use('/api/users', usersRouter)
+
+// Stages + Expenses
+app.use('/api/stages', stagesRouter)
+app.use('/api/expenses', expensesRouter)
 
 // Site settings (hero image etc.)
 app.use('/api/settings', settingsRouter)

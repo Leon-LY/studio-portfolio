@@ -116,7 +116,7 @@ router.get('/preview/:id', async (req, res) => {
         if (converted !== pdfPath) fs.renameSync(converted, pdfPath)
       }
       res.setHeader('Content-Type', 'application/pdf')
-      res.setHeader('Content-Disposition', `inline; filename="${file.original_name}.pdf"`)
+      res.setHeader('Content-Disposition', `inline; filename*=UTF-8''${encodeURIComponent(file.original_name)}.pdf`)
       return fs.createReadStream(pdfPath).pipe(res)
     }
 

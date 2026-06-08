@@ -266,6 +266,7 @@ export const adminApi = {
   getExpenseCategories() { return apiFetch<any[]>('/api/expenses/categories') },
   getExpenses(projectId: string) { return apiFetch<any[]>(`/api/expenses?project_id=${projectId}`) },
   createExpense(data: any) { return apiFetch<any>('/api/expenses', { method: 'POST', body: JSON.stringify(data) }) },
+  updateExpense(id: string, data: any) { return apiFetch<any>(`/api/expenses/${id}`, { method: 'PUT', body: JSON.stringify(data) }) },
   deleteExpense(id: string) { return apiFetch<any>(`/api/expenses/${id}`, { method: 'DELETE' }) },
 
   // Contacts

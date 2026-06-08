@@ -1,17 +1,9 @@
 <template>
   <div>
     <AdminHeader title="操作手册" />
-    <div class="p-6 max-w-4xl mx-auto">
 
-      <!-- 目录 -->
-      <div class="mb-10 p-6 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
-        <h2 class="text-lg font-serif font-bold text-stone-900 mb-4">目录</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
-          <a v-for="s in sections" :key="s.id" :href="`#${s.id}`" class="text-sm text-stone-600 hover:text-accent-500 transition-colors py-1.5 px-2 rounded hover:bg-stone-50">
-            {{ s.num }}. {{ s.title }}
-          </a>
-        </div>
-      </div>
+    <div class="flex gap-8 max-w-6xl mx-auto p-6">
+      <div class="flex-1 min-w-0">
 
       <!-- ============ 1 ============ -->
       <section :id="sections[0].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
@@ -408,7 +400,20 @@
         </div>
       </section>
 
+    </div><!-- /left -->
+
+    <div class="w-48 flex-shrink-0">
+      <div class="bg-white rounded-sm border border-stone-200 p-4">
+        <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">目录</p>
+        <nav class="space-y-0.5">
+          <a v-for="s in sections" :key="s.id" :href="`#${s.id}`" class="block text-xs text-stone-500 hover:text-accent-500 transition-colors py-1.5 px-2 rounded hover:bg-stone-50 leading-tight">
+            {{ s.num }}. {{ s.title }}
+          </a>
+        </nav>
+      </div>
     </div>
+
+  </div><!-- /flex -->
   </div>
 </template>
 

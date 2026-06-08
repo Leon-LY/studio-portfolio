@@ -275,6 +275,14 @@ export const adminApi = {
   updateClient(id: string, data: any) { return apiFetch<any>(`/api/clients/${id}`, { method: 'PUT', body: JSON.stringify(data) }) },
   deleteClient(id: string) { return apiFetch<any>(`/api/clients/${id}`, { method: 'DELETE' }) },
 
+  // Settings
+  getSettings() { return apiFetch<any>('/api/settings') },
+  updateSettings(data: any) { return apiFetch<any>('/api/settings', { method: 'PUT', body: JSON.stringify(data) }) },
+  uploadHeroImage(file: File) {
+    const fd = new FormData(); fd.append('image', file)
+    return apiFetch<any>('/api/settings/hero-image', { method: 'POST', body: fd })
+  },
+
   // Financial
   getFinancialSummary() { return apiFetch<any[]>('/api/projects/financial') },
 

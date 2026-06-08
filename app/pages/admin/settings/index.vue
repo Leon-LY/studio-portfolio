@@ -34,10 +34,8 @@
                 <input ref="fileInput" type="file" accept=".jpg,.jpeg,.png,.webp" class="hidden" @change="handleFileChange" />
                 <Icon name="lucide:upload" size="24" class="text-stone-400 mx-auto mb-2" />
                 <p class="text-sm text-stone-600">{{ uploading ? '上传中...' : '点击或拖拽上传背景图' }}</p>
-                <p class="text-xs text-stone-400 mt-1">推荐尺寸 1920×1080，支持 JPG/PNG/WebP，不超过 10MB</p>
+                <p class="text-xs text-stone-400 mt-1">推荐尺寸 1920×1080，JPG/PNG/WebP，≤10MB</p>
               </div>
-              <p v-if="error" class="text-sm text-red-500 mt-2">{{ error }}</p>
-              <p v-if="success" class="text-sm text-green-600 mt-2">{{ success }}</p>
             </div>
           </div>
 
@@ -49,7 +47,7 @@
             <div class="p-5 space-y-4">
               <BaseInput v-model="form.site_name" label="站点名称" placeholder="方外设计" />
               <BaseInput v-model="form.site_description" label="站点描述" placeholder="建筑设计工作室" hint="显示在浏览器标签页和搜索结果中" />
-              <BaseInput v-model="form.hero_slogan" label="首页 Slogan" placeholder="方寸之外 · 别有天地" hint="显示在首页 Hero 区域" />
+              <BaseInput v-model="form.hero_slogan" label="首页 Slogan" placeholder="方寸之外 · 别有天地" />
               <BaseTextarea v-model="form.hero_subtitle" label="首页副标题" placeholder="以思考重塑空间的边界..." :rows="2" />
               <BaseInput v-model="form.contact_email" label="联系邮箱" placeholder="email@example.com" />
               <BaseInput v-model="form.contact_address" label="联系地址" placeholder="山东 · 威海" />
@@ -63,15 +61,15 @@
         <div class="w-64 flex-shrink-0 space-y-4 hidden lg:block">
           <div class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 p-5">
             <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">修改即时生效</h4>
-            <p class="text-xs text-stone-500 leading-relaxed">所有设置保存后<strong>立即生效</strong>，刷新前台网站即可看到变化，不需要重新构建或部署。</p>
+            <p class="text-xs text-stone-500 leading-relaxed">所有设置保存后立即生效，刷新前台网站即可看到变化。</p>
           </div>
           <div class="bg-stone-50 rounded-sm border border-stone-200 p-5">
             <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">各字段作用</h4>
             <ul class="text-xs text-stone-500 space-y-2">
-              <li><strong>站点名称</strong> — 浏览器标签页标题</li>
-              <li><strong>站点描述</strong> — 搜索引擎摘要</li>
-              <li><strong>首页 Slogan</strong> — Hero 区大字</li>
-              <li><strong>联系信息</strong> — Footer 和联系页显示</li>
+              <li>站点名称 — 浏览器标签页标题</li>
+              <li>站点描述 — 搜索引擎摘要</li>
+              <li>首页 Slogan — Hero 区大字</li>
+              <li>联系信息 — Footer 和联系页</li>
             </ul>
           </div>
         </div>
@@ -87,18 +85,21 @@ import BaseButton from '~/components/ui/BaseButton.vue'
 import BaseInput from '~/components/ui/BaseInput.vue'
 import BaseTextarea from '~/components/ui/BaseTextarea.vue'
 
+const toast = useToast()
 const fileInput = ref<HTMLInputElement>()
 const isDragging = ref(false); const uploading = ref(false); const saving = ref(false)
-const error = ref(''); const success = ref(''); const heroImage = ref('')
+const heroImage = ref('')
 const form = reactive({ site_name: '', site_description: '', hero_slogan: '', hero_subtitle: '', contact_email: '', contact_address: '', contact_phone: '' })
 
-function authHeader() { const token = localStorage.getItem('studio_token'); return token ? { Authorization: `Bearer ${token}` } : {} }
-
 onMounted(async () => {
-  try { const s = await (await fetch('/api/settings', { headers: authHeader() })).json()
-    heroImage.value = s.hero_image || ''; form.site_name = s.site_name || ''; form.site_description = s.site_description || ''
-    form.hero_slogan = s.hero_slogan || ''; form.hero_subtitle = s.hero_subtitle || ''
-    form.contact_email = s.contact_email || ''; form.contact_address = s.contact_address || ''; form.contact_phone = s.contact_phone || ''
+  try {
+    const s = await adminApi.getSettings()
+    heroImage.value = s.hero_image || ''
+    Object.assign(form, {
+      site_name: s.site_name || '', site_description: s.site_description || '',
+      hero_slogan: s.hero_slogan || '', hero_subtitle: s.hero_subtitle || '',
+      contact_email: s.contact_email || '', contact_address: s.contact_address || '', contact_phone: s.contact_phone || '',
+    })
   } catch {}
 })
 
@@ -107,21 +108,21 @@ async function handleFileChange(e: Event) { const file = (e.target as HTMLInputE
 async function handleDrop(e: DragEvent) { isDragging.value = false; const file = e.dataTransfer?.files?.[0]; if (file) await doUpload(file) }
 
 async function doUpload(file: File) {
-  uploading.value = true; error.value = ''; success.value = ''
-  try { const fd = new FormData(); fd.append('image', file)
-    const res = await fetch('/api/settings/hero-image', { method: 'POST', headers: authHeader(), body: fd })
-    if (!res.ok) throw new Error((await res.json()).error)
-    const data = await res.json(); heroImage.value = data.url; success.value = '背景图已更新！刷新首页即可查看效果。'
-  } catch (e: any) { error.value = e.message || '上传失败' } finally { uploading.value = false }
+  uploading.value = true
+  try { const data = await adminApi.uploadHeroImage(file); heroImage.value = data.url; toast.success('背景图已更新') }
+  catch (e: any) { toast.error(e.message || '上传失败') }
+  finally { uploading.value = false }
 }
 
 async function removeHero() {
-  try { await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify({ hero_image: '' }) }); heroImage.value = ''; success.value = '背景图已移除' }
-  catch (e: any) { error.value = e.message }
+  try { await adminApi.updateSettings({ hero_image: '' }); heroImage.value = ''; toast.success('背景图已移除') }
+  catch (e: any) { toast.error(e.message) }
 }
 
-async function saveInfo() { saving.value = true
-  try { await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(form) }); success.value = '站点信息已保存' }
-  catch (e: any) { error.value = e.message } finally { saving.value = false }
+async function saveInfo() {
+  saving.value = true
+  try { await adminApi.updateSettings({ ...form }); toast.success('站点信息已保存') }
+  catch (e: any) { toast.error(e.message) }
+  finally { saving.value = false }
 }
 </script>

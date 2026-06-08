@@ -254,13 +254,13 @@ router.get('/admin/:id', authMiddleware, async (req, res) => {
 
 // POST /api/projects — create project
 router.post('/', authMiddleware, async (req, res) => {
-  const { title, slug, description, content, category_id, status, completion_date, location, client, area_sqm, is_featured, stage_id, style_ids, seo_title, seo_description } = req.body
+  const { title, slug, description, content, category_id, status, completion_date, location, client, client_id, area_sqm, is_featured, stage_id, style_ids, seo_title, seo_description } = req.body
   if (!title || !slug) return res.status(400).json({ error: 'title 和 slug 为必填项' })
   try {
     const { rows } = await query(
-      `INSERT INTO projects (title, slug, description, content, category_id, status, completion_date, location, client, area_sqm, is_featured, stage_id, seo_title, seo_description)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
-      [title, slug, description, content, category_id, status || 'draft', completion_date, location, client, area_sqm, is_featured || false, stage_id || null, seo_title, seo_description],
+      `INSERT INTO projects (title, slug, description, content, category_id, status, completion_date, location, client, client_id, area_sqm, is_featured, stage_id, seo_title, seo_description)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *`,
+      [title, slug, description, content, category_id, status || 'draft', completion_date, location, client, client_id || null, area_sqm, is_featured || false, stage_id || null, seo_title, seo_description],
     )
     const project = rows[0]
     if (style_ids && style_ids.length > 0) {
@@ -277,13 +277,13 @@ router.post('/', authMiddleware, async (req, res) => {
 
 // PUT /api/projects/:id — update project
 router.put('/:id', authMiddleware, async (req, res) => {
-  const { title, slug, description, content, category_id, status, completion_date, location, client, area_sqm, is_featured, stage_id, style_ids, seo_title, seo_description } = req.body
+  const { title, slug, description, content, category_id, status, completion_date, location, client, client_id, area_sqm, is_featured, stage_id, style_ids, seo_title, seo_description } = req.body
   if (!title || !slug) return res.status(400).json({ error: 'title 和 slug 为必填项' })
   try {
     const { rows } = await query(
-      `UPDATE projects SET title=$1, slug=$2, description=$3, content=$4, category_id=$5, status=$6, completion_date=$7, location=$8, client=$9, area_sqm=$10, is_featured=$11, stage_id=$12, seo_title=$13, seo_description=$14
-       WHERE id=$15 RETURNING *`,
-      [title, slug, description, content, category_id, status, completion_date, location, client, area_sqm, is_featured, stage_id || null, seo_title, seo_description, req.params.id],
+      `UPDATE projects SET title=$1, slug=$2, description=$3, content=$4, category_id=$5, status=$6, completion_date=$7, location=$8, client=$9, client_id=$10, area_sqm=$11, is_featured=$12, stage_id=$13, seo_title=$14, seo_description=$15
+       WHERE id=$16 RETURNING *`,
+      [title, slug, description, content, category_id, status, completion_date, location, client, client_id || null, area_sqm, is_featured, stage_id || null, seo_title, seo_description, req.params.id],
     )
     if (rows.length === 0) return res.status(404).json({ error: 'Not found' })
     // Replace styles

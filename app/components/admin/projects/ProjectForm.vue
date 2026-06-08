@@ -97,7 +97,25 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <BaseInput v-model="form.location" label="位置" placeholder="城市，国家" />
-      <BaseInput v-model="form.client" label="客户" placeholder="客户名称" />
+      <div>
+        <label class="block text-sm font-medium text-stone-700 mb-1">客户</label>
+        <select
+          v-model="selectedClientId"
+          class="w-full rounded-sm border border-stone-300 px-3 py-2 text-sm bg-white focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 transition-colors"
+          @change="onClientChange"
+        >
+          <option value="">无 / 手动输入</option>
+          <option v-for="c in clients" :key="c.id" :value="c.id">{{ c.name }}</option>
+        </select>
+        <input
+          v-if="!selectedClientId"
+          :value="form.client"
+          type="text"
+          placeholder="客户名称（手动输入）"
+          class="w-full mt-2 rounded-sm border border-stone-300 px-3 py-2 text-sm bg-white focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 transition-colors placeholder-stone-400"
+          @input="form.client = ($event.target as HTMLInputElement).value"
+        />
+      </div>
       <BaseInput v-model="form.area_sqm" label="面积（m²）" placeholder="500" type="number" />
     </div>
 
@@ -156,6 +174,17 @@ const { generateSlug } = useAdminProjects()
 
 const saving = ref(false)
 const saveMessage = ref('')
+const clients = ref<any[]>([])
+const selectedClientId = ref('')
+
+function onClientChange() {
+  const client = clients.value.find(c => c.id === selectedClientId.value)
+  form.client = client ? client.name : ''
+}
+
+onMounted(async () => {
+  try { clients.value = await adminApi.getClients() } catch {}
+})
 
 const form = reactive<ProjectFormData>({
   title: '',
@@ -200,7 +229,7 @@ async function onSubmit() {
   saving.value = true
   saveMessage.value = ''
   try {
-    emit('submit', { ...form })
+    emit('submit', { ...form, client_id: selectedClientId.value || null })
     saveMessage.value = '已保存！'
     setTimeout(() => { saveMessage.value = '' }, 3000)
   } finally {

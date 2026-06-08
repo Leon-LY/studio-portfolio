@@ -99,7 +99,8 @@ const userName = computed(() =>
 
 const userEmail = computed(() => user.value?.email || '')
 
-// Breadcrumb: last item is the page title
+// Breadcrumb: last item is the page title. Peer pages (board) skip parent.
+const peerPages = new Set(['board'])
 const breadcrumbs = computed(() => {
   const segments = route.path.split('/').filter(Boolean)
   if (segments.length === 0) return []
@@ -115,9 +116,12 @@ const breadcrumbs = computed(() => {
     path += '/' + seg
     if (seg === '[id]' || seg.match(/^[0-9a-f-]{36}$/)) continue
     const label = labelMap[seg] || seg
+    // If current is a peer page, remove its logical parent
+    if (peerPages.has(seg) && crumbs.length > 1) {
+      crumbs.pop()
+    }
     crumbs.push({ label, to: path })
   }
-  // Deduplicate consecutive same labels
   return crumbs.filter((c, i) => i === 0 || c.label !== crumbs[i - 1]?.label)
 })
 

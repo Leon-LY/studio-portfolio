@@ -75,6 +75,7 @@ const navGroups = [
     label: '资源管理',
     items: [
       { to: '/admin/payments', label: '回款管理', icon: 'lucide:receipt' },
+      { to: '/admin/expenses', label: '支出管理', icon: 'lucide:banknote' },
       { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },
       { to: '/admin/categories', label: '分类', icon: 'lucide:folder-tree' },
       { to: '/admin/styles', label: '风格', icon: 'lucide:palette' },

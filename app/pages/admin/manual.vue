@@ -423,9 +423,9 @@
 
     </div><!-- /左侧内容 -->
 
-    <!-- 右侧：悬浮目录 -->
+    <!-- 右侧：目录 -->
     <div class="hidden lg:block w-56 flex-shrink-0">
-      <div class="sticky top-20 bg-white rounded-sm border border-stone-200 p-4">
+      <div class="bg-white rounded-sm border border-stone-200 p-4">
         <div class="relative mb-3">
           <Icon name="lucide:search" size="14" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400" />
           <input v-model="search" type="text" placeholder="搜索..." class="w-full pl-7 pr-3 py-1.5 text-xs border border-stone-200 rounded-sm bg-white placeholder-stone-400 focus:border-stone-400 focus:outline-none transition-colors" />

@@ -179,10 +179,59 @@
         </div>
       </section>
 
-      <!-- ============ 5 ============ -->
+      <!-- ============ 5: 客户管理 ============ -->
       <section v-show="!search || sectionVisible(4)" :id="sections[4].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">5. 回款管理</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">5. 客户管理</h2>
+        </div>
+        <div class="p-6 space-y-5 text-sm leading-relaxed">
+          <p class="text-stone-600">管理您的客户信息，将项目关联到客户，追踪合作历史。</p>
+          <div>
+            <h3 class="text-sm font-semibold text-stone-800 mb-2">客户列表</h3>
+            <ul class="text-stone-600 space-y-1.5">
+              <li>列表显示客户名称、联系人、电话/邮箱、关联项目数</li>
+              <li><strong>点击行可展开</strong>查看关联的项目名称（点击跳转前台）</li>
+              <li>铅笔图标编辑，垃圾桶图标删除</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-stone-800 mb-2">添加/编辑客户</h3>
+            <ul class="text-stone-600 space-y-1.5">
+              <li>填写客户名称、联系人、电话、邮箱、地址、备注</li>
+              <li><strong>关联项目</strong> — 勾选复选框将现有项目关联到此客户</li>
+              <li>也可在项目编辑页通过客户下拉选择器关联</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6: 收支总览 ============ -->
+      <section v-show="!search || sectionVisible(5)" :id="sections[5].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+        <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
+          <h2 class="text-base font-serif font-bold text-stone-900">6. 收支总览</h2>
+        </div>
+        <div class="p-6 space-y-5 text-sm leading-relaxed">
+          <p class="text-stone-600">查看所有项目的收入、支出和利润汇总。</p>
+          <div>
+            <h3 class="text-sm font-semibold text-stone-800 mb-2">概览卡片</h3>
+            <ul class="text-stone-600 space-y-1.5">
+              <li><strong>预计收入</strong> — 所有回款节点的总金额</li>
+              <li><strong>已收</strong> — 已标记为"已付"的回款金额</li>
+              <li><strong>总支出</strong> — 所有项目费用的总和</li>
+              <li><strong>净利润</strong> — 已收减去支出（负数显示红色）</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-stone-800 mb-2">项目盈亏表</h3>
+            <p class="text-stone-600">按利润从高到低排列每个项目的收入、支出和利润。点击项目名跳转到编辑页。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7 ============ -->
+      <section v-show="!search || sectionVisible(6)" :id="sections[6].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+        <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
+          <h2 class="text-base font-serif font-bold text-stone-900">7. 回款管理</h2>
         </div>
         <div class="p-6 space-y-5 text-sm leading-relaxed">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -211,9 +260,9 @@
       </section>
 
       <!-- ============ 6 ============ -->
-      <section v-show="!search || sectionVisible(5)" :id="sections[5].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(7)" :id="sections[5].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">6. 文件管理</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">8. 文件管理</h2>
         </div>
         <div class="p-6 space-y-4 text-sm leading-relaxed">
           <p class="text-stone-600">左侧菜单「文件管理」进入。全局视图，按项目浏览和管理所有附件。</p>
@@ -245,9 +294,9 @@
       </section>
 
       <!-- ============ 7 ============ -->
-      <section v-show="!search || sectionVisible(6)" :id="sections[6].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(8)" :id="sections[6].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">7. 分类管理</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">9. 分类管理</h2>
         </div>
         <div class="p-6 space-y-3 text-sm leading-relaxed">
           <p class="text-stone-600">左侧菜单「分类」进入。用于按类型组织和筛选作品（住宅、商业、公共建筑等）。</p>
@@ -261,9 +310,9 @@
       </section>
 
       <!-- ============ 8 ============ -->
-      <section v-show="!search || sectionVisible(7)" :id="sections[7].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(9)" :id="sections[7].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">8. 风格管理</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">10. 风格管理</h2>
         </div>
         <div class="p-6 space-y-3 text-sm leading-relaxed">
           <p class="text-stone-600">左侧菜单「风格」进入。描述建筑风格（现代、极简、新中式等）。操作方式与分类完全一致：新建、编辑、删除。一个项目可以有多个风格标签。</p>
@@ -272,9 +321,9 @@
       </section>
 
       <!-- ============ 9 ============ -->
-      <section v-show="!search || sectionVisible(8)" :id="sections[8].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(10)" :id="sections[8].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">9. 留言管理</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">11. 留言管理</h2>
         </div>
         <div class="p-6 space-y-3 text-sm leading-relaxed">
           <p class="text-stone-600">左侧菜单「留言」进入。当前台联系表单有人提交时，留言自动存入数据库并在此显示。</p>
@@ -288,9 +337,9 @@
       </section>
 
       <!-- ============ 10 ============ -->
-      <section v-show="!search || sectionVisible(9)" :id="sections[9].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(11)" :id="sections[9].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">10. 用户管理</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">12. 用户管理</h2>
         </div>
         <div class="p-6 space-y-4 text-sm leading-relaxed">
           <p class="text-stone-600">左侧菜单「用户管理」进入。<strong>仅管理员可访问</strong>。管理可以登录后台的账号。</p>
@@ -304,9 +353,9 @@
       </section>
 
       <!-- ============ 11 ============ -->
-      <section v-show="!search || sectionVisible(10)" :id="sections[10].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(12)" :id="sections[10].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">11. 站点设置</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">13. 站点设置</h2>
         </div>
         <div class="p-6 space-y-4 text-sm leading-relaxed">
           <p class="text-stone-600">左侧菜单「站点设置」进入。自定义前台网站的显示内容，无需修改代码。</p>
@@ -328,9 +377,9 @@
       </section>
 
       <!-- ============ 12 ============ -->
-      <section v-show="!search || sectionVisible(11)" :id="sections[11].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(13)" :id="sections[11].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">12. 常见问题</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">14. 常见问题</h2>
         </div>
         <div class="divide-y divide-stone-100">
           <details class="group">
@@ -369,9 +418,9 @@
       </section>
 
       <!-- ============ 13 ============ -->
-      <section v-show="!search || sectionVisible(12)" :id="sections[12].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(14)" :id="sections[12].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
-          <h2 class="text-base font-serif font-bold text-stone-900">13. 技术支持</h2>
+          <h2 class="text-base font-serif font-bold text-stone-900">15. 技术支持</h2>
         </div>
         <div class="p-6 text-sm leading-relaxed text-stone-600 space-y-1">
           <p>👨‍💻 <strong>开发者</strong>：Leon — <a href="tel:18389118642" class="text-accent-500 hover:underline">18389118642</a></p>
@@ -395,15 +444,18 @@ const sections = [
   { id: 'dashboard', num: '2', title: '仪表盘' },
   { id: 'projects', num: '3', title: '项目管理' },
   { id: 'board', num: '4', title: '项目看板' },
-  { id: 'payments', num: '5', title: '回款管理' },
-  { id: 'files', num: '6', title: '文件管理' },
-  { id: 'categories', num: '7', title: '分类管理' },
-  { id: 'styles', num: '8', title: '风格管理' },
-  { id: 'contacts', num: '9', title: '留言管理' },
-  { id: 'users', num: '10', title: '用户管理' },
-  { id: 'settings', num: '11', title: '站点设置' },
-  { id: 'faq', num: '12', title: '常见问题' },
-  { id: 'support', num: '13', title: '技术支持' },
+  { id: 'clients', num: '5', title: '客户管理' },
+  { id: 'finance', num: '6', title: '收支总览' },
+  { id: 'payments', num: '7', title: '回款管理' },
+  { id: 'expenses', num: '8', title: '支出管理' },
+  { id: 'files', num: '9', title: '文件管理' },
+  { id: 'categories', num: '10', title: '分类管理' },
+  { id: 'styles', num: '11', title: '风格管理' },
+  { id: 'contacts', num: '12', title: '留言管理' },
+  { id: 'users', num: '13', title: '用户管理' },
+  { id: 'settings', num: '14', title: '站点设置' },
+  { id: 'faq', num: '15', title: '常见问题' },
+  { id: 'support', num: '16', title: '技术支持' },
 ]
 
 const filteredSections = computed(() => {

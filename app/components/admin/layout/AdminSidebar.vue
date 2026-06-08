@@ -68,6 +68,7 @@ const navGroups = [
       { to: '/admin', label: '仪表盘', icon: 'lucide:layout-dashboard' },
       { to: '/admin/projects', label: '项目', icon: 'lucide:folder-kanban' },
       { to: '/admin/projects/board', label: '看板', icon: 'lucide:kanban' },
+      { to: '/admin/clients', label: '客户', icon: 'lucide:users' },
       { to: '/admin/contacts', label: '留言', icon: 'lucide:inbox' },
     ],
   },

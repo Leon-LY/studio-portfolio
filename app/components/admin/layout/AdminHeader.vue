@@ -106,7 +106,7 @@ const breadcrumbs = computed(() => {
   if (segments.length === 0) return []
   const crumbs: { label: string; to: string }[] = []
   const labelMap: Record<string, string> = {
-    admin: '仪表盘', projects: '项目', board: '看板', contacts: '留言',
+    admin: '仪表盘', projects: '项目', board: '看板', clients: '客户', contacts: '留言',
     payments: '回款管理', expenses: '支出管理', files: '文件管理', categories: '分类', styles: '风格',
     settings: '站点设置', users: '用户管理', manual: '操作手册',
     new: '新建项目', edit: '编辑',

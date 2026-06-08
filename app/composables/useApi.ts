@@ -269,6 +269,12 @@ export const adminApi = {
   updateExpense(id: string, data: any) { return apiFetch<any>(`/api/expenses/${id}`, { method: 'PUT', body: JSON.stringify(data) }) },
   deleteExpense(id: string) { return apiFetch<any>(`/api/expenses/${id}`, { method: 'DELETE' }) },
 
+  // Clients
+  getClients() { return apiFetch<any[]>('/api/clients') },
+  createClient(data: any) { return apiFetch<any>('/api/clients', { method: 'POST', body: JSON.stringify(data) }) },
+  updateClient(id: string, data: any) { return apiFetch<any>(`/api/clients/${id}`, { method: 'PUT', body: JSON.stringify(data) }) },
+  deleteClient(id: string) { return apiFetch<any>(`/api/clients/${id}`, { method: 'DELETE' }) },
+
   // Contacts
   getContacts() { return apiFetch<any[]>('/api/contact') },
   markContactRead(id: string) { return apiFetch<any>(`/api/contact/${id}/read`, { method: 'PUT' }) },

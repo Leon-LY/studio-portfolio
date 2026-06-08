@@ -364,10 +364,10 @@
         </div>
       </section>
 
-    </div><!-- /左侧 -->
+    </div><!-- /左侧内容 -->
 
-    <!-- 右侧目录 -->
-    <div class="hidden lg:block w-52 flex-shrink-0">
+    <!-- 右侧目录（随页面自然滚动） -->
+    <div class="hidden lg:block w-48 flex-shrink-0">
       <div class="bg-white rounded-sm border border-stone-200 p-4">
         <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">目录</p>
         <nav class="space-y-0.5">

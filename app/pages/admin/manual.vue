@@ -2,10 +2,8 @@
   <div>
     <AdminHeader title="操作手册" />
 
-    <!-- 主布局：内容 + 侧边目录 -->
-    <div class="flex gap-8 items-start max-w-6xl mx-auto p-6">
-      <!-- 左侧：内容区 -->
-      <div class="flex-1 min-w-0">
+    <!-- 主布局 -->
+    <div class="max-w-4xl mx-auto p-6">
 
       <!-- 搜索无结果 -->
       <div v-if="search && filteredSections.length === 0" class="text-center py-16 text-stone-400">
@@ -421,25 +419,24 @@
         </div>
       </section>
 
-    </div><!-- /左侧内容 -->
+    </div>
 
-    <!-- 右侧：目录 -->
-    <div class="hidden lg:block w-56 flex-shrink-0">
-      <div class="bg-white rounded-sm border border-stone-200 p-4">
-        <div class="relative mb-3">
-          <Icon name="lucide:search" size="14" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400" />
-          <input v-model="search" type="text" placeholder="搜索..." class="w-full pl-7 pr-3 py-1.5 text-xs border border-stone-200 rounded-sm bg-white placeholder-stone-400 focus:border-stone-400 focus:outline-none transition-colors" />
+    <!-- 底部目录 -->
+    <div class="max-w-4xl mx-auto px-6 pb-10">
+      <div class="bg-white rounded-sm border border-stone-200 p-6">
+        <div class="relative mb-4">
+          <Icon name="lucide:search" size="14" class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+          <input v-model="search" type="text" placeholder="搜索章节..." class="w-full pl-8 pr-4 py-2 text-sm border border-stone-200 rounded-sm bg-white placeholder-stone-400 focus:border-stone-400 focus:outline-none transition-colors" />
         </div>
-        <p class="text-[10px] font-medium text-stone-400 uppercase tracking-wider mb-2">目录</p>
-        <nav class="space-y-0.5">
-          <a v-for="s in filteredSections" :key="s.id" :href="`#${s.id}`" class="block text-xs text-stone-500 hover:text-accent-500 transition-colors py-1 px-1.5 rounded hover:bg-stone-50 leading-tight">
+        <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">目录</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
+          <a v-for="s in filteredSections" :key="s.id" :href="`#${s.id}`" class="text-sm text-stone-600 hover:text-accent-500 transition-colors py-1.5 px-2 rounded hover:bg-stone-50">
             {{ s.num }}. {{ s.title }}
           </a>
-        </nav>
+        </div>
       </div>
-    </div><!-- /右侧目录 -->
+    </div>
 
-  </div>
   </div>
 </template>
 

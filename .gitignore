@@ -25,3 +25,7 @@ logs
 
 # Docker secret env
 supabase/docker/.env
+
+# Server uploads — NEVER delete these
+server/uploads/
+server/previews/

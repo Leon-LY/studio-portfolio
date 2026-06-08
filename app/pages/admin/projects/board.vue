@@ -214,11 +214,18 @@ function onDragLeave(stageId: string) {
 
 async function onDrop(_e: DragEvent, stageId: string) {
   dragOverStage.value = ''
-  if (!draggedProject) return
+  const project = draggedProject // capture before async
+  if (!project) return
   try {
-    await adminApi.updateProjectStage(draggedProject.id, stageId)
-    draggedProject.stage_id = stageId
-    allProjects.value = [...allProjects.value]
+    await adminApi.updateProjectStage(project.id, stageId)
+    project.stage_id = stageId
+    // Force reactivity by replacing the project object in the array
+    const idx = allProjects.value.findIndex(p => p.id === project.id)
+    if (idx !== -1) {
+      allProjects.value = [...allProjects.value.slice(0, idx), { ...project }, ...allProjects.value.slice(idx + 1)]
+    } else {
+      allProjects.value = [...allProjects.value]
+    }
   } catch {}
   draggedProject = null
 }
@@ -228,13 +235,16 @@ const showMoveMenu = ref<any>(null)
 const moveMenuStyle = ref({})
 
 async function moveProject(project: ProjectRow, stageId: string) {
+  showMoveMenu.value = null
   try {
     await adminApi.updateProjectStage(project.id, stageId)
-    project.stage_id = stageId
-    allProjects.value = [...allProjects.value]
+    const idx = allProjects.value.findIndex(p => p.id === project.id)
+    if (idx !== -1) {
+      allProjects.value[idx] = { ...allProjects.value[idx], stage_id: stageId }
+      allProjects.value = [...allProjects.value]
+    }
     toast.success('已移动')
   } catch (e: any) { toast.error(e.message) }
-  showMoveMenu.value = null
 }
 
 // Position move menu near click

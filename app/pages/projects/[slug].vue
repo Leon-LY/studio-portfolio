@@ -84,7 +84,7 @@
           <div v-if="project.content" class="prose prose-lg prose max-w-none mb-14" v-html="sanitizeHtml(project.content)" />
 
           <!-- 图片图集 -->
-          <div v-if="project.images && project.images.length > 1" class="mb-14">
+          <div v-if="project.images && project.images.length > 0" class="mb-14">
             <h2 class="text-2xl font-serif font-bold text-stone-800 mb-8">项目图集</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div

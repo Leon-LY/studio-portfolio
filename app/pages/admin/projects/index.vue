@@ -79,6 +79,9 @@
                   <!-- 排序 -->
                   <button class="p-1 text-stone-300 hover:text-stone-500 transition-colors" title="上移" @click="moveProject(project, -1)"><Icon name="lucide:chevron-up" size="14" /></button>
                   <button class="p-1 text-stone-300 hover:text-stone-500 transition-colors" title="下移" @click="moveProject(project, 1)"><Icon name="lucide:chevron-down" size="14" /></button>
+                  <NuxtLink v-if="project.status === 'published'" :to="`/projects/${project.slug}`" target="_blank">
+                    <BaseButton variant="ghost" size="sm">查看</BaseButton>
+                  </NuxtLink>
                   <NuxtLink :to="`/admin/projects/${project.id}/edit`">
                     <BaseButton variant="ghost" size="sm">编辑</BaseButton>
                   </NuxtLink>

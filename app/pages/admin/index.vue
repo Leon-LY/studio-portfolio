@@ -4,11 +4,17 @@
 
     <div class="p-6 space-y-6">
       <!-- 统计卡片 -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div v-for="stat in stats" :key="stat.label" class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1">
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div v-for="n in 3" :key="n" class="bg-white p-6 rounded-sm border border-stone-200 animate-pulse">
+          <div class="skeleton h-4 w-16" />
+          <div class="skeleton h-8 w-12 mt-3" />
+        </div>
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <NuxtLink v-for="stat in stats" :key="stat.label" :to="stat.link || ''" class="bg-white p-6 rounded-sm border border-stone-200 shadow-elevation-1 hover:shadow-elevation-3 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer" :class="{ 'pointer-events-none': !stat.link }">
           <p class="text-sm text-stone-500">{{ stat.label }}</p>
           <p class="mt-2 font-serif text-3xl font-bold text-stone-800">{{ stat.value }}</p>
-        </div>
+        </NuxtLink>
       </div>
 
       <!-- 回款概览 -->
@@ -123,10 +129,11 @@ import EmptyState from '~/components/ui/EmptyState.vue'
 
 const { fetchProjects } = useAdminProjects()
 
+const loading = ref(true)
 const stats = ref([
-  { label: '项目总数', value: 0 },
-  { label: '已发布', value: 0 },
-  { label: '草稿', value: 0 },
+  { label: '项目总数', value: 0, link: '/admin/projects' },
+  { label: '已发布', value: 0, link: '/admin/projects?status=published' },
+  { label: '草稿', value: 0, link: '/admin/projects?status=draft' },
 ])
 const recentProjects = ref<Project[]>([])
 const paymentOverview = ref<PaymentOverview | null>(null)
@@ -144,9 +151,9 @@ onMounted(async () => {
       adminApi.getPaymentOverview().catch(() => null),
     ])
     stats.value = [
-      { label: '项目总数', value: result.count },
-      { label: '已发布', value: all[1].count },
-      { label: '草稿', value: all[0].count },
+      { label: '项目总数', value: result.count, link: '/admin/projects' },
+      { label: '已发布', value: all[1].count, link: '/admin/projects?status=published' },
+      { label: '草稿', value: all[0].count, link: '/admin/projects?status=draft' },
     ]
     paymentOverview.value = all[2]
 
@@ -166,6 +173,8 @@ onMounted(async () => {
     } catch {}
   } catch (e) {
     console.error('Failed to load dashboard:', e)
+  } finally {
+    loading.value = false
   }
 })
 

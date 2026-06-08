@@ -62,11 +62,6 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {
-    '/admin/**': { ssr: false },
-    '/projects/**': { ssr: false },
-  },
-
   typescript: { strict: true },
   css: ['~/assets/css/tailwind.css'],
 })

@@ -1,7 +1,14 @@
 <template>
   <header class="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-6 sticky top-0 z-20">
-    <!-- 标题 -->
+    <!-- 标题 + 面包屑 -->
     <div>
+      <div v-if="breadcrumbs.length > 1" class="flex items-center gap-1.5 mb-1">
+        <template v-for="(crumb, idx) in breadcrumbs" :key="crumb.to">
+          <NuxtLink v-if="idx < breadcrumbs.length - 1" :to="crumb.to" class="text-xs text-stone-400 hover:text-stone-600 transition-colors">{{ crumb.label }}</NuxtLink>
+          <span v-else class="text-xs text-stone-600 font-medium">{{ crumb.label }}</span>
+          <Icon v-if="idx < breadcrumbs.length - 1" name="lucide:chevron-right" size="12" class="text-stone-300" />
+        </template>
+      </div>
       <h1 class="text-lg font-semibold text-stone-800">{{ title }}</h1>
     </div>
 
@@ -73,6 +80,8 @@ defineProps({
 })
 
 const { user, signOut } = useAuth()
+const toast = useToast()
+const route = useRoute()
 
 const menuOpen = ref(false)
 const showChangePwd = ref(false)
@@ -84,6 +93,28 @@ const userName = computed(() =>
 )
 
 const userEmail = computed(() => user.value?.email || '')
+
+// Breadcrumb: map path segments to labels
+const breadcrumbs = computed(() => {
+  const segments = route.path.split('/').filter(Boolean)
+  const crumbs: { label: string; to: string }[] = [{ label: '后台', to: '/admin' }]
+  const labelMap: Record<string, string> = {
+    admin: '仪表盘', projects: '项目', board: '看板', contacts: '留言',
+    payments: '回款管理', files: '文件管理', categories: '分类', styles: '风格',
+    settings: '站点设置', users: '用户管理', manual: '操作手册',
+    new: '新建项目', edit: '编辑项目',
+  }
+  let path = ''
+  for (const seg of segments) {
+    path += '/' + seg
+    if (seg === '[id]' || seg.match(/^[0-9a-f-]{36}$/)) continue // skip UUID segments
+    const label = labelMap[seg] || seg
+    if (label !== crumbs[crumbs.length - 1]?.label) {
+      crumbs.push({ label, to: path })
+    }
+  }
+  return crumbs
+})
 
 async function handleSignOut() {
   menuOpen.value = false
@@ -101,9 +132,9 @@ async function handleChangePwd() {
     showChangePwd.value = false
     pwdForm.current = ''
     pwdForm.newPass = ''
-    alert('密码修改成功')
+    toast.success('密码修改成功')
   } catch (e: any) {
-    alert(e.message)
+    toast.error(e.message)
   } finally {
     pwdSaving.value = false
   }

@@ -136,7 +136,7 @@ async function handleCategoryChange(file: ProjectFile, event: Event) {
     file.category_id = categoryId
     emit('update:category', file)
   } catch (e: any) {
-    alert(`更新分类失败：${e.message}`)
+    useToast().error(`更新分类失败：${e.message}`)
     select.value = file.category_id || ''
   }
 }

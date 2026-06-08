@@ -217,7 +217,7 @@ async function handleUserSubmit() {
     showUserForm.value = false
     await loadUsers()
   } catch (e: any) {
-    alert(e.message)
+    useToast().error(e.message)
   } finally {
     saving.value = false
   }
@@ -239,9 +239,9 @@ async function handlePasswordSubmit() {
       new_password: passwordForm.new_password,
     })
     showPasswordForm.value = false
-    alert('密码修改成功')
+    useToast().success('密码修改成功')
   } catch (e: any) {
-    alert(e.message)
+    useToast().error(e.message)
   } finally {
     savingPwd.value = false
   }
@@ -253,7 +253,7 @@ async function handleDeleteUser() {
     await adminApi.deleteUser(confirmDeleteUser.value.id)
     await loadUsers()
   } catch (e: any) {
-    alert(e.message)
+    useToast().error(e.message)
   }
   confirmDeleteUser.value = null
 }

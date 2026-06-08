@@ -199,7 +199,7 @@ async function handleArchive(project: Project) {
     await archiveProject(project.id, project.title)
     await loadProjects()
   } catch (e: any) {
-    alert(`归档失败：${e.message}`)
+    useToast().error(`归档失败：${e.message}`)
   }
 }
 
@@ -208,7 +208,7 @@ async function handleRestore(project: Project) {
     await restoreProject(project.id)
     await loadProjects()
   } catch (e: any) {
-    alert(`恢复失败：${e.message}`)
+    useToast().error(`恢复失败：${e.message}`)
   }
 }
 
@@ -219,7 +219,7 @@ async function handleDelete() {
       confirmDelete.value = null
       await loadProjects()
     } catch (e: any) {
-      alert(`删除失败：${e.message}`)
+      useToast().error(`删除失败：${e.message}`)
     }
   }
 }
@@ -233,7 +233,7 @@ async function moveProject(project: Project, direction: number) {
     await adminApi.updateProject(other.id, { sort_order: project.sort_order })
     projects.value[idx] = { ...project, sort_order: other.sort_order }
     projects.value[idx + direction] = { ...other, sort_order: project.sort_order }
-  } catch (e: any) { alert(e.message) }
+  } catch (e: any) { useToast().error(e.message) }
 }
 
 function formatDate(date: string) {

@@ -160,7 +160,7 @@ async function handleSaved(data: any) {
     }
     showForm.value = false
   } catch (e: any) {
-    alert(`操作失败: ${e.message}`)
+    useToast().error(`操作失败: ${e.message}`)
   }
 }
 
@@ -180,7 +180,7 @@ async function handleMarkPaid(m: PaymentMilestone) {
   try {
     await updateStatus(m.id, 'paid')
   } catch (e: any) {
-    alert(`操作失败: ${e.message}`)
+    useToast().error(`操作失败: ${e.message}`)
   }
 }
 

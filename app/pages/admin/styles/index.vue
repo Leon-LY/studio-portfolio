@@ -102,8 +102,8 @@ function resetForm() { newName.value = ''; newSlug.value = '' }
 async function loadStyles() { try { styles.value = await fetchAll() } catch {} }
 onMounted(() => loadStyles())
 
-async function handleAdd() { if (!newName.value) return; saving.value = true; try { await create(newName.value, newSlug.value || slugify(newName.value)); await loadStyles(); resetForm(); showAdd.value = false; refreshNuxtData('admin-styles') } catch (e: any) { alert(e.message) } finally { saving.value = false } }
+async function handleAdd() { if (!newName.value) return; saving.value = true; try { await create(newName.value, newSlug.value || slugify(newName.value)); await loadStyles(); resetForm(); showAdd.value = false; refreshNuxtData('admin-styles') } catch (e: any) { useToast().error(e.message) } finally { saving.value = false } }
 function openEdit(s: Style) { editingStyle.value = s; editForm.name = s.name; editForm.slug = s.slug; showEdit.value = true }
-async function handleEdit() { if (!editingStyle.value) return; saving.value = true; try { await update(editingStyle.value.id, editForm); await loadStyles(); refreshNuxtData('admin-styles'); showEdit.value = false } catch (e: any) { alert(e.message) } finally { saving.value = false } }
-async function handleDeleteConfirm() { if (!confirmDelete.value) return; try { await remove(confirmDelete.value.id); await loadStyles(); refreshNuxtData('admin-styles') } catch (e: any) { alert(e.message) } confirmDelete.value = null }
+async function handleEdit() { if (!editingStyle.value) return; saving.value = true; try { await update(editingStyle.value.id, editForm); await loadStyles(); refreshNuxtData('admin-styles'); showEdit.value = false } catch (e: any) { useToast().error(e.message) } finally { saving.value = false } }
+async function handleDeleteConfirm() { if (!confirmDelete.value) return; try { await remove(confirmDelete.value.id); await loadStyles(); refreshNuxtData('admin-styles') } catch (e: any) { useToast().error(e.message) } confirmDelete.value = null }
 </script>

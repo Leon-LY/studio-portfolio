@@ -176,7 +176,7 @@ async function handleUpdate(form: ProjectFormData) {
     refreshNuxtData(`admin-project-${projectId}`)
   } catch (e: any) {
     console.error('更新项目失败:', e)
-    alert(`更新项目失败：${e.message}`)
+    useToast().error(`更新项目失败：${e.message}`)
   }
 }
 
@@ -213,7 +213,7 @@ async function handleFileDelete(file: ProjectFile) {
     await adminApi.deleteFile(file.id)
     projectFiles.value = projectFiles.value.filter(f => f.id !== file.id)
   } catch (e: any) {
-    alert(`删除失败: ${e.message}`)
+    useToast().error(`删除失败: ${e.message}`)
   }
 }
 
@@ -270,7 +270,7 @@ async function handlePaymentSaved(data: any) {
     }
     showPaymentForm.value = false
   } catch (e: any) {
-    alert(`操作失败: ${e.message}`)
+    useToast().error(`操作失败: ${e.message}`)
   }
 }
 
@@ -285,7 +285,7 @@ async function handlePaymentDeleteConfirm() {
       await adminApi.deleteMilestone(deletingMilestone.value.id)
       paymentMilestones.value = paymentMilestones.value.filter(m => m.id !== deletingMilestone.value!.id)
     } catch (e: any) {
-      alert(`删除失败: ${e.message}`)
+      useToast().error(`删除失败: ${e.message}`)
     }
     deletingMilestone.value = null
   }
@@ -297,7 +297,7 @@ async function handleMarkPaid(m: PaymentMilestone) {
     const idx = paymentMilestones.value.findIndex(p => p.id === m.id)
     if (idx !== -1) paymentMilestones.value[idx] = updated
   } catch (e: any) {
-    alert(`操作失败: ${e.message}`)
+    useToast().error(`操作失败: ${e.message}`)
   }
 }
 

@@ -116,14 +116,14 @@ onMounted(() => loadCategories())
 async function handleAdd() {
   if (!newName.value) return; saving.value = true
   try { await create(newName.value, newSlug.value || slugify(newName.value)); await loadCategories(); resetForm(); showAdd.value = false; refreshNuxtData('admin-categories') }
-  catch (e: any) { alert(e.message) } finally { saving.value = false }
+  catch (e: any) { useToast().error(e.message) } finally { saving.value = false }
 }
 function openEdit(cat: Category) { editingCat.value = cat; editForm.name = cat.name; editForm.slug = cat.slug; editForm.description = cat.description || ''; showEdit.value = true }
 async function handleEdit() {
   if (!editingCat.value) return; saving.value = true
   try { await update(editingCat.value.id, editForm); await loadCategories(); refreshNuxtData('admin-categories'); showEdit.value = false }
-  catch (e: any) { alert(e.message) } finally { saving.value = false }
+  catch (e: any) { useToast().error(e.message) } finally { saving.value = false }
 }
-async function toggleVisibility(cat: Category) { try { await update(cat.id, { is_visible: !cat.is_visible }); cat.is_visible = !cat.is_visible; refreshNuxtData('admin-categories') } catch (e: any) { alert(e.message) } }
-async function handleDeleteConfirm() { if (!confirmDelete.value) return; try { await remove(confirmDelete.value.id); await loadCategories(); refreshNuxtData('admin-categories') } catch (e: any) { alert(e.message) } confirmDelete.value = null }
+async function toggleVisibility(cat: Category) { try { await update(cat.id, { is_visible: !cat.is_visible }); cat.is_visible = !cat.is_visible; refreshNuxtData('admin-categories') } catch (e: any) { useToast().error(e.message) } }
+async function handleDeleteConfirm() { if (!confirmDelete.value) return; try { await remove(confirmDelete.value.id); await loadCategories(); refreshNuxtData('admin-categories') } catch (e: any) { useToast().error(e.message) } confirmDelete.value = null }
 </script>

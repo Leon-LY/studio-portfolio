@@ -16,18 +16,25 @@
     </div>
 
     <!-- 导航 -->
-    <nav class="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
-      <NuxtLink
-        v-for="item in navItems"
-        :key="item.to"
-        :to="item.to"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors"
-        :class="isActive(item.to) ? 'bg-stone-700 text-canvas border-l-2 border-accent-400' : 'text-stone-400 hover:text-canvas hover:bg-stone-800'"
-        @click="$emit('close')"
-      >
-        <Icon :name="item.icon" size="18" />
-        {{ item.label }}
-      </NuxtLink>
+    <nav class="flex-1 py-6 px-4 space-y-5 overflow-y-auto">
+      <template v-for="group in navGroups" :key="group.label">
+        <div>
+          <p class="px-3 mb-2 text-[10px] font-medium text-stone-500 uppercase tracking-widest">{{ group.label }}</p>
+          <div class="space-y-1">
+            <NuxtLink
+              v-for="item in group.items"
+              :key="item.to"
+              :to="item.to"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors"
+              :class="isActive(item.to) ? 'bg-stone-700 text-canvas border-l-2 border-accent-400' : 'text-stone-400 hover:text-canvas hover:bg-stone-800'"
+              @click="$emit('close')"
+            >
+              <Icon :name="item.icon" size="18" />
+              {{ item.label }}
+            </NuxtLink>
+          </div>
+        </div>
+      </template>
     </nav>
 
     <!-- 返回网站 -->
@@ -54,18 +61,33 @@ defineEmits(['close'])
 
 const route = useRoute()
 
-const navItems = [
-  { to: '/admin', label: '仪表盘', icon: 'lucide:layout-dashboard' },
-  { to: '/admin/projects', label: '项目', icon: 'lucide:folder-kanban' },
-  { to: '/admin/projects/board', label: '看板', icon: 'lucide:kanban' },
-  { to: '/admin/contacts', label: '留言', icon: 'lucide:inbox' },
-  { to: '/admin/payments', label: '回款管理', icon: 'lucide:receipt' },
-  { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },
-  { to: '/admin/categories', label: '分类', icon: 'lucide:folder-tree' },
-  { to: '/admin/styles', label: '风格', icon: 'lucide:palette' },
-  { to: '/admin/settings', label: '站点设置', icon: 'lucide:settings' },
-  { to: '/admin/users', label: '用户管理', icon: 'lucide:users' },
-  { to: '/admin/manual', label: '操作手册', icon: 'lucide:book-open' },
+const navGroups = [
+  {
+    label: '内容管理',
+    items: [
+      { to: '/admin', label: '仪表盘', icon: 'lucide:layout-dashboard' },
+      { to: '/admin/projects', label: '项目', icon: 'lucide:folder-kanban' },
+      { to: '/admin/projects/board', label: '看板', icon: 'lucide:kanban' },
+      { to: '/admin/contacts', label: '留言', icon: 'lucide:inbox' },
+    ],
+  },
+  {
+    label: '资源管理',
+    items: [
+      { to: '/admin/payments', label: '回款管理', icon: 'lucide:receipt' },
+      { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },
+      { to: '/admin/categories', label: '分类', icon: 'lucide:folder-tree' },
+      { to: '/admin/styles', label: '风格', icon: 'lucide:palette' },
+    ],
+  },
+  {
+    label: '系统设置',
+    items: [
+      { to: '/admin/settings', label: '站点设置', icon: 'lucide:settings' },
+      { to: '/admin/users', label: '用户管理', icon: 'lucide:users' },
+      { to: '/admin/manual', label: '操作手册', icon: 'lucide:book-open' },
+    ],
+  },
 ]
 
 function isActive(path: string) {

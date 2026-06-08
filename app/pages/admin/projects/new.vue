@@ -22,7 +22,7 @@ async function handleCreate(form: ProjectFormData) {
     await navigateTo(`/admin/projects/${project.id}/edit?created=1`)
   } catch (e: any) {
     console.error('创建项目失败:', e)
-    alert(`创建项目失败：${e.message}`)
+    useToast().error(`创建项目失败：${e.message}`)
   }
 }
 </script>

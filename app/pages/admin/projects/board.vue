@@ -116,7 +116,7 @@ async function loadStages() {
 async function addStage() {
   if (!newStageName.value.trim()) return
   try { await adminApi.createStage({ name: newStageName.value.trim() }); newStageName.value = ''; await loadStages() }
-  catch (e: any) { alert(e.message) }
+  catch (e: any) { useToast().error(e.message) }
 }
 
 async function updateStage(s: any) {
@@ -126,7 +126,7 @@ async function updateStage(s: any) {
 async function deleteStage(s: any) {
   if (!confirm(`确定删除阶段「${s.name}」吗？该阶段下的项目将移至"未设置"。`)) return
   try { await adminApi.deleteStage(s.id); await loadStages(); await loadAllProjects() }
-  catch (e: any) { alert(e.message) }
+  catch (e: any) { useToast().error(e.message) }
 }
 
 async function moveStage(i: number, dir: number) {

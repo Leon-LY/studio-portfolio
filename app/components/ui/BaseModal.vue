@@ -6,7 +6,7 @@
         <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm" @click="closeOnBackdrop && $emit('update:modelValue', false)" />
 
         <!-- 内容 -->
-        <div :class="['relative bg-white rounded-sm shadow-elevation-4 max-h-[90vh] overflow-auto', contentClass]" v-bind="$attrs">
+        <div ref="modalRef" :class="['relative bg-white rounded-sm shadow-elevation-4 max-h-[90vh] overflow-auto', contentClass]" v-bind="$attrs">
           <!-- 头部 -->
           <div v-if="title || $slots.header" class="flex items-center justify-between px-6 py-4 border-b border-stone-100">
             <h3 class="text-lg font-semibold text-stone-800">{{ title }}</h3>
@@ -47,14 +47,38 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+const modalRef = ref<HTMLElement | null>(null)
+
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape' && props.modelValue && props.closable) {
     emit('update:modelValue', false)
+    return
+  }
+  // Focus trap: keep Tab within modal
+  if (e.key === 'Tab' && props.modelValue && modalRef.value) {
+    const focusable = modalRef.value.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusable.length === 0) return
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
   }
 }
 
+// Lock body scroll when modal is open
+watch(() => props.modelValue, (v) => {
+  if (import.meta.client) {
+    document.body.style.overflow = v ? 'hidden' : ''
+  }
+})
+
 onMounted(() => document.addEventListener('keydown', onKeydown))
-onUnmounted(() => document.removeEventListener('keydown', onKeydown))
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown)
+  if (import.meta.client) document.body.style.overflow = ''
+})
 </script>
 
 <style scoped>

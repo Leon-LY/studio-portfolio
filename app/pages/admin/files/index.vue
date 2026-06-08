@@ -131,7 +131,7 @@ async function handleDelete(file: ProjectFile) {
     await adminApi.deleteFile(file.id)
     allFiles.value = allFiles.value.filter(f => f.id !== file.id)
   } catch (e: any) {
-    alert(`删除失败: ${e.message}`)
+    useToast().error(`删除失败: ${e.message}`)
   }
 }
 </script>

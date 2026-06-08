@@ -25,4 +25,4 @@ RUN mkdir -p /app/previews && chmod 777 /app/previews
 
 EXPOSE 3001
 ENV HOME=/home/app
-CMD ["node", "server/src/index.js"]
+CMD ["node", "src/index.js"]

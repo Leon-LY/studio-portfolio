@@ -1,15 +1,20 @@
 <template>
   <header class="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-6 sticky top-0 z-20">
-    <!-- 标题 + 面包屑 -->
+    <!-- 面包屑 + 标题 -->
     <div>
-      <div v-if="breadcrumbs.length > 1" class="flex items-center gap-1.5 mb-1">
+      <nav v-if="breadcrumbs.length > 0" class="flex items-center gap-1 text-sm">
         <template v-for="(crumb, idx) in breadcrumbs" :key="crumb.to">
-          <NuxtLink v-if="idx < breadcrumbs.length - 1" :to="crumb.to" class="text-xs text-stone-400 hover:text-stone-600 transition-colors">{{ crumb.label }}</NuxtLink>
-          <span v-else class="text-xs text-stone-600 font-medium">{{ crumb.label }}</span>
-          <Icon v-if="idx < breadcrumbs.length - 1" name="lucide:chevron-right" size="12" class="text-stone-300" />
+          <NuxtLink
+            v-if="idx < breadcrumbs.length - 1"
+            :to="crumb.to"
+            class="text-stone-400 hover:text-stone-600 transition-colors"
+          >
+            {{ crumb.label }}
+          </NuxtLink>
+          <span v-else class="font-semibold text-stone-800">{{ crumb.label }}</span>
+          <span v-if="idx < breadcrumbs.length - 1" class="text-stone-300 mx-0.5">/</span>
         </template>
-      </div>
-      <h1 class="text-lg font-semibold text-stone-800">{{ title }}</h1>
+      </nav>
     </div>
 
     <!-- 用户菜单 -->
@@ -94,26 +99,26 @@ const userName = computed(() =>
 
 const userEmail = computed(() => user.value?.email || '')
 
-// Breadcrumb: map path segments to labels
+// Breadcrumb: last item is the page title
 const breadcrumbs = computed(() => {
   const segments = route.path.split('/').filter(Boolean)
-  const crumbs: { label: string; to: string }[] = [{ label: '后台', to: '/admin' }]
+  if (segments.length === 0) return []
+  const crumbs: { label: string; to: string }[] = []
   const labelMap: Record<string, string> = {
     admin: '仪表盘', projects: '项目', board: '看板', contacts: '留言',
     payments: '回款管理', files: '文件管理', categories: '分类', styles: '风格',
     settings: '站点设置', users: '用户管理', manual: '操作手册',
-    new: '新建项目', edit: '编辑项目',
+    new: '新建项目', edit: '编辑',
   }
   let path = ''
   for (const seg of segments) {
     path += '/' + seg
-    if (seg === '[id]' || seg.match(/^[0-9a-f-]{36}$/)) continue // skip UUID segments
+    if (seg === '[id]' || seg.match(/^[0-9a-f-]{36}$/)) continue
     const label = labelMap[seg] || seg
-    if (label !== crumbs[crumbs.length - 1]?.label) {
-      crumbs.push({ label, to: path })
-    }
+    crumbs.push({ label, to: path })
   }
-  return crumbs
+  // Deduplicate consecutive same labels
+  return crumbs.filter((c, i) => i === 0 || c.label !== crumbs[i - 1]?.label)
 })
 
 async function handleSignOut() {

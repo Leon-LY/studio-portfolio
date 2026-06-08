@@ -1,11 +1,12 @@
 <template>
   <aside
-    class="w-64 bg-stone-900 text-canvas flex flex-col h-screen fixed left-0 top-0 z-50 transition-transform duration-300 lg:translate-x-0 lg:z-30"
-    :class="open ? 'translate-x-0' : '-translate-x-full'"
+    class="bg-stone-900 text-canvas flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 lg:translate-x-0 lg:z-30"
+    :class="[open ? 'translate-x-0' : '-translate-x-full', collapsed ? 'w-16' : 'w-64']"
   >
     <!-- Logo -->
-    <div class="flex items-center justify-between h-14 px-4 lg:px-6 lg:h-16 border-b border-stone-700">
-      <NuxtLink to="/admin" class="font-serif text-lg font-bold tracking-tight" @click="$emit('close')">方外设计 后台</NuxtLink>
+    <div class="flex items-center justify-between h-14 px-4 lg:h-16 border-b border-stone-700" :class="collapsed ? 'lg:justify-center lg:px-0' : 'lg:px-6'">
+      <NuxtLink v-if="!collapsed" to="/admin" class="font-serif text-lg font-bold tracking-tight" @click="$emit('close')">方外设计 后台</NuxtLink>
+      <NuxtLink v-else to="/admin" class="font-serif text-lg font-bold tracking-tight" title="仪表盘" @click="$emit('close')">方</NuxtLink>
       <button
         class="p-1 -mr-1 rounded-sm hover:bg-stone-700 transition-colors lg:hidden"
         aria-label="关闭菜单"
@@ -16,37 +17,49 @@
     </div>
 
     <!-- 导航 -->
-    <nav class="flex-1 py-6 px-4 space-y-5 overflow-y-auto">
+    <nav class="flex-1 py-6 overflow-y-auto" :class="collapsed ? 'px-2 space-y-4' : 'px-4 space-y-5'">
       <template v-for="group in navGroups" :key="group.label">
         <div>
-          <p class="px-3 mb-2 text-[10px] font-medium text-stone-500 uppercase tracking-widest">{{ group.label }}</p>
+          <p v-if="!collapsed" class="px-3 mb-2 text-[10px] font-medium text-stone-500 uppercase tracking-widest">{{ group.label }}</p>
           <div class="space-y-1">
             <NuxtLink
               v-for="item in group.items"
               :key="item.to"
               :to="item.to"
+              :title="collapsed ? item.label : ''"
               class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-colors"
-              :class="isActive(item.to) ? 'bg-stone-700 text-canvas border-l-2 border-accent-400' : 'text-stone-400 hover:text-canvas hover:bg-stone-800'"
+              :class="[isActive(item.to) ? 'bg-stone-700 text-canvas border-l-2 border-accent-400' : 'text-stone-400 hover:text-canvas hover:bg-stone-800', collapsed ? 'justify-center px-0' : '']"
               @click="$emit('close')"
             >
               <Icon :name="item.icon" size="18" />
-              {{ item.label }}
+              <span v-if="!collapsed">{{ item.label }}</span>
             </NuxtLink>
           </div>
         </div>
       </template>
     </nav>
 
-    <!-- 返回网站 -->
-    <div class="p-4 border-t border-stone-700">
+    <!-- 底部操作 -->
+    <div class="border-t border-stone-700" :class="collapsed ? 'p-2' : 'p-4'">
+      <button
+        class="w-full flex items-center gap-2 px-3 py-2 text-sm text-stone-400 hover:text-canvas transition-colors rounded-sm hover:bg-stone-800"
+        :class="collapsed ? 'justify-center px-0' : ''"
+        :title="collapsed ? '展开菜单' : '收起菜单'"
+        @click="$emit('toggle')"
+      >
+        <Icon :name="collapsed ? 'lucide:chevron-right' : 'lucide:chevron-left'" size="16" />
+        <span v-if="!collapsed">收起菜单</span>
+      </button>
       <NuxtLink
         to="/"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-2 px-3 py-2 text-sm text-stone-400 hover:text-canvas transition-colors rounded-sm hover:bg-stone-800"
+        class="flex items-center gap-2 px-3 py-2 text-sm text-stone-400 hover:text-canvas transition-colors rounded-sm hover:bg-stone-800 mt-1"
+        :class="collapsed ? 'justify-center px-0' : ''"
+        :title="collapsed ? '查看网站' : ''"
       >
         <Icon name="lucide:external-link" size="16" />
-        查看网站
+        <span v-if="!collapsed">查看网站</span>
       </NuxtLink>
     </div>
   </aside>
@@ -55,9 +68,10 @@
 <script setup lang="ts">
 defineProps({
   open: { type: Boolean, default: false },
+  collapsed: { type: Boolean, default: false },
 })
 
-defineEmits(['close'])
+defineEmits(['close', 'toggle'])
 
 const route = useRoute()
 

@@ -170,15 +170,33 @@ const formData = computed<Partial<ProjectFormData>>(() => {
   }
 })
 
+const formDirty = ref(false)
+
 async function handleUpdate(form: ProjectFormData) {
   try {
     await updateProject(projectId, form)
     refreshNuxtData(`admin-project-${projectId}`)
+    formDirty.value = false
+    useToast().success('已保存')
   } catch (e: any) {
     console.error('更新项目失败:', e)
     useToast().error(`更新项目失败：${e.message}`)
   }
 }
+
+// Unsaved changes warning
+onMounted(() => {
+  setTimeout(() => { formDirty.value = true }, 1000)
+  window.onbeforeunload = () => '你有未保存的更改'
+})
+onBeforeRouteLeave((_to, _from, next) => {
+  if (formDirty.value && !confirm('你有未保存的更改，确定要离开吗？')) {
+    next(false)
+  } else {
+    next()
+  }
+})
+watch(formDirty, (v) => { window.onbeforeunload = v ? () => '你有未保存的更改' : null })
 
 // ============================================================
 // Files management

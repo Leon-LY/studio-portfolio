@@ -7,9 +7,9 @@
       @click="sidebarOpen = false"
     />
 
-    <AdminSidebar :open="sidebarOpen" @close="sidebarOpen = false" />
+    <AdminSidebar :open="sidebarOpen" :collapsed="collapsed" @close="sidebarOpen = false" @toggle="collapsed = !collapsed" />
 
-    <div class="lg:ml-64">
+    <div :class="collapsed ? 'lg:ml-16' : 'lg:ml-64'" class="transition-all duration-300">
       <!-- Mobile header bar -->
       <div class="flex items-center gap-3 h-14 px-4 bg-stone-900 text-canvas lg:hidden">
         <button
@@ -30,10 +30,8 @@
 import AdminSidebar from '~/components/admin/layout/AdminSidebar.vue'
 
 const sidebarOpen = ref(false)
+const collapsed = ref(false)
 
-// Close sidebar on route change (mobile)
 const route = useRoute()
-watch(() => route.fullPath, () => {
-  sidebarOpen.value = false
-})
+watch(() => route.fullPath, () => { sidebarOpen.value = false })
 </script>

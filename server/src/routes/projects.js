@@ -144,6 +144,27 @@ router.get('/featured', async (req, res) => {
   }
 })
 
+// GET /api/projects/financial — income/expense summary per project
+router.get('/financial', authMiddleware, async (_req, res) => {
+  try {
+    const { rows } = await query(`
+      SELECT p.id, p.title, p.status,
+        COALESCE(pm.expected, 0) AS expected_income,
+        COALESCE(pm.received, 0) AS received_income,
+        COALESCE(pe.expenses, 0) AS total_expenses,
+        COALESCE(pm.received, 0) - COALESCE(pe.expenses, 0) AS profit
+      FROM projects p
+      LEFT JOIN (SELECT project_id, COALESCE(SUM(amount), 0) AS expected, COALESCE(SUM(amount) FILTER (WHERE status = 'paid'), 0) AS received FROM payment_milestones GROUP BY project_id) pm ON pm.project_id = p.id
+      LEFT JOIN (SELECT project_id, COALESCE(SUM(amount), 0) AS expenses FROM project_expenses GROUP BY project_id) pe ON pe.project_id = p.id
+      ORDER BY profit DESC
+    `)
+    res.json(rows)
+  } catch (err) {
+    console.error('Financial summary error:', err)
+    res.status(500).json({ error: '获取财务摘要失败' })
+  }
+})
+
 // GET /api/projects/:slug — single project detail (public)
 router.get('/:slug', async (req, res) => {
   try {

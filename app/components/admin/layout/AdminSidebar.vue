@@ -73,8 +73,9 @@ const navGroups = [
     ],
   },
   {
-    label: '资源管理',
+    label: '财务管理',
     items: [
+      { to: '/admin/finance', label: '收支总览', icon: 'lucide:bar-chart-3' },
       { to: '/admin/payments', label: '回款管理', icon: 'lucide:receipt' },
       { to: '/admin/expenses', label: '支出管理', icon: 'lucide:banknote' },
       { to: '/admin/files', label: '文件管理', icon: 'lucide:folder-open' },

@@ -275,6 +275,9 @@ export const adminApi = {
   updateClient(id: string, data: any) { return apiFetch<any>(`/api/clients/${id}`, { method: 'PUT', body: JSON.stringify(data) }) },
   deleteClient(id: string) { return apiFetch<any>(`/api/clients/${id}`, { method: 'DELETE' }) },
 
+  // Financial
+  getFinancialSummary() { return apiFetch<any[]>('/api/projects/financial') },
+
   // Contacts
   getContacts() { return apiFetch<any[]>('/api/contact') },
   markContactRead(id: string) { return apiFetch<any>(`/api/contact/${id}/read`, { method: 'PUT' }) },

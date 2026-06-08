@@ -3,18 +3,27 @@
     <AdminHeader title="操作手册" />
     <div class="p-6 max-w-4xl mx-auto">
 
-      <!-- 目录 -->
-      <div class="mb-10 p-6 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
-        <h2 class="text-lg font-serif font-bold text-stone-900 mb-4">目录</h2>
+      <!-- 搜索 + 目录 -->
+      <div class="mb-10 p-6 bg-white rounded-sm border border-stone-200 shadow-elevation-1 sticky top-16 z-20">
+        <div class="relative mb-4">
+          <Icon name="lucide:search" size="14" class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+          <input v-model="search" type="text" placeholder="搜索手册内容..." class="w-full pl-8 pr-4 py-2 text-sm border border-stone-200 rounded-sm bg-white placeholder-stone-400 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 transition-colors" />
+        </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
-          <a v-for="s in sections" :key="s.id" :href="`#${s.id}`" class="text-sm text-stone-600 hover:text-accent-500 transition-colors py-1.5 px-2 rounded hover:bg-stone-50">
+          <a v-for="s in filteredSections" :key="s.id" :href="`#${s.id}`" class="text-sm text-stone-600 hover:text-accent-500 transition-colors py-1.5 px-2 rounded hover:bg-stone-50">
             {{ s.num }}. {{ s.title }}
           </a>
         </div>
       </div>
 
+      <!-- 搜索无结果 -->
+      <div v-if="search && filteredSections.length === 0" class="text-center py-16 text-stone-400">
+        <Icon name="lucide:search" size="32" class="mx-auto mb-3" />
+        <p>没有匹配「{{ search }}」的内容</p>
+      </div>
+
       <!-- ============ 1 ============ -->
-      <section :id="sections[0].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(0)" :id="sections[0].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">1. 系统概述</h2>
         </div>
@@ -54,7 +63,7 @@
       </section>
 
       <!-- ============ 2 ============ -->
-      <section :id="sections[1].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(1)" :id="sections[1].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">2. 仪表盘</h2>
         </div>
@@ -90,7 +99,7 @@
       </section>
 
       <!-- ============ 3 ============ -->
-      <section :id="sections[2].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(2)" :id="sections[2].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">3. 项目管理</h2>
         </div>
@@ -146,7 +155,7 @@
       </section>
 
       <!-- ============ 4 ============ -->
-      <section :id="sections[3].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(3)" :id="sections[3].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">4. 项目看板</h2>
         </div>
@@ -171,7 +180,7 @@
       </section>
 
       <!-- ============ 5 ============ -->
-      <section :id="sections[4].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(4)" :id="sections[4].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">5. 回款管理</h2>
         </div>
@@ -202,7 +211,7 @@
       </section>
 
       <!-- ============ 6 ============ -->
-      <section :id="sections[5].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(5)" :id="sections[5].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">6. 文件管理</h2>
         </div>
@@ -236,7 +245,7 @@
       </section>
 
       <!-- ============ 7 ============ -->
-      <section :id="sections[6].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(6)" :id="sections[6].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">7. 分类管理</h2>
         </div>
@@ -252,7 +261,7 @@
       </section>
 
       <!-- ============ 8 ============ -->
-      <section :id="sections[7].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(7)" :id="sections[7].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">8. 风格管理</h2>
         </div>
@@ -263,7 +272,7 @@
       </section>
 
       <!-- ============ 9 ============ -->
-      <section :id="sections[8].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(8)" :id="sections[8].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">9. 留言管理</h2>
         </div>
@@ -279,7 +288,7 @@
       </section>
 
       <!-- ============ 10 ============ -->
-      <section :id="sections[9].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(9)" :id="sections[9].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">10. 用户管理</h2>
         </div>
@@ -295,7 +304,7 @@
       </section>
 
       <!-- ============ 11 ============ -->
-      <section :id="sections[10].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(10)" :id="sections[10].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">11. 站点设置</h2>
         </div>
@@ -319,7 +328,7 @@
       </section>
 
       <!-- ============ 12 ============ -->
-      <section :id="sections[11].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(11)" :id="sections[11].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">12. 常见问题</h2>
         </div>
@@ -360,7 +369,7 @@
       </section>
 
       <!-- ============ 13 ============ -->
-      <section :id="sections[12].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
+      <section v-show="!search || sectionVisible(12)" :id="sections[12].id" class="mb-10 bg-white rounded-sm border border-stone-200 shadow-elevation-1">
         <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 rounded-t-sm">
           <h2 class="text-base font-serif font-bold text-stone-900">13. 技术支持</h2>
         </div>
@@ -380,6 +389,7 @@
 definePageMeta({ layout: "admin" })
 import AdminHeader from '~/components/admin/layout/AdminHeader.vue'
 
+const search = ref('')
 const sections = [
   { id: 'overview', num: '1', title: '系统概述' },
   { id: 'dashboard', num: '2', title: '仪表盘' },
@@ -395,4 +405,15 @@ const sections = [
   { id: 'faq', num: '12', title: '常见问题' },
   { id: 'support', num: '13', title: '技术支持' },
 ]
+
+const filteredSections = computed(() => {
+  if (!search.value) return sections
+  const q = search.value.toLowerCase()
+  return sections.filter(s => s.title.toLowerCase().includes(q) || s.num.includes(q))
+})
+
+function sectionVisible(idx: number) {
+  if (!search.value) return true
+  return filteredSections.value.some(s => s.num === sections[idx].num)
+}
 </script>

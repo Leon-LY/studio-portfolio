@@ -136,6 +136,7 @@ import EmptyState from '~/components/ui/EmptyState.vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 import ConfirmDialog from '~/components/ui/ConfirmDialog.vue'
 
+const { fetchProjects } = useAdminProjects()
 const toast = useToast()
 
 const projects = ref<any[]>([])
@@ -153,7 +154,7 @@ const selectedProject = computed(() => projects.value.find(p => p.id === selecte
 const totalExpense = computed(() => expenses.value.reduce((s, e) => s + Number(e.amount), 0))
 
 onMounted(async () => {
-  try { projects.value = await adminApi.getProjects({ perPage: 999 }) } catch {}
+  try { const result = await fetchProjects({ perPage: 999 }); projects.value = result.data || [] } catch {}
   try { expenseCategories.value = await adminApi.getExpenseCategories() } catch {}
 })
 

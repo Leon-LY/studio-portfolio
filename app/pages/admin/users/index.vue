@@ -3,16 +3,19 @@
     <AdminHeader title="用户管理" />
 
     <div class="p-6">
-      <!-- 新建用户按钮 -->
-      <div class="mb-6 flex justify-between items-center">
-        <p class="text-sm text-stone-500">管理系统管理员和编辑者账号</p>
+      <!-- 搜索 + 新建 -->
+      <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div class="relative max-w-xs w-full">
+          <Icon name="lucide:search" size="14" class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+          <input v-model="search" type="text" placeholder="搜索用户..." class="w-full pl-8 pr-4 py-2 text-sm border border-stone-200 rounded-sm bg-white placeholder-stone-400 focus:border-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-600 transition-colors" />
+        </div>
         <BaseButton size="sm" @click="openCreateForm">
           <Icon name="lucide:user-plus" size="16" class="mr-1" /> 新增用户
         </BaseButton>
       </div>
 
       <!-- 用户列表 -->
-      <div v-if="users.length > 0" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 overflow-hidden">
+      <div v-if="filteredUsers.length > 0" class="bg-white rounded-sm border border-stone-200 shadow-elevation-1 overflow-hidden">
         <table class="w-full text-sm">
           <thead>
             <tr class="border-b border-stone-100">
@@ -23,7 +26,7 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-stone-50">
-            <tr v-for="u in users" :key="u.id" class="hover:bg-stone-50 transition-colors">
+            <tr v-for="u in filteredUsers" :key="u.id" class="hover:bg-stone-50 transition-colors">
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center">
@@ -70,10 +73,17 @@
       </div>
 
       <EmptyState
-        v-else
+        v-else-if="users.length === 0"
         icon="lucide:users"
         title="暂无用户"
-        description="系统中只有一个管理员账户。"
+        description="添加管理员或编辑者账号。"
+        wrapper-class="py-12"
+      />
+      <EmptyState
+        v-else-if="filteredUsers.length === 0"
+        icon="lucide:search"
+        title="未找到用户"
+        :description="`没有匹配「${search}」的用户`"
         wrapper-class="py-12"
       />
     </div>
@@ -152,6 +162,12 @@ interface UserRow {
 }
 
 const users = ref<UserRow[]>([])
+const search = ref('')
+const filteredUsers = computed(() => {
+  if (!search.value) return users.value
+  const q = search.value.toLowerCase()
+  return users.value.filter(u => u.full_name?.toLowerCase().includes(q) || u.email.toLowerCase().includes(q))
+})
 const showUserForm = ref(false)
 const showPasswordForm = ref(false)
 const editingUser = ref<UserRow | null>(null)

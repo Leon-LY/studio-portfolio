@@ -84,15 +84,10 @@
       rows="2"
     />
 
-    <!-- 正文 -->
+    <!-- 正文 — 富文本编辑器 -->
     <div class="space-y-1.5">
       <label class="block text-sm font-medium text-stone-700">正文内容</label>
-      <BaseTextarea
-        v-model="form.content"
-        placeholder="详细的项目描述（支持 HTML）"
-        rows="10"
-        hint="富文本编辑器将在后续版本中集成"
-      />
+      <RichTextEditor v-model="form.content" />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -160,6 +155,7 @@ import type { ProjectFormData } from '~/types/models'
 import BaseInput from '~/components/ui/BaseInput.vue'
 import BaseTextarea from '~/components/ui/BaseTextarea.vue'
 import BaseButton from '~/components/ui/BaseButton.vue'
+import RichTextEditor from '~/components/ui/RichTextEditor.vue'
 
 const props = defineProps({
   initialData: { type: Object as PropType<Partial<ProjectFormData>>, default: () => ({}) },

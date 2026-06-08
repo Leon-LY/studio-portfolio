@@ -281,6 +281,7 @@ export const adminApi = {
   // Contacts
   getContacts() { return apiFetch<any[]>('/api/contact') },
   markContactRead(id: string) { return apiFetch<any>(`/api/contact/${id}/read`, { method: 'PUT' }) },
+  deleteContact(id: string) { return apiFetch<any>(`/api/contact/${id}`, { method: 'DELETE' }) },
 
   changePassword(id: string, data: { current_password?: string; new_password: string }) {
     return apiFetch<any>(`/api/users/${id}/password`, { method: 'PUT', body: JSON.stringify(data) })

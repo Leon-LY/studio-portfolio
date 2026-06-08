@@ -81,4 +81,14 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
   }
 })
 
+// DELETE /api/contact/:id — delete message
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    await query('DELETE FROM contacts WHERE id = $1', [req.params.id])
+    res.json({ success: true })
+  } catch (err) {
+    res.status(500).json({ error: '删除留言失败' })
+  }
+})
+
 export default router
